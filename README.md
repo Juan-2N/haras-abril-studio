@@ -27,7 +27,10 @@ Excepción: la plantilla de los videos por lote (`composiciones/00-00-HA-VideoLo
 
 **Requisitos:** Node 22+ (acá se usa 24), `ffmpeg`, ImageMagick (`magick`) y Chrome. `npx hyperframes doctor` revisa que esté todo.
 
+Clonar en una ruta corta (hay archivos con rutas largas y Windows corta en 260 caracteres):
+
 ```powershell
+git config --global core.longpaths true
 git clone https://github.com/<owner>/haras-abril-studio.git "W:\HARAS ABRIL\Studio"
 ```
 
