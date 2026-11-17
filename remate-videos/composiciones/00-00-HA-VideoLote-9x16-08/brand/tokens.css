@@ -1,0 +1,127 @@
+/* ============================================================
+   HARAS ABRIL · REMATE & CSI 2026 — TOKENS PARA VIDEO
+   Fuente: styleguide (design_handoff_remate_csi_2026) + medición
+   de las plantillas HA_26_RRSS_* sobre lienzo de 1080 px de ancho.
+   Todas las medidas en px de lienzo (1080×1920 o 1080×1350).
+   Reglas de uso en brand/DESIGN.md.
+   v2 (28/10/2026): Remate en oscuro, Garamond solo en frases de cierre.
+   ============================================================ */
+
+/* ---------- TIPOGRAFÍAS (locales, brand/fonts) ---------- */
+@font-face { font-family: "Barlow Condensed"; src: url("fonts/BarlowCondensed-Light.ttf") format("truetype"); font-weight: 300; font-style: normal; }
+@font-face { font-family: "Barlow Condensed"; src: url("fonts/BarlowCondensed-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; }
+@font-face { font-family: "Barlow Condensed"; src: url("fonts/BarlowCondensed-Medium.ttf") format("truetype"); font-weight: 500; font-style: normal; }
+@font-face { font-family: "Barlow Condensed"; src: url("fonts/BarlowCondensed-SemiBold.ttf") format("truetype"); font-weight: 600; font-style: normal; }
+@font-face { font-family: "Barlow Condensed"; src: url("fonts/BarlowCondensed-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; }
+@font-face { font-family: "EB Garamond"; src: url("fonts/EBGaramond-VariableFont_wght.ttf") format("truetype"); font-weight: 400 800; font-style: normal; }
+@font-face { font-family: "EB Garamond"; src: url("fonts/EBGaramond-Italic-VariableFont_wght.ttf") format("truetype"); font-weight: 400 800; font-style: italic; }
+
+:root {
+  /* ---------- COLORES DE MARCA (no agregar otros) ---------- */
+  --ha-black:       #000000;  /* Fondo nivel CSI (negro = Concurso) */
+  --ha-white:       #FFFFFF;  /* Texto principal sobre oscuro. Ya no es fondo (v2) */
+  --ha-ink:         #2C2723;  /* Base de paneles y tarjetas del Remate (v2) */
+  --ha-taupe:       #675D51;  /* Texto serif secundario sobre blanco (CONCURSO CSI) */
+  --ha-gold:        #C6A47E;  /* Líneas, bordes, claim grande sobre blanco */
+  --ha-gold-text:   #A88A66;  /* Dorado para texto chico/numeración sobre blanco (contraste ≥3:1) */
+  --ha-sand:        #FEDBA3;  /* Claim serif sobre oscuro */
+  --ha-red:         #E54235;  /* SOLO la estrella. Nunca texto ni fondos */
+  --ha-charcoal:    #2B2B2B;  /* Fondo nivel Remate (carbón = Remate · negro = Concurso) */
+  --ha-charcoal-elev: #1F1F1F;
+  --ha-gray:        #717171;  /* Texto secundario sobre blanco */
+  --ha-gray-light:  #B6B6B6;  /* Texto secundario sobre oscuro */
+
+  /* Degradé dorado metálico (botones/pills y relleno "oro") */
+  --ha-gold-grad:   linear-gradient(90deg, #977B4C 0%, #C6A47E 35%, #E0CB94 70%, #FAF4D0 100%);
+  /* Línea dorada con destello central (separa marca y evento) */
+  --ha-gold-flare:  linear-gradient(90deg, rgba(198,164,126,0) 0%, #C6A47E 22%, #FAF4D0 50%, #C6A47E 78%, rgba(198,164,126,0) 100%);
+
+  /* Líneas y bordes */
+  --ha-line-gold:      rgba(198,164,126,0.55);  /* filetes, bordes de tarjeta */
+  --ha-line-gold-soft: rgba(198,164,126,0.30);
+  --ha-line-star:      rgba(255,255,255,0.28);  /* diagrama de estrella sobre foto */
+  --ha-line-neutral:   rgba(255,255,255,0.22);
+
+  /* Superficies v2 sobre foto */
+  --ha-panel-dark:  rgba(44,39,35,0.85);    /* tarjetas, lower third, cajas de datos (ink translúcido) */
+  --ha-strip-light: rgba(255,255,255,0.70); /* franja de meta de la tarjeta de lista: única superficie clara */
+  --ha-strip-text:  #2C2723;                /* texto sobre la franja clara */
+
+  /* Velos sobre foto (legibilidad) */
+  --ha-veil-dark:   rgba(0,0,0,0.38);
+  --ha-veil-bottom: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.85) 100%);
+
+  /* ---------- FAMILIAS ---------- */
+  --ha-font-sans:  "Barlow Condensed", sans-serif;  /* todo el texto salvo las frases de cierre */
+  --ha-font-serif: "EB Garamond", Garamond, serif;                  /* SOLO las 3 frases de cierre (itálica) */
+
+  /* ---------- ESCALA TIPOGRÁFICA (lienzo 1080) ---------- */
+  /* Título de evento: "REMATE" — sans, mayúsculas, muy espaciado */
+  --ha-t-event-size: 112px;  --ha-t-event-weight: 700;  --ha-t-event-track: 0.28em;
+  /* Año / complemento (Barlow Regular): "2026", "CONCURSO CSI 1*" */
+  --ha-t-year-size: 104px;   --ha-t-year-weight: 400;   --ha-t-year-track: 0.08em;
+  /* Subtítulo (Barlow Bold, mayúsculas): "LISTA DE LOTES" */
+  --ha-t-sub-size: 88px;     --ha-t-sub-weight: 700;
+  /* Frase de cierre, ÚNICO uso de Garamond (itálica): "Tu próxima estrella cada vez más cerca." */
+  --ha-t-claim-size: 46px;   --ha-t-claim-weight: 400;
+  /* Nombre de lote (Barlow Bold, mayúsculas) */
+  --ha-t-lot-size: 66px;     --ha-t-lot-weight: 700;    --ha-t-lot-track: 0.06em;
+  /* Numeral (01, 02… / 5 DÍAS) */
+  --ha-t-num-size: 64px;     --ha-t-num-weight: 500;    --ha-t-num-track: 0.10em;
+  --ha-t-count-size: 150px;  --ha-t-count-weight: 600;  --ha-t-count-track: 0.08em;
+  /* Línea de datos (pedigrí, separador " × ") */
+  --ha-t-data-size: 28px;    --ha-t-data-weight: 400;   --ha-t-data-track: 0.08em;
+  /* Meta (sexo, AAFE, pelaje, fecha DD.MM.AAAA) */
+  --ha-t-meta-size: 27px;    --ha-t-meta-weight: 400;   --ha-t-meta-track: 0.10em;
+  /* Eyebrow / etiqueta / texto de botón */
+  --ha-t-label-size: 34px;   --ha-t-label-weight: 500;  --ha-t-label-track: 0.16em;
+
+  --ha-lh-tight: 1.0;
+  --ha-lh-text:  1.25;
+
+  /* ---------- ESPACIADO (múltiplos de 8) ---------- */
+  --ha-s-1: 8px;   --ha-s-2: 16px;  --ha-s-3: 24px;  --ha-s-4: 32px;
+  --ha-s-5: 40px;  --ha-s-6: 48px;  --ha-s-8: 64px;  --ha-s-10: 80px;
+  --ha-s-12: 96px; --ha-s-14: 112px;
+
+  /* ---------- GRILLA Y ZONAS SEGURAS ---------- */
+  --ha-margin-x: 108px;        /* margen lateral de tarjetas y paneles */
+  --ha-safe-top-9x16: 270px;   /* bajo la barra de IG stories/reels */
+  --ha-safe-bot-9x16: 340px;   /* sobre la caja de respuesta / CTA de IG */
+  --ha-safe-top-4x5: 96px;
+  --ha-safe-bot-4x5: 96px;
+
+  /* ---------- COMPONENTES ---------- */
+  --ha-logo-w: 530px;          /* logotipo HARAS ABRIL dentro de panel */
+  --ha-logo-w-sm: 300px;
+  --ha-star-size: 72px;        /* estrella roja sobre el logotipo */
+  --ha-seal-size: 420px;       /* sello/emblema circular en story */
+
+  --ha-panel-pad-y: 72px;      /* panel carbón (Remate) o negro (CSI) centrado */
+  --ha-panel-pad-x: 88px;
+  --ha-frame-offset: 12px;     /* marco exterior fino que abraza el panel */
+  --ha-border: 2px;            /* borde dorado de tarjetas */
+  --ha-hairline: 1px;          /* filetes y diagrama de estrella */
+
+  --ha-flare-w: 690px;         /* línea dorada con destello */
+  --ha-flare-h: 3px;
+
+  --ha-btn-h: 76px;            /* pill dorada (VER LOTES / REGISTRATE / MÁS INFO) */
+  --ha-btn-pad-x: 72px;
+  --ha-btn-radius: 999px;
+
+  --ha-lot-card-h: 218px;      /* tarjeta de lote (lista) */
+  --ha-lot-card-gap: 38px;
+  --ha-lot-num-col: 170px;     /* columna diagonal con el número */
+
+  --ha-radius: 0px;            /* superficies siempre rectas */
+
+  /* ---------- MOVIMIENTO ---------- */
+  --ha-ease:      cubic-bezier(0.22, 0.61, 0.36, 1);   /* power2.out aprox. */
+  --ha-ease-out:  cubic-bezier(0.16, 1, 0.3, 1);       /* expo.out aprox. */
+  --ha-ease-in:   cubic-bezier(0.55, 0, 0.75, 0.25);   /* salidas */
+  --ha-dur-fast:  0.4s;
+  --ha-dur-base:  0.8s;
+  --ha-dur-slow:  1.4s;
+  --ha-stagger:   0.12s;
+}

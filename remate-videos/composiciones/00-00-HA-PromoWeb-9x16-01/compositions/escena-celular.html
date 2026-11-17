@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; perspective: 1600px; perspective-origin: 540px 960px; }
+        /* Celular: pantalla de 532 × 1151 (viewport 390 × 844) con marco de 14 px, centrado */
+        .ec-cel { position: absolute; left: 260px; top: 370px; width: 560px; height: 1179px; border-radius: 72px;
+          border: 14px solid var(--ha-charcoal-elev); outline: var(--ha-hairline) solid var(--ha-line-gold);
+          overflow: hidden; background: var(--ha-black);
+          box-shadow: 0 0 160px color-mix(in srgb, var(--ha-gold) 35%, transparent), 0 60px 120px color-mix(in srgb, var(--ha-black) 80%, transparent); }
+        .ec-pantalla { position: absolute; left: 0; top: 0; width: 532px; height: 3274px; }
+        /* Reflejo de vidrio sobre la pantalla */
+        .ec-reflejo { position: absolute; inset: 0; pointer-events: none;
+          background: linear-gradient(135deg, color-mix(in srgb, var(--ha-white) 16%, transparent) 0%, transparent 35%); }
+        .ec-flash { position: absolute; inset: 0; opacity: 0;
+          background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--ha-sand) 65%, transparent) 0%, transparent 55%); }
+      </style>
+
+      <div data-hf-id="hf-snfh" id="root" data-composition-id="escena-celular" data-width="1080" data-height="1920">
+        <div data-hf-id="hf-1mmx" class="ec-flash"></div>
+        <div data-hf-id="hf-lbvn" class="ec-cel">
+          <img data-hf-id="hf-afeh" class="ec-pantalla" data-layout-allow-overflow src="../assets/web/mobile-home-scroll.jpg" alt="" />
+          <div data-hf-id="hf-gbb4" class="ec-reflejo"></div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.querySelector('[data-composition-id="escena-celular"]');
+          const q = (s) => root.querySelector(s);
+          q(".ec-pantalla").decode().then(() => {
+            const tl = gsap.timeline({ paused: true });
+            // Drop: el celular nace del colapso de las tarjetas
+            tl.fromTo(q(".ec-flash"), { opacity: 1 }, { opacity: 0, duration: 0.8, ease: "power2.out" }, 0);
+            tl.fromTo(q(".ec-cel"), { scale: 0.3, rotationX: 28, rotationY: -22, opacity: 0, filter: "blur(16px)" },
+              { scale: 1, rotationX: 4, rotationY: -8, opacity: 1, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0);
+            tl.to(q(".ec-cel"), { rotationX: 0, rotationY: 7, duration: 1.7, ease: "sine.inOut" }, 0.6);
+            // Scroll por la home: hero → cifras → Sobre Haras Abril
+            tl.fromTo(q(".ec-pantalla"), { y: 0 }, { y: -1900, duration: 1.6, ease: "power2.inOut" }, 0.65);
+            // La cámara entra en la pantalla
+            tl.to(q(".ec-cel"), { scale: 3.2, rotationY: 0, opacity: 0, filter: "blur(10px)", duration: 0.66, ease: "power3.in" }, 2.3);
+            window.__timelines["escena-celular"] = tl;
+          });
+        })();
+      </script>
+    </template>
+  </body>
+</html>

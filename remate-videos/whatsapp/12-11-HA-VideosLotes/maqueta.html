@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>12-11-HA-VideosLotes-maqueta-wa</title>
+  <!-- Maqueta para revisar cómo se ve el envío (no es pieza: los colores imitan un chat genérico).
+       Imagen: salida/mailing/12-11-HA-VideosLotes-play-e.png · Texto: mensaje.txt
+       Exportar: node herramientas/exportar-png.mjs whatsapp/12-11-HA-VideosLotes/maqueta.html salida/whatsapp/12-11-HA-VideosLotes-maqueta.png 420 -->
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 420px; background: #0B141A; font-family: "Segoe UI", Helvetica, Arial, sans-serif; }
+    .chat { padding: 24px 12px 28px 56px; }
+    .burbuja { background: #005C4B; color: #E9EDEF; border-radius: 10px 0 10px 10px; padding: 4px 4px 8px; }
+    .burbuja img { display: block; width: 344px; height: 194px; border-radius: 7px; }
+    .txt { padding: 8px 6px 0; font-size: 14.5px; line-height: 1.4; white-space: pre-wrap; word-break: break-word; }
+    .txt a { color: #53BDEB; text-decoration: none; }
+    .hora { text-align: right; font-size: 11px; color: #A6BDB6; padding: 2px 6px 0; }
+  </style>
+</head>
+<body>
+  <div class="chat">
+    <div class="burbuja">
+      <img src="../../salida/mailing/12-11-HA-VideosLotes-play-e.png" alt="" />
+      <div class="txt" id="txt"></div>
+      <div class="hora">10:00 ✓✓</div>
+    </div>
+  </div>
+  <script>
+    // Mismo texto que mensaje.txt, con el formato de WhatsApp (*negrita*) y los links resaltados
+    const t = `*REMATE 2026* 💫
+Ya están disponibles los videos de los 13 lotes.
+Trote, salto y pedigree de cada producto, para conocerlos con tiempo.
+
+▶️ *Ver los videos:*
+https://youtube.com/playlist?list=PLRpMvaeQJNdQ
+
+*Pre-ofertas online*
+Del lunes 23/11 (10:00 h) al viernes 27/11 (20:00 h)
+https://remateharasabril.com/Remate/338/haras-abril
+
+*Remate en vivo*
+Sábado 28/11 · 17:30 h
+Haras Abril, Lezama · Presencial y online
+
+📄 Todos los detalles del remate:
+https://harasabril.com.ar/remate
+
+Tu próxima estrella cada vez más cerca.`;
+    document.getElementById("txt").innerHTML = t
+      .replace(/\*(.+?)\*/g, "<b>$1</b>")
+      .replace(/(https:\/\/\S+)/g, '<a>$1</a>');
+  </script>
+</body>
+</html>

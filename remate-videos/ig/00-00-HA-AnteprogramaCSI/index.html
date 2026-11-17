@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>00-00-HA-AnteprogramaCSI (IG)</title>
+  <!-- Carrusel para IG del Anteprograma CSI 1* 2026: 5 placas fijas, en 4:5 (feed) y 9:16 (stories).
+       Nivel CSI: fondo negro. Los datos salen del mismo datos.js que el PDF (pdf/00-00-HA-AnteprogramaCSI).
+       Exportar: node herramientas/exportar-slides.mjs ig/00-00-HA-AnteprogramaCSI/index.html salida -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: var(--ha-charcoal-elev); }
+    body { -webkit-font-smoothing: antialiased; font-family: var(--ha-font-sans); color: var(--ha-white); }
+    .slide { position: relative; width: 1080px; overflow: hidden; background: var(--ha-black); margin-bottom: 40px; }
+    .f-4x5 { height: 1350px; }
+    .f-9x16 { height: 1920px; }
+    /* Zona de contenido: márgenes de 96 px y zonas seguras de cada formato */
+    .zona { --e: 1; position: absolute; left: 96px; right: 96px; display: flex; flex-direction: column; overflow: hidden; }
+    .f-4x5 .zona { top: var(--ha-safe-top-4x5); bottom: var(--ha-safe-bot-4x5); }
+    .f-9x16 .zona { top: var(--ha-safe-top-9x16); bottom: var(--ha-safe-bot-9x16); }
+
+    /* ── Encabezado: CSI 1* · sello · fechas ── */
+    .encabezado { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: var(--ha-s-6); flex: none; }
+    .head-txt {
+      white-space: nowrap; text-transform: uppercase; line-height: var(--ha-lh-tight);
+      font-size: calc(var(--ha-t-lot-size) * 0.62);
+    }
+    .head-l { justify-self: end; font-weight: var(--ha-t-event-weight); letter-spacing: var(--ha-t-label-track); }
+    .head-r { justify-self: start; font-weight: var(--ha-t-year-weight); letter-spacing: var(--ha-t-meta-track); }
+    .seal { display: block; width: 150px; height: 150px; } /* emblema 1081 × 1080 */
+    .estrella { color: var(--ha-red); }
+
+    .destello { flex: none; height: var(--ha-flare-h); background: var(--ha-gold-flare); }
+
+    /* ── Título del día ── */
+    .dia-titulo {
+      flex: none; text-align: center; text-transform: uppercase; white-space: nowrap;
+      font-weight: var(--ha-t-event-weight); font-size: calc(calc(var(--ha-t-lot-size) * 0.82) * var(--e));
+      letter-spacing: var(--ha-t-label-track); line-height: var(--ha-lh-tight);
+      margin: var(--ha-s-5) 0 var(--ha-s-2);
+    }
+    .dia-titulo .fecha { font-weight: var(--ha-t-year-weight); color: var(--ha-sand); }
+
+    /* ── Filas de pruebas ── */
+    .pruebas { flex: none; display: flex; flex-direction: column; margin-top: auto; }
+    .prueba {
+      display: grid; grid-template-columns: 84px 1fr auto; align-items: center; column-gap: var(--ha-s-3);
+      padding: calc(var(--ha-s-2) * 0.7 * var(--e)) var(--ha-s-2); border-bottom: var(--ha-hairline) solid var(--ha-line-gold);
+    }
+    .prueba .num {
+      font-weight: var(--ha-t-num-weight); font-size: calc(calc(var(--ha-t-num-size) * 0.72) * var(--e));
+      letter-spacing: var(--ha-t-num-track); color: var(--ha-sand); line-height: 1;
+    }
+    .prueba > div { min-width: 0; }
+    .prueba .cat {
+      display: block; white-space: nowrap; font-weight: var(--ha-t-lot-weight); text-transform: uppercase;
+      font-size: calc(calc(var(--ha-t-lot-size) * 0.56) * var(--e)); letter-spacing: 0.04em; line-height: 1.1;
+    }
+    .prueba .sub {
+      display: block; margin-top: 4px; text-transform: uppercase;
+      font-size: calc(var(--ha-t-data-size) * var(--e)); letter-spacing: var(--ha-t-data-track); color: var(--ha-gray-light); line-height: 1.15;
+    }
+    .prueba .sub .item { white-space: nowrap; }
+    .prueba .sub .copa { color: var(--ha-sand); font-weight: var(--ha-t-num-weight); }
+    .prueba .alt {
+      font-weight: var(--ha-t-year-weight); font-size: calc(calc(var(--ha-t-lot-size) * 0.56) * var(--e));
+      letter-spacing: var(--ha-t-meta-track); white-space: nowrap;
+    }
+    .prueba .alt small { font-size: 0.7em; color: var(--ha-gray-light); margin-left: 2px; }
+    /* Serie internacional: panel con borde dorado */
+    .prueba.destacada {
+      background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-gold);
+      margin: var(--ha-s-1) 0; padding: calc(var(--ha-s-2) * var(--e)) var(--ha-s-2);
+    }
+    .prueba.destacada .cat { font-size: calc(calc(var(--ha-t-lot-size) * 0.64) * var(--e)); }
+    .prueba.destacada .sub { color: var(--ha-sand); }
+
+    /* ── Hito horario ── */
+    .hito {
+      flex: none; display: flex; justify-content: center; align-items: center; gap: var(--ha-s-2);
+      margin-top: var(--ha-s-4); text-transform: uppercase; white-space: nowrap;
+      font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * var(--e)); letter-spacing: var(--ha-t-label-track);
+    }
+    .hito svg { width: 40px; height: 40px; fill: none; stroke: var(--ha-sand); stroke-width: 1.8; stroke-linecap: round; }
+    .hito .hora { color: var(--ha-sand); }
+    .hito.destacado {
+      background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-gold);
+      padding: var(--ha-s-3) var(--ha-s-4); font-size: calc(calc(var(--ha-t-label-size) * 1.35) * var(--e)); font-weight: var(--ha-t-event-weight);
+    }
+    .hito.destacado svg { width: 52px; height: 52px; }
+
+    .pie {
+      margin-top: auto; padding-top: var(--ha-s-3); flex: none; text-align: center; text-transform: uppercase;
+      font-size: var(--ha-t-meta-size); letter-spacing: var(--ha-t-meta-track); color: var(--ha-gray-light);
+    }
+
+    /* ── Portada ── */
+    .portada .zona { justify-content: center; align-items: center; text-align: center; }
+    .portada .seal-grande { width: 300px; height: 300px; display: block; }
+    .eyebrow {
+      margin-top: var(--ha-s-6); text-transform: uppercase; white-space: nowrap;
+      font-weight: var(--ha-t-label-weight); font-size: var(--ha-t-label-size); letter-spacing: var(--ha-t-label-track); color: var(--ha-gray-light);
+    }
+    .titulo-grande {
+      margin-top: var(--ha-s-3); white-space: nowrap; text-transform: uppercase; line-height: var(--ha-lh-tight);
+      font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-event-size) * 0.8);
+      letter-spacing: 0.2em; padding-left: 0.2em;
+    }
+    .csi {
+      margin-top: var(--ha-s-2); white-space: nowrap; line-height: var(--ha-lh-tight);
+      font-weight: var(--ha-t-year-weight); font-size: calc(var(--ha-t-year-size) * 0.8); letter-spacing: var(--ha-t-year-track);
+    }
+    .portada .destello { width: var(--ha-flare-w); margin: var(--ha-s-6) auto; }
+    .fechas {
+      display: flex; align-items: stretch; border: var(--ha-border) solid var(--ha-gold); white-space: nowrap;
+      font-size: calc(var(--ha-t-lot-size) * 0.8); line-height: 1; text-transform: uppercase;
+    }
+    .fechas .mes { padding: var(--ha-s-2) var(--ha-s-4); font-weight: var(--ha-t-event-weight); letter-spacing: var(--ha-t-label-track); border-right: var(--ha-border) solid var(--ha-gold); }
+    .fechas .dias { padding: var(--ha-s-2) var(--ha-s-4); font-weight: var(--ha-t-year-weight); letter-spacing: var(--ha-t-num-track); }
+    .lugar {
+      margin-top: var(--ha-s-3); text-transform: uppercase; white-space: nowrap;
+      font-size: var(--ha-t-label-size); letter-spacing: var(--ha-t-label-track);
+    }
+    .logos { margin-top: var(--ha-s-8); display: flex; align-items: center; justify-content: center; gap: var(--ha-s-8); }
+    .logos .fea { width: 110px; height: 112px; } /* 675 × 688 */
+    .logos .fei { width: 200px; height: 60px; }  /* 893 × 267 */
+    .deslizar {
+      margin-top: var(--ha-s-6); text-transform: uppercase; white-space: nowrap;
+      font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 0.8); letter-spacing: var(--ha-t-label-track); color: var(--ha-sand);
+    }
+
+    /* ── Inscripciones y premios ── */
+    .bloque-titulo {
+      margin-top: var(--ha-s-4); text-align: center; text-transform: uppercase; white-space: nowrap;
+      font-weight: var(--ha-t-event-weight); font-size: calc(calc(var(--ha-t-lot-size) * 0.82) * var(--e)); letter-spacing: var(--ha-t-label-track);
+    }
+    .cierre { flex: none; margin-top: var(--ha-s-3); text-align: center; }
+    .etiqueta {
+      display: block; text-transform: uppercase; color: var(--ha-sand);
+      font-weight: var(--ha-t-label-weight); font-size: calc(calc(var(--ha-t-label-size) * 0.8) * var(--e)); letter-spacing: var(--ha-t-label-track);
+    }
+    .cierre .grande { display: block; margin-top: var(--ha-s-1); text-transform: uppercase; font-weight: var(--ha-t-event-weight); font-size: calc(calc(var(--ha-t-lot-size) * 0.9) * var(--e)); letter-spacing: 0.06em; }
+    .cierre .mail { display: block; margin-top: var(--ha-s-1); font-size: calc(calc(var(--ha-t-label-size) * 0.95) * var(--e)); letter-spacing: 0.04em; }
+    .premios { flex: none; margin-top: var(--ha-s-4); display: flex; flex-direction: column; gap: var(--ha-s-2); }
+    .premio { background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-line-gold); padding: calc(var(--ha-s-3) * var(--e)) var(--ha-s-4); text-align: center; }
+    .premio .item { white-space: nowrap; }
+    .premio .que { display: block; text-transform: uppercase; font-weight: var(--ha-t-lot-weight); font-size: calc(calc(var(--ha-t-lot-size) * 0.5) * var(--e)); letter-spacing: 0.04em; }
+    .premio .bolsa { display: block; margin-top: var(--ha-s-1); text-transform: uppercase; font-size: calc(var(--ha-t-label-size) * var(--e)); letter-spacing: var(--ha-t-data-track); }
+    .premio .bolsa b { color: var(--ha-sand); font-weight: var(--ha-t-event-weight); }
+    .premio .reparto { display: block; margin-top: 6px; text-transform: uppercase; font-size: calc(var(--ha-t-data-size) * var(--e)); letter-spacing: var(--ha-t-data-track); color: var(--ha-gray-light); }
+    .boton {
+      flex: none; margin: var(--ha-s-5) auto 0; height: var(--ha-btn-h); padding: 0 var(--ha-btn-pad-x); border-radius: var(--ha-btn-radius);
+      background: var(--ha-gold-grad); color: var(--ha-ink); display: flex; align-items: center; gap: var(--ha-s-2);
+      font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 0.9); letter-spacing: var(--ha-t-label-track);
+      text-transform: uppercase; white-space: nowrap; width: fit-content;
+    }
+    .firma { margin-top: auto; padding-top: var(--ha-s-5); padding-bottom: var(--ha-s-1); display: flex; flex-direction: column; align-items: center; }
+    .firma .logo-fila { display: flex; align-items: center; gap: var(--ha-s-2); }
+    .firma .star { width: 40px; height: 40px; }      /* 130 × 130 */
+    .firma .logotipo { width: 424px; height: 48px; }  /* 849 × 97 */
+    .firma .destello { width: 520px; margin: var(--ha-s-3) 0; }
+    .claim { font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-claim-weight); font-size: var(--ha-t-claim-size); color: var(--ha-sand); line-height: 1.2; }
+  </style>
+</head>
+<body>
+  <main id="doc"></main>
+
+  <script src="../../pdf/00-00-HA-AnteprogramaCSI/datos.js"></script>
+  <script>
+    const D = window.ANTEPROGRAMA;
+    const BASE = "00-00-HA-AnteprogramaCSI";
+    const SELLO = "../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png";
+    const reloj = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>';
+    const conEstrella = (t) => t.replace("*", '<span class="estrella">*</span>');
+
+    // "Viernes 27 de noviembre 2026" → "Viernes" + "27.11.2026"
+    const MESES = { noviembre: "11", diciembre: "12", octubre: "10" };
+    const partirFecha = (f) => {
+      const m = f.match(/^(\S+) (\d+) de (\S+) (\d{4})$/);
+      return m ? [m[1], `${m[2].padStart(2, "0")}.${MESES[m[3].toLowerCase()]}.${m[4]}`] : [f, ""];
+    };
+
+    // Copa de cada campeonato (A, B, C), para las pruebas 8 a 13
+    const copaCampeonato = Object.fromEntries(D.campeonatos.lista.map(([l, , copa]) => [l, copa]));
+    const bolsaSerie = D.premios.find((p) => p.pruebas === "Prueba 7")?.bolsa;
+
+    // Título y bajada de cada prueba, armados a partir de los datos del PDF
+    const fila = (p) => {
+      let cat = p.categoria, sub = [];
+      const final = cat.match(/^Campeonato Final F\.E\.A\. (.+)$/);
+      if (final) { cat = final[1]; sub.push("Campeonato Final F.E.A."); }
+      const camp = p.obs.match(/Campeonato "([A-C])"/);
+      if (camp) sub.push(`Campeonato ${camp[1]} · <span class="copa">Copa ${copaCampeonato[camp[1]].replace(/^Copa /, "")}</span>`);
+      if (p.copa) sub.push(`<span class="copa">${p.obs}</span>`);
+      if (p.destacada) {
+        const gp = cat.match(/^Serie Internacional (Gran Premio .+)$/);
+        if (gp) { cat = gp[1]; sub.push("Serie Internacional"); }
+        const copaGP = p.obs.match(/(Copa .+?)\s*\*/);
+        if (copaGP) sub.push(`<span class="copa">${copaGP[1]}</span>`);
+        sub.push(`Bolsa ${p.premio !== "-" ? p.premio : bolsaSerie}`);
+      }
+      return `
+        <div class="prueba${p.destacada ? " destacada" : ""}">
+          <span class="num">${String(p.n).padStart(2, "0")}</span>
+          <div><span class="cat">${cat}</span>${sub.length ? `<span class="sub">${sub.map((t) => `<span class="item">${t}</span>`).join(" · ")}</span>` : ""}</div>
+          <span class="alt">${p.altura}<small>m</small></span>
+        </div>`;
+    };
+
+    const encabezado = `
+      <div class="encabezado">
+        <span class="head-txt head-l">${conEstrella("CSI 1*")}</span>
+        <img class="seal" src="${SELLO}" alt="Haras Abril" />
+        <span class="head-txt head-r">27-29.11.2026</span>
+      </div>`;
+
+    const placas = [
+      // 00 · Portada
+      () => ({ clase: "portada", html: `
+        <img class="seal-grande" src="${SELLO}" alt="Haras Abril" />
+        <div class="eyebrow">Concurso Internacional de Salto</div>
+        <div class="titulo-grande">Anteprograma</div>
+        <div class="csi">${conEstrella("CSI 1* 2026")}</div>
+        <div class="destello"></div>
+        <div class="fechas"><span class="mes">Nov</span><span class="dias">27 · 28 · 29</span></div>
+        <div class="lugar">Haras Abril · Lezama, Buenos Aires</div>
+        <div class="logos">
+          <img class="fea" src="../../assets/logos/fea.png" alt="Federación Ecuestre Argentina" />
+          <img class="fei" src="../../assets/logos/fei.png" alt="FEI" />
+        </div>
+        <div class="deslizar">Deslizá para ver el programa →</div>` }),
+      // 01 a 03 · Un día por placa
+      ...D.dias.map((d) => () => {
+        const [dia, fecha] = partirFecha(d.fecha);
+        return { clase: "dia", html: `
+          ${encabezado}
+          <div class="dia-titulo">${dia} <span class="fecha">${fecha}</span></div>
+          <div class="destello"></div>
+          <div class="pruebas">${d.pruebas.map(fila).join("")}</div>
+          ${d.hito ? `<div class="hito${d.hito.destacado ? " destacado" : ""}">${reloj}<span class="hora">${d.hito.hora}</span><span>·</span><span>${d.hito.texto}</span></div>` : ""}
+          <div class="pie">Anteprograma completo en el link de la bio</div>` };
+      }),
+      // 04 · Inscripciones y premios
+      () => {
+        const jov = D.premios[0];
+        return { clase: "info", html: `
+          ${encabezado}
+          <div class="bloque-titulo">Inscripciones</div>
+          <div class="destello" style="margin-top: var(--ha-s-2)"></div>
+          <div class="cierre">
+            <span class="etiqueta">Cierre</span>
+            <span class="grande">${D.inscripciones.cierre}</span>
+            <span class="mail">${D.inscripciones.mail}</span>
+          </div>
+          <div class="premios">
+            <div class="premio">
+              <span class="que">Serie Internacional · Pruebas 7 y 14</span>
+              <span class="bolsa">Bolsa <b>${bolsaSerie}</b> por prueba</span>
+            </div>
+            <div class="premio">
+              <span class="que"><span class="item">Campeonato Final F.E.A.</span> · <span class="item">Caballos Jóvenes 4, 5 y 6 años</span></span>
+              <span class="bolsa">Bolsa <b>${jov.bolsa}</b> por categoría</span>
+              <span class="reparto">${jov.reparto.map(([q, m]) => `<span class="item">${q} ${m}</span>`).join(" · ")}</span>
+            </div>
+          </div>
+          <div class="boton"><span>Anteprograma completo en la bio</span><span>→</span></div>
+          <div class="firma">
+            <div class="logo-fila">
+              <img class="star" src="../../assets/logos/ha-estrella-roja.png" alt="" />
+              <img class="logotipo" src="../../assets/logos/ha-logotipo-negativo.png" alt="Haras Abril" />
+            </div>
+            <div class="destello"></div>
+            <div class="claim">El evento de salto ecuestre del año</div>
+          </div>` };
+      },
+    ];
+
+    const html = [];
+    for (const formato of ["4x5", "9x16"]) {
+      placas.forEach((placa, i) => {
+        const { clase, html: contenido } = placa();
+        const nombre = `${BASE}-${formato}-${String(i).padStart(2, "0")}`;
+        html.push(`<section class="slide f-${formato} ${clase}" data-nombre="${nombre}"><div class="zona">${contenido}</div></section>`);
+      });
+    }
+    document.getElementById("doc").outerHTML = html.join("");
+
+    // Agranda el texto de cada placa (--e) hasta ocupar su zona sin desbordar. Corre antes de exportar.
+    document.fonts.ready.then(() => {
+      for (const z of document.querySelectorAll(".slide:not(.portada) .zona")) {
+        let e = 0.8;
+        const entra = () => z.scrollHeight <= z.clientHeight &&
+          [...z.querySelectorAll(".cat, .item")].every((el) => el.scrollWidth <= el.parentElement.clientWidth + 1);
+        for (let prueba = 1.5; prueba >= 0.8; prueba -= 0.02) {
+          z.style.setProperty("--e", prueba.toFixed(2));
+          if (entra()) { e = prueba; break; }
+        }
+        z.style.setProperty("--e", e.toFixed(2));
+        z.closest(".slide").dataset.escala = e.toFixed(2);
+      }
+    });
+  </script>
+</body>
+</html>

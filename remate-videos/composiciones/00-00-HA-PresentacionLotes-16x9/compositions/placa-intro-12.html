@@ -1,0 +1,168 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"lote","type":"string","label":"N.º de lote","default":"01"},
+    {"id":"nombre","type":"string","label":"Nombre","default":"Abril Top Fire I"},
+    {"id":"sangre","type":"string","label":"Sangre (padre × abuelo materno × bisabuelo)","default":"Abril Ofire × Larino × Quality Touch"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        /* PDF HA_Video_Lote_2026_D, página 2, medido con PyMuPDF a 1920 px. */
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        /* Lote con clip de cabeza: la foto no se muestra, se ve el clip del index */
+        .pi-foto { display: none; }
+
+        /* Foto a sangre con zoom lento (canvas) y viñeta, medida comparando el PDF con la foto: 50 % de negro en los bordes */
+        .pi-foto { position: absolute; inset: 0; }
+        .pi-foto img { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; visibility: hidden; }
+        .pi-foto canvas { position: absolute; left: 0; top: 0; }
+        .pi-vineta { position: absolute; inset: 0; background: radial-gradient(ellipse 75% 85% at 35% 42%, transparent 0%, color-mix(in srgb, var(--ha-black) 50%, transparent) 100%); }
+
+        /* El bloque se mide en la página 2 (centro en x = 1426,5) y se corre entero para el cierre */
+        .pi-bloque { position: absolute; left: 0px; top: 0px; width: 1920px; height: 1080px; }
+        /* Sello de 208 px de círculo centrado en (1427, 269) */
+        .pi-seal { position: absolute; left: 1308.8px; top: 147.4px; width: 236.7px; height: 236.7px; transform-origin: 49.95% 51.39%; }
+        .pi-fila { position: absolute; left: 466.5px; width: 1920px; display: flex; justify-content: center; white-space: nowrap; line-height: normal; text-transform: uppercase; }
+        /* 07/11: nombre y sangre un 10 % más chicos que en el PDF, para dar aire sobre el clip de cabeza.
+           El nombre baja 10,6 px para seguir apoyado a la misma distancia de la línea */
+        .pi-nombre {
+          top: 419.6px; color: var(--ha-white);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-lot-weight);
+          font-size: calc(var(--ha-t-lot-size) * 1.333 * 0.9); letter-spacing: var(--ha-t-lot-track);
+        }
+        .pi-sangre {
+          top: 549.5px; color: var(--ha-white);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-data-weight);
+          font-size: calc(var(--ha-t-data-size) * 1.607 * 0.9); letter-spacing: var(--ha-t-data-track);
+        }
+        .pi-centro { display: inline-block; }
+        .pi-pal-mask { display: inline-block; overflow: hidden; vertical-align: top; }
+        .pi-pal { display: inline-block; }
+        /* Línea dorada (1072–1781 × 525–531): más gruesa en el centro y finita en las puntas. Se dibuja de izquierda a derecha */
+        .pi-linea { position: absolute; left: 1071.7px; top: 524.7px; width: 709.6px; height: 6px; background: var(--ha-gold); transform-origin: 0% 50%; clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 50% 100%); }
+        /* Brillo en la punta de la línea, como en la C: centrado en el arranque y viaja hasta el final */
+        .pi-brillo { position: absolute; left: 921.7px; top: 483.7px; width: 300px; height: 88px; mix-blend-mode: screen; opacity: 0; }
+        /* LOTE ╱ 01 en sand: LOTE en x = 1320,7, diagonal 1420,7–1458 × 681–745 y 01 en x = 1468,6 */
+        .pi-lote {
+          position: absolute; top: 684px; white-space: nowrap; line-height: normal; color: var(--ha-sand);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-num-weight);
+          font-size: calc(var(--ha-t-label-size) * 1.247); letter-spacing: var(--ha-t-label-track); text-transform: uppercase;
+        }
+        .pi-lote-txt { left: 1320.7px; }
+        .pi-lote-num { left: 1468.6px; }
+        .pi-diag { position: absolute; left: 1420.7px; top: 681px; width: 37.3px; height: 64px; overflow: visible; }
+        .pi-diag line { stroke: var(--ha-sand); stroke-width: var(--ha-border); }
+      </style>
+
+      <div id="root" data-composition-id="placa-intro-12" data-width="1920" data-height="1080">
+        <div class="pi-foto"><img src="../assets/fotos/lote01-cabeza.jpg" alt="" /></div>
+        <div class="pi-vineta"></div>
+
+        <div class="pi-bloque">
+          <img class="pi-seal" src="../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+          <div class="pi-fila pi-nombre"><span class="pi-centro" data-var-text="nombre">Abril Top Fire I</span></div>
+          <div class="pi-linea"></div>
+          <img class="pi-brillo" src="../assets/logos/shine-linea.png" alt="" />
+          <div class="pi-fila pi-sangre"><span class="pi-centro" data-var-text="sangre">Abril Ofire × Larino × Quality Touch</span></div>
+          <span class="pi-lote pi-lote-txt">Lote</span>
+          <svg class="pi-diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg>
+          <span class="pi-lote pi-lote-num" data-var-text="lote">01</span>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.querySelector('[data-composition-id="placa-intro-12"]');
+          const vars = window.__hyperframes.getVariables();
+
+          // Nombre palabra por palabra, cada una con su máscara
+          const partirPalabras = (el) => {
+            const palabras = el.textContent.trim().split(/\s+/);
+            el.textContent = "";
+            return palabras.map((p, i) => {
+              const mask = document.createElement("span");
+              mask.className = "pi-pal-mask";
+              const s = document.createElement("span");
+              s.className = "pi-pal";
+              s.textContent = p;
+              mask.appendChild(s);
+              el.appendChild(mask);
+              if (i < palabras.length - 1) el.appendChild(document.createTextNode(" "));
+              return s;
+            });
+          };
+          const fit = (el, max) => {
+            let s = parseFloat(getComputedStyle(el).fontSize);
+            while (el.offsetWidth > max && s > 12) { s -= 1; el.style.fontSize = s + "px"; }
+          };
+
+          // Zoom lento dibujado en canvas con coordenadas decimales: con transform, Chrome redondea la posición
+          // subpíxel y un zoom tan lento avanza a saltos
+          const zoomFoto = (caja, img, r, origen) => {
+            const cv = document.createElement("canvas");
+            cv.width = caja.clientWidth;
+            cv.height = caja.clientHeight;
+            caja.appendChild(cv);
+            const ctx = cv.getContext("2d");
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+            const ox = r.x + r.w * origen[0], oy = r.y + r.h * origen[1];
+            const estado = { s: 1 };
+            const dibujar = () => {
+              const s = estado.s;
+              ctx.clearRect(0, 0, cv.width, cv.height);
+              ctx.drawImage(img, ox + (r.x - ox) * s, oy + (r.y - oy) * s, r.w * s, r.h * s);
+            };
+            return { estado, dibujar };
+          };
+          const fotoImg = root.querySelector(".pi-foto img");
+
+          Promise.all([
+            fotoImg.decode(),
+            document.fonts.load('700 88px "Barlow Condensed"'),
+            document.fonts.load('400 45px "Barlow Condensed"'),
+            document.fonts.load('500 42px "Barlow Condensed"'),
+          ]).then(() => {
+            const nombre = root.querySelector(".pi-nombre .pi-centro");
+            fit(nombre, 820);
+            fit(root.querySelector(".pi-sangre .pi-centro"), 820);
+            const palabras = partirPalabras(nombre);
+
+            const tl = gsap.timeline({ paused: true });
+            // Encuadre del PDF: la imagen de 2560 × 1440 escalada a 1927 × 1084, en (0, −4)
+            const zoom = zoomFoto(root.querySelector(".pi-foto"), fotoImg, { x: 0, y: -4, w: 1927, h: 1084 }, [0.3, 0.4]);
+            zoom.dibujar();
+            tl.fromTo(zoom.estado, { s: 1 }, { s: 1.06, duration: 3.6, ease: "none", onUpdate: zoom.dibujar }, 0);
+            tl.fromTo(".pi-seal", { opacity: 0, scale: 0.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, 0.15);
+            tl.fromTo(palabras, { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "expo.out", stagger: 0.12 }, 0.4);
+            // La línea se dibuja de izquierda a derecha con el brillo en la punta, a la velocidad de la C:
+            // allá el brillo recorría 967 px (de x = 953 al borde del cuadro) y salía de cuadro sin frenarse.
+            // Acá hace el mismo recorrido, la línea lo sigue hasta su largo y el brillo se apaga al llegar a la punta
+            const linea = root.querySelector(".pi-linea"), brillo = root.querySelector(".pi-brillo");
+            const LARGO = 709.6, RECORRIDO_C = 967;
+            const trazo = { x: 0, a: 0 };
+            const pintarTrazo = () => {
+              gsap.set(linea, { scaleX: Math.min(trazo.x / LARGO, 1) });
+              gsap.set(brillo, { x: Math.min(trazo.x, LARGO), opacity: trazo.a * Math.max(0, Math.min(1, (LARGO - trazo.x) / 40)) });
+            };
+            pintarTrazo();
+            tl.fromTo(trazo, { x: 0 }, { x: RECORRIDO_C, duration: 0.6, ease: "power3.out", onUpdate: pintarTrazo }, 0.55);
+            tl.fromTo(trazo, { a: 0 }, { a: 1, duration: 0.1, ease: "none", onUpdate: pintarTrazo }, 0.55);
+            tl.fromTo(".pi-sangre .pi-centro", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power2.out" }, 0.75);
+            tl.fromTo(".pi-lote", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "power2.out", stagger: 0.1 }, 0.95);
+            tl.fromTo(".pi-diag line", { attr: { x2: 0, y2: 64 } }, { attr: { x2: 37.3, y2: 0 }, duration: 0.4, ease: "power2.out" }, 1.0);
+
+            window.__timelines["placa-intro-12"] = tl;
+          });
+        })();
+      </script>
+    </template>
+  </body>
+</html>

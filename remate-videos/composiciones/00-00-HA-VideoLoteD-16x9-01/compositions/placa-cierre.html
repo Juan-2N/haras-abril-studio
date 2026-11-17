@@ -1,0 +1,179 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"lote","type":"string","label":"N.º de lote","default":"01"},
+    {"id":"nombre","type":"string","label":"Nombre","default":"Abril Top Fire I"},
+    {"id":"sangre","type":"string","label":"Sangre (padre × abuelo materno × bisabuelo)","default":"Abril Ofire × Larino × Quality Touch"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        /* PDF HA_Video_Lote_2026_D, página 9, medido con PyMuPDF a 1920 px. */
+        #root { position: absolute; inset: 0; overflow: hidden; background: var(--ha-black); }
+
+        /* Foto a sangre con zoom lento (canvas) y viñeta, medida comparando el PDF con la foto: 50 % de negro en los bordes */
+        .pf-foto { position: absolute; inset: 0; }
+        .pf-foto img { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; visibility: hidden; }
+        .pf-foto canvas { position: absolute; left: 0; top: 0; }
+        .pf-vineta { position: absolute; inset: 0; background: radial-gradient(ellipse 75% 85% at 52% 30%, transparent 0%, color-mix(in srgb, var(--ha-black) 50%, transparent) 100%); }
+        /* 07/11, prueba: el cierre sin viñeta. Para volver a ponerla, borrar esta línea */
+        .pf-vineta { display: none; }
+        /* El bloque se mide en la página 2 (centro en x = 1426,5) y se corre entero para el cierre */
+        .pf-bloque { position: absolute; left: -950px; top: 169px; width: 1920px; height: 1080px; }
+        /* Sello de 208 px de círculo centrado en (1427, 269) */
+        .pf-seal { position: absolute; left: 1308.8px; top: 147.4px; width: 236.7px; height: 236.7px; transform-origin: 49.95% 51.39%; }
+        .pf-fila { position: absolute; left: 466.5px; width: 1920px; display: flex; justify-content: center; white-space: nowrap; line-height: normal; text-transform: uppercase; }
+        .pf-nombre {
+          top: 409px; color: var(--ha-white);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-lot-weight);
+          font-size: calc(var(--ha-t-lot-size) * 1.333); letter-spacing: var(--ha-t-lot-track);
+        }
+        .pf-sangre {
+          top: 549.5px; color: var(--ha-white);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-data-weight);
+          font-size: calc(var(--ha-t-data-size) * 1.607 * 0.9); letter-spacing: var(--ha-t-data-track);
+          /* Sombra suave: en varios lotes la sangre pasa sobre los parantes blancos del salto */
+          text-shadow: 0 1px 3px color-mix(in srgb, var(--ha-black) 80%, transparent), 0 0 12px color-mix(in srgb, var(--ha-black) 55%, transparent);
+        }
+        .pf-centro { display: inline-block; }
+        .pf-pal-mask { display: inline-block; overflow: hidden; vertical-align: top; }
+        .pf-pal { display: inline-block; }
+        /* Línea dorada (1072–1781 × 525–531): más gruesa en el centro y finita en las puntas. Se dibuja de izquierda a derecha */
+        .pf-linea { position: absolute; left: 1071.7px; top: 524.7px; width: 709.6px; height: 6px; background: var(--ha-gold); transform-origin: 0% 50%; clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 50% 100%); }
+        /* Brillo en la punta de la línea, como en la C: centrado en el arranque y viaja hasta el final */
+        .pf-brillo { position: absolute; left: 921.7px; top: 483.7px; width: 300px; height: 88px; mix-blend-mode: screen; opacity: 0; }
+        /* LOTE ╱ 01 en marrón medio (--ha-taupe), elegido por el usuario sobre muestras: sin viñeta, el sand no se leía. LOTE en x = 1320,7, diagonal 1420,7–1458 × 681–745 y 01 en x = 1468,6 */
+        .pf-lote {
+          position: absolute; top: 684px; white-space: nowrap; line-height: normal; color: var(--ha-taupe);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-num-weight);
+          font-size: calc(var(--ha-t-label-size) * 1.247); letter-spacing: var(--ha-t-label-track); text-transform: uppercase;
+        }
+        .pf-lote-txt { left: 1320.7px; }
+        .pf-lote-num { left: 1468.6px; }
+        .pf-diag { position: absolute; left: 1420.7px; top: 681px; width: 37.3px; height: 64px; overflow: visible; }
+        .pf-diag line { stroke: var(--ha-taupe); stroke-width: var(--ha-border); }
+        /* 08/11: "REMATE 2026 ╱ LOTE NN" arriba del sello, centrado con él; reemplaza al LOTE ╱ NN de abajo. Los potrillos (cierreDerecha) conservan el de abajo */
+        .pf-lote, .pf-diag { display: none; }
+        .pf-arriba {
+          top: 66px; align-items: center; gap: 18px; color: var(--ha-taupe);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-num-weight);
+          font-size: calc(var(--ha-t-label-size) * 1.247); letter-spacing: var(--ha-t-label-track);
+        }
+        .pf-arriba-diag { width: 37.3px; height: 64px; flex: none; overflow: visible; }
+        .pf-arriba-diag line { stroke: var(--ha-taupe); stroke-width: var(--ha-border); }
+      </style>
+
+      <div id="root" data-composition-id="placa-cierre" data-width="1920" data-height="1080">
+        <div class="pf-foto"><img src="../assets/fotos/lote01b-salto.jpg" alt="" /></div>
+        <div class="pf-vineta"></div>
+        <div class="pf-bloque">
+          <div class="pf-fila pf-arriba">
+            <span>Remate 2026</span>
+            <svg class="pf-arriba-diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg>
+            <span>Lote <span data-var-text="lote">01</span></span>
+          </div>
+          <img class="pf-seal" src="../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+          <div class="pf-fila pf-nombre"><span class="pf-centro" data-var-text="nombre">Abril Top Fire I</span></div>
+          <div class="pf-linea"></div>
+          <img class="pf-brillo" src="../assets/logos/shine-linea.png" alt="" />
+          <div class="pf-fila pf-sangre"><span class="pf-centro" data-var-text="sangre">Abril Ofire × Larino × Quality Touch</span></div>
+          <span class="pf-lote pf-lote-txt">Lote</span>
+          <svg class="pf-diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg>
+          <span class="pf-lote pf-lote-num" data-var-text="lote">01</span>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.querySelector('[data-composition-id="placa-cierre"]');
+          const vars = window.__hyperframes.getVariables();
+          // Nombre palabra por palabra, cada una con su máscara
+          const partirPalabras = (el) => {
+            const palabras = el.textContent.trim().split(/\s+/);
+            el.textContent = "";
+            return palabras.map((p, i) => {
+              const mask = document.createElement("span");
+              mask.className = "pf-pal-mask";
+              const s = document.createElement("span");
+              s.className = "pf-pal";
+              s.textContent = p;
+              mask.appendChild(s);
+              el.appendChild(mask);
+              if (i < palabras.length - 1) el.appendChild(document.createTextNode(" "));
+              return s;
+            });
+          };
+          const fit = (el, max) => {
+            let s = parseFloat(getComputedStyle(el).fontSize);
+            while (el.offsetWidth > max && s > 12) { s -= 1; el.style.fontSize = s + "px"; }
+          };
+
+          // Zoom lento dibujado en canvas con coordenadas decimales: con transform, Chrome redondea la posición
+          // subpíxel y un zoom tan lento avanza a saltos
+          const zoomFoto = (caja, img, r, origen) => {
+            const cv = document.createElement("canvas");
+            cv.width = caja.clientWidth;
+            cv.height = caja.clientHeight;
+            caja.appendChild(cv);
+            const ctx = cv.getContext("2d");
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+            const ox = r.x + r.w * origen[0], oy = r.y + r.h * origen[1];
+            const estado = { s: 1 };
+            const dibujar = () => {
+              const s = estado.s;
+              ctx.clearRect(0, 0, cv.width, cv.height);
+              ctx.drawImage(img, ox + (r.x - ox) * s, oy + (r.y - oy) * s, r.w * s, r.h * s);
+            };
+            return { estado, dibujar };
+          };
+          const fotoImg = root.querySelector(".pf-foto img");
+
+          Promise.all([
+            fotoImg.decode(),
+            document.fonts.load('700 88px "Barlow Condensed"'),
+            document.fonts.load('400 45px "Barlow Condensed"'),
+            document.fonts.load('500 42px "Barlow Condensed"'),
+          ]).then(() => {
+            const nombre = root.querySelector(".pf-nombre .pf-centro");
+            fit(nombre, 820);
+            fit(root.querySelector(".pf-sangre .pf-centro"), 820);
+            const palabras = partirPalabras(nombre);
+
+            const tl = gsap.timeline({ paused: true });
+            // Encuadre del PDF: la imagen de 1344 × 752 escalada a 1928 × 1079, en (0, −4)
+            const zoom = zoomFoto(root.querySelector(".pf-foto"), fotoImg, { x: 0, y: -4, w: 1928, h: 1079 }, [0.6, 0.4]);
+            zoom.dibujar();
+            tl.fromTo(zoom.estado, { s: 1 }, { s: 1.06, duration: 5, ease: "none", onUpdate: zoom.dibujar }, 0);
+            tl.fromTo(".pf-seal", { opacity: 0, scale: 0.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, 0.15);
+            tl.fromTo(".pf-arriba", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power2.out" }, 0.3);
+            tl.fromTo(palabras, { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "expo.out", stagger: 0.12 }, 0.4);
+            // La línea se dibuja de izquierda a derecha con el brillo en la punta, a la velocidad de la C:
+            // allá el brillo recorría 967 px (de x = 953 al borde del cuadro) y salía de cuadro sin frenarse.
+            // Acá hace el mismo recorrido, la línea lo sigue hasta su largo y el brillo se apaga al llegar a la punta
+            const linea = root.querySelector(".pf-linea"), brillo = root.querySelector(".pf-brillo");
+            const LARGO = 709.6, RECORRIDO_C = 967;
+            const trazo = { x: 0, a: 0 };
+            const pintarTrazo = () => {
+              gsap.set(linea, { scaleX: Math.min(trazo.x / LARGO, 1) });
+              gsap.set(brillo, { x: Math.min(trazo.x, LARGO), opacity: trazo.a * Math.max(0, Math.min(1, (LARGO - trazo.x) / 40)) });
+            };
+            pintarTrazo();
+            tl.fromTo(trazo, { x: 0 }, { x: RECORRIDO_C, duration: 0.6, ease: "power3.out", onUpdate: pintarTrazo }, 0.55);
+            tl.fromTo(trazo, { a: 0 }, { a: 1, duration: 0.1, ease: "none", onUpdate: pintarTrazo }, 0.55);
+            tl.fromTo(".pf-sangre .pf-centro", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power2.out" }, 0.75);
+            tl.fromTo(".pf-lote", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "power2.out", stagger: 0.1 }, 0.95);
+            tl.fromTo(".pf-diag line", { attr: { x2: 0, y2: 64 } }, { attr: { x2: 37.3, y2: 0 }, duration: 0.4, ease: "power2.out" }, 1.0);
+            window.__timelines["placa-cierre"] = tl;
+          });
+        })();
+      </script>
+    </template>
+  </body>
+</html>

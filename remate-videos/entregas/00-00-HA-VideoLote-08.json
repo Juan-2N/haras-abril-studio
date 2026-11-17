@@ -1,0 +1,20 @@
+{
+  "slug": "video-lote-08",
+  "titulo": "Video Lote 08 · Abril Tarbet",
+  "tipo": "video",
+  "descripcion": "Video del lote para YouTube · 16:9 · 42 s",
+  "base": "../salida",
+  "formatos": [
+    "16x9",
+    "9x16"
+  ],
+  "slides": [
+    {
+      "id": "08",
+      "titulo": "Lote 08",
+      "subtitulo": "Abril Tarbet · Abril Ofire × Conthargos × Baloubet du Rouet",
+      "video": "00-00-HA-VideoLote-{formato}-08.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-{formato}-08.jpg"
+    }
+  ]
+}

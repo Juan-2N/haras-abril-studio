@@ -1,0 +1,75 @@
+{
+  "slug": "portadas-remate-web",
+  "titulo": "Portadas Remate 2026 · Portales web",
+  "tipo": "portada",
+  "descripcion": "Portada genérica del Remate (sello, REMATE 2026 y fecha 28.11.2026) en 9 formatos para portales web · PNG",
+  "base": "../salida/portadas-remate",
+  "formatos": [
+    "web"
+  ],
+  "slides": [
+    {
+      "id": "21x9",
+      "titulo": "21:9",
+      "subtitulo": "2520×1080 px",
+      "video": "00-00-HA-PortadaRemate-21x9.png",
+      "captura": "jpg/00-00-HA-PortadaRemate-21x9.jpg"
+    },
+    {
+      "id": "16x6",
+      "titulo": "16:6",
+      "subtitulo": "1920×720 px",
+      "video": "00-00-HA-PortadaRemate-16x6.png",
+      "captura": "jpg/00-00-HA-PortadaRemate-16x6.jpg"
+    },
+    {
+      "id": "16x9",
+      "titulo": "16:9",
+      "subtitulo": "1920×1080 px",
+      "video": "00-00-HA-PortadaRemate-16x9.png",
+      "captura": "jpg/00-00-HA-PortadaRemate-16x9.jpg"
+    },
+    {
+      "id": "4x3",
+      "titulo": "4:3",
+      "subtitulo": "1600×1200 px",
+      "video": "00-00-HA-PortadaRemate-4x3.png",
+      "captura": "jpg/00-00-HA-PortadaRemate-4x3.jpg"
+    },
+    {
+      "id": "5x4",
+      "titulo": "5:4",
+      "subtitulo": "1500×1200 px",
+      "video": "00-00-HA-PortadaRemate-5x4.png",
+      "captura": "jpg/00-00-HA-PortadaRemate-5x4.jpg"
+    },
+    {
+      "id": "1x1",
+      "titulo": "1:1",
+      "subtitulo": "1080×1080 px",
+      "video": "00-00-HA-PortadaRemate-1x1.png",
+      "captura": "jpg/00-00-HA-PortadaRemate-1x1.jpg"
+    },
+    {
+      "id": "4x5",
+      "titulo": "4:5",
+      "subtitulo": "1080×1350 px",
+      "video": "00-00-HA-PortadaRemate-4x5.png",
+      "captura": "jpg/00-00-HA-PortadaRemate-4x5.jpg"
+    },
+    {
+      "id": "3x4",
+      "titulo": "3:4",
+      "subtitulo": "1080×1440 px",
+      "video": "00-00-HA-PortadaRemate-3x4.png",
+      "captura": "jpg/00-00-HA-PortadaRemate-3x4.jpg"
+    },
+    {
+      "id": "9x16",
+      "titulo": "9:16",
+      "subtitulo": "1080×1920 px",
+      "video": "00-00-HA-PortadaRemate-9x16.png",
+      "captura": "jpg/00-00-HA-PortadaRemate-9x16.jpg"
+    }
+  ]
+}

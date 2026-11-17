@@ -1,0 +1,20 @@
+{
+  "slug": "inscripcion-csi-2026",
+  "titulo": "Inscripción CSI 1* & Campeonato Nacional de Caballos Jóvenes",
+  "tipo": "reel",
+  "fecha_publicacion": "2026-11-16",
+  "descripcion": "Video del concurso con texto sobreimpreso · Reel y Stories 9:16 · 36 s",
+  "base": "../salida",
+  "formatos": ["9x16"],
+  "slides": [
+    { "id": "01", "titulo": "Inscribite ahora", "subtitulo": "CSI 1* & Campeonato Nacional de Caballos Jóvenes 2026 F.E.A",
+      "video": "16-11-HA-InscripcionCSI-{formato}-01.mp4", "captura": "capturas/16-11-HA-InscripcionCSI-{formato}-01.jpg" }
+  ],
+  "copy": [
+    "¡Haras Abril vuelve a abrir sus puertas! 💫",
+    "CSI 1* & Campeonato Nacional de Caballos Jóvenes 2026 F.E.A",
+    "27, 28 y 29 de noviembre · Lezama.",
+    "No te lo pierdas. ¡Inscribite ahora!",
+    "#harasabril #simplementelamejorsangre #losmejoresresultados"
+  ]
+}

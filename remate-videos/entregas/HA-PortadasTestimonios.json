@@ -1,0 +1,16 @@
+{
+  "slug": "portadas-testimonios",
+  "titulo": "Portadas Testimonios · #FamiliaHarasAbril",
+  "tipo": "reel",
+  "descripcion": "Portadas de los reels de testimonios, en PNG tal como vinieron del diseño · Stories 9:16",
+  "base": "../salida",
+  "formatos": ["9x16"],
+  "slides": [
+    { "id": "01", "titulo": "Delfi Blanco", "subtitulo": "#Familia Haras Abril",
+      "video": "testimonios/HA_26_RRSS_TEST_01.png", "captura": "capturas/HA_26_RRSS_TEST_01.jpg" },
+    { "id": "02", "titulo": "Guille Berlier", "subtitulo": "#Familia Haras Abril",
+      "video": "testimonios/HA_26_RRSS_TEST_02.png", "captura": "capturas/HA_26_RRSS_TEST_02.jpg" },
+    { "id": "03", "titulo": "Coty Abdala", "subtitulo": "#Familia Haras Abril",
+      "video": "testimonios/HA_26_RRSS_TEST_03.png", "captura": "capturas/HA_26_RRSS_TEST_03.jpg" }
+  ]
+}

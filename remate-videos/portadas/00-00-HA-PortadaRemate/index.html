@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>00-00-HA-PortadaRemate</title>
+  <!-- Portadas genéricas del Remate 2026 para portales web, una placa por formato.
+       Diseño: fondo carbón, sello, REMATE 2026, línea dorada y fecha.
+       Para agregar un formato, sumarlo a FORMATOS (nombre, ancho, alto).
+       Exportar: node herramientas/exportar-slides.mjs portadas/00-00-HA-PortadaRemate/index.html salida/portadas-remate -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: var(--ha-charcoal-elev); }
+    body { -webkit-font-smoothing: antialiased; font-family: var(--ha-font-sans); color: var(--ha-white); padding: 40px; }
+    .slide { position: relative; overflow: hidden; background: var(--ha-charcoal); margin-bottom: 40px;
+             display: flex; align-items: center; justify-content: center; }
+    /* Sello de marca de agua, muy tenue, para que el fondo no quede plano */
+    .agua { position: absolute; opacity: 0.05; pointer-events: none; }
+    /* Marco fino dorado */
+    .marco { position: absolute; inset: calc(var(--ha-s-5) * var(--u)); border: var(--ha-hairline) solid var(--ha-line-gold-soft); pointer-events: none; }
+
+    /* --u: escala de la placa = lado corto / 1080 */
+    .bloque { position: relative; display: flex; align-items: center; text-transform: uppercase; }
+    .sello { flex: none; width: calc(var(--ha-seal-size) * 0.9 * var(--u)); height: calc(var(--ha-seal-size) * 0.9 * var(--u)); }
+    .textos { display: flex; flex-direction: column; }
+    .evento { white-space: nowrap; font-weight: var(--ha-t-event-weight); letter-spacing: var(--ha-t-event-track); font-size: calc(var(--ha-t-event-size) * var(--u)); line-height: var(--ha-lh-tight); }
+    .evento span { font-weight: var(--ha-t-year-weight); letter-spacing: var(--ha-t-year-track); }
+    .linea { height: calc(var(--ha-flare-h) * var(--u)); width: calc(var(--ha-flare-w) * var(--u)); background: var(--ha-gold-flare); margin: calc(var(--ha-s-5) * var(--u)) 0; }
+    .fecha { white-space: nowrap; color: var(--ha-sand); font-weight: var(--ha-t-data-weight); letter-spacing: var(--ha-t-label-track); font-size: calc(var(--ha-t-label-size) * 1.6 * var(--u)); line-height: var(--ha-lh-tight); }
+
+    /* Vertical (de 16:9 a 9:16): todo apilado y centrado */
+    .apilado .bloque { flex-direction: column; text-align: center; }
+    .apilado .textos { align-items: center; margin-top: calc(var(--ha-s-8) * var(--u)); }
+    /* Apaisado (más ancho que 2:1): sello a la izquierda, textos a la derecha */
+    .apaisado .bloque { flex-direction: row; gap: calc(var(--ha-s-12) * var(--u)); }
+    .apaisado .textos { align-items: flex-start; }
+    .apaisado .linea { background: var(--ha-gold-grad); }
+  </style>
+</head>
+<body>
+  <script>
+    const FECHA = "28.11.2026";
+    const FORMATOS = [
+      ["21x9", 2520, 1080],
+      ["16x6", 1920, 720],
+      ["16x9", 1920, 1080],
+      ["4x3", 1600, 1200],
+      ["5x4", 1500, 1200],
+      ["1x1", 1080, 1080],
+      ["4x5", 1080, 1350],
+      ["3x4", 1080, 1440],
+      ["9x16", 1080, 1920],
+    ];
+    document.body.insertAdjacentHTML("beforeend", FORMATOS.map(([nombre, w, h]) => {
+      const tipo = w / h > 2 ? "apaisado" : "apilado";
+      // Las apaisadas y las verticales tienen aire de sobra en el lado largo: el bloque crece
+      const u = (Math.min(w, h) / 1080) * (tipo === "apaisado" ? 1.4 : h / w > 1.5 ? 1.2 : 1);
+      // Marca de agua: sello grande, corrido hacia una esquina
+      const agua = Math.max(w, h) * 0.9;
+      return `<section class="slide ${tipo}" data-nombre="00-00-HA-PortadaRemate-${nombre}" style="width:${w}px;height:${h}px;--u:${u}">
+        <img class="agua" src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="" style="width:${agua}px;height:${agua}px;left:${w - agua * 0.55}px;top:${h - agua * 0.6}px" />
+        <div class="marco"></div>
+        <div class="bloque">
+          <img class="sello" src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+          <div class="textos">
+            <div class="evento">Remate <span>2026</span></div>
+            <div class="linea"></div>
+            <div class="fecha">${FECHA}</div>
+          </div>
+        </div>
+      </section>`;
+    }).join(""));
+  </script>
+</body>
+</html>

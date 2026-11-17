@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>HA26 Catálogo 36x38 · grilla</title>
+<link rel="stylesheet" href="../../brand/tokens.css">
+<style>
+  /* Pliego terminado 360 × 380 mm · 3 cuerpos de 120 mm · módulo de lote 60 × 190 mm */
+  @page { size: 360mm 380mm; margin: 0; }
+  /* Tríptico envolvente: la solapa (A) se pliega adentro y va 3 mm más angosta. 118 + 121 + 121 = 360.
+     Exterior: A | B | C  ·  Interior (dorso): C' | B' | A'  → la angosta queda a la derecha. */
+  #exterior { --c1: 118mm; --c2: 121mm; --c3: 121mm; }
+  #interior { --c1: 121mm; --c2: 121mm; --c3: 118mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #777; font-family: var(--ha-font-sans); color: var(--ha-white); }
+  .lado { width: 360mm; height: 380mm; position: relative; background: var(--ha-charcoal); overflow: hidden;
+          display: grid; grid-template-columns: calc(var(--c1) / 2) calc(var(--c1) / 2) calc(var(--c2) / 2) calc(var(--c2) / 2) calc(var(--c3) / 2) calc(var(--c3) / 2); grid-template-rows: repeat(2, 190mm); page-break-after: always; }
+  .rotulo { font: 500 6mm var(--ha-font-sans); letter-spacing: .16em; color: #fff; padding: 8mm 0 4mm; }
+  body.pantalla { padding: 10mm; }
+  body:not(.pantalla) .rotulo { display: none; }
+
+  /* Guías de pliegue y de cuerpo */
+  .guias .lado::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, transparent calc(var(--c1) - .3mm), #E54235 calc(var(--c1) - .3mm), #E54235 calc(var(--c1) + .3mm), transparent calc(var(--c1) + .3mm)),
+                linear-gradient(90deg, transparent calc(var(--c1) + var(--c2) - .3mm), #E54235 calc(var(--c1) + var(--c2) - .3mm), #E54235 calc(var(--c1) + var(--c2) + .3mm), transparent calc(var(--c1) + var(--c2) + .3mm)); opacity: .8; }
+  .tag { display: none; }
+  .guias .tag { display: block; position: absolute; top: 2mm; z-index: 5; font: 600 3.2mm var(--ha-font-sans); letter-spacing: .1em;
+                background: #E54235; color: #fff; padding: .6mm 2mm; }
+
+  /* ---------- Tarjeta de lote 60 × 190 ---------- */
+  .lote { width: 100%; height: 190mm; display: grid; grid-template-rows: 26mm 80mm 34mm 1fr; overflow: hidden; background: var(--ha-ink);
+          border-right: .25mm solid var(--ha-line-gold-soft); border-bottom: 1mm solid var(--ha-taupe); } /* línea marrón claro entre filas */
+  .lote .cab { text-align: center; padding: 3.2mm 3mm 0; }
+  .lote .num { font: 500 3mm var(--ha-font-sans); letter-spacing: .16em; color: var(--ha-sand); display: flex; align-items: center; justify-content: center; gap: 1.6mm; }
+  .lote .num::before { content: ""; width: 4mm; height: .3mm; background: var(--ha-gold); transform: rotate(-45deg); }
+  .lote .nom { font: 700 4.6mm/1 var(--ha-font-sans); letter-spacing: .06em; text-transform: uppercase; margin-top: 2.2mm; white-space: nowrap; }
+  .lote .ped { font: 400 2.25mm/1.25 var(--ha-font-sans); letter-spacing: .06em; text-transform: uppercase; color: var(--ha-gray-light); margin-top: 1.6mm; }
+  .lote img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .lote .f1 img { object-position: 50% 30%; }
+  .lote .f2 img { object-position: 74% 50%; }
+  .lote .f2.potrillo img { object-position: 50% 60%; }
+  .lote .datos { padding: 3mm 4mm; display: grid; grid-template-columns: 1fr 17mm; gap: 3mm; align-items: center; }
+  .lote .qrl { width: 17mm; height: 17mm; background: #fff; padding: 1.3mm; } /* QR a la ficha del lote: oscuro sobre blanco para que lo lean todas las cámaras */
+  .lote .qrl img { width: 100%; height: 100%; display: block; }
+  .lote .datos .filas div { display: grid; grid-template-columns: 10mm 1fr; font: 400 2.5mm/1 var(--ha-font-sans); letter-spacing: .1em;
+                     text-transform: uppercase; padding: 1.7mm 0; border-bottom: .2mm solid var(--ha-line-gold-soft); }
+  .lote .datos b { font-weight: 600; color: var(--ha-sand); }
+
+  /* ---------- Cuerpo A (solapa): lote 13 + cómo participar + programa ---------- */
+  .info { padding: 9mm 6mm 6mm; display: flex; flex-direction: column; background: var(--ha-charcoal-elev);
+          border-bottom: 1mm solid var(--ha-taupe); }
+  .eyebrow { font: 500 3mm var(--ha-font-sans); letter-spacing: .16em; color: var(--ha-sand); text-transform: uppercase; }
+  .tit { font: 700 6.2mm/1 var(--ha-font-sans); letter-spacing: .06em; text-transform: uppercase; margin-top: 2mm; }
+  .flare { height: .35mm; background: var(--ha-gold-flare); margin: 4mm 0; }
+  .modo { margin-bottom: 5.5mm; }
+  .modo h4 { font: 700 3.2mm var(--ha-font-sans); letter-spacing: .12em; text-transform: uppercase; }
+  .modo p { font: 400 2.6mm/1.3 var(--ha-font-sans); letter-spacing: .04em; color: var(--ha-gray-light); margin-top: .8mm; }
+  .caja { border: .3mm solid var(--ha-line-gold); padding: 3mm; text-align: center; margin-top: 1mm; }
+  .sello-info { width: 46mm; height: 32.6mm; align-self: center; margin-top: 1mm; } /* SIMPLYTHEBEST.pdf, 1092×774 */
+  .info .paquete { margin-top: auto; } /* el aire queda entre el sello y el bloque de texto */
+  .caja .eyebrow { font-size: 2.6mm; }
+  .caja .fecha { font: 700 5.4mm/1 var(--ha-font-sans); letter-spacing: .06em; margin: 1.6mm 0 1mm; }
+  .caja p { font: 400 2.4mm var(--ha-font-sans); letter-spacing: .08em; color: var(--ha-gray-light); text-transform: uppercase; }
+  .qr img { width: 100%; height: 100%; display: block; }
+  .qr { width: 24mm; height: 24mm; margin: 4mm auto 0; background: #fff; padding: 1.6mm; display: grid; place-items: center;
+        font: 500 2.6mm var(--ha-font-sans); letter-spacing: .12em; color: var(--ha-sand); }
+  .url { text-align: center; font: 500 2.8mm var(--ha-font-sans); letter-spacing: .1em; margin-top: 2mm; }
+
+  .programa { grid-column: span 2; position: relative; display: flex; flex-direction: column; background: var(--ha-charcoal-elev); }
+  .programa .top { padding: 9mm 7mm 0; text-align: center; }
+  .dias { display: grid; grid-template-columns: repeat(3, 1fr); margin: 5mm 6mm 0; border: .3mm solid var(--ha-line-gold); }
+  .dia { padding: 4mm 2.5mm 5mm; text-align: center; border-right: .3mm solid var(--ha-line-gold); }
+  .dia:last-child { border-right: 0; }
+  .dia .dn { font: 500 2.8mm var(--ha-font-sans); letter-spacing: .16em; color: var(--ha-gray-light); }
+  .dia .dd { font: 600 13mm/1 var(--ha-font-sans); letter-spacing: .04em; color: var(--ha-sand); margin: 1mm 0 .5mm; }
+  .dia .dm { font: 400 2.6mm var(--ha-font-sans); letter-spacing: .16em; color: var(--ha-gray-light); }
+  .dia ul { list-style: none; margin-top: 3.5mm; border-top: .2mm solid var(--ha-line-gold-soft); }
+  .dia li { font: 400 2.7mm/1.25 var(--ha-font-sans); letter-spacing: .05em; text-transform: uppercase; padding: 1.8mm 0; border-bottom: .2mm solid var(--ha-line-gold-soft); }
+  .dia li i { font-style: normal; display: block; color: var(--ha-gray-light); font-size: 2.3mm; margin-bottom: .4mm; }
+  .dia.hl { background: rgba(198,164,126,.12); }
+  .dia li.r { font-weight: 700; color: var(--ha-white); }
+  .dia li.r i { color: var(--ha-sand); font-weight: 600; font-size: 3.4mm; }
+  .dia li:not(.r) i { margin: .6mm 0 0; }
+  .dia li em { display: block; font-style: normal; font-weight: 400; text-transform: none; color: var(--ha-gray-light); margin-top: .6mm; }
+  .lugar { margin-top: auto; height: 74mm; position: relative; }
+  .lugar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .lugar::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, var(--ha-charcoal-elev) 0%, rgba(0,0,0,0) 45%, rgba(0,0,0,.6) 100%); }
+  .lugar span { position: absolute; left: 0; right: 0; bottom: 5mm; text-align: center; font: 500 3mm var(--ha-font-sans); letter-spacing: .16em; }
+
+  /* ---------- Cuerpo B (contratapa): 20 sponsors 2 × 10 ---------- */
+  .sponsors { grid-column: span 2; grid-row: span 2; display: grid; grid-template-rows: 40mm 1fr; background: var(--ha-black); }
+  .sponsors .top { text-align: center; padding-top: 11mm; }
+  .sponsors .top .flare { width: 60mm; margin: 4mm auto 0; }
+  .logos { display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(10, 34mm); }
+  .logos div { overflow: hidden; display: grid; place-items: center; }
+  .logos img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* ---------- Cuerpo C (tapa) ---------- */
+  .tapa { grid-column: span 2; grid-row: span 2; position: relative; background: var(--ha-charcoal); text-align: center; overflow: hidden;
+          display: flex; flex-direction: column; align-items: center; }
+  .tapa .agua { position: absolute; width: 150mm; height: 150mm; top: 58mm; left: 15mm; opacity: .07; }
+  .tapa .foto { position: absolute; left: 0; right: 0; bottom: 0; height: 150mm; }
+  .tapa .foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; display: block; }
+  .tapa .foto::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, var(--ha-charcoal) 0%, rgba(43,43,43,.55) 40%, rgba(0,0,0,.82) 100%); }
+  .tapa > *:not(.agua):not(.foto) { position: relative; }
+  .tapa .sello { width: 42mm; height: 42mm; margin-top: 30mm; }
+  .tapa .logo { width: 70mm; height: 8mm; margin-top: 10mm; } /* 849×97 */
+  .tapa .flare { width: 80mm; margin: 7mm 0; }
+  .tapa .ev { font: 700 19mm/1 var(--ha-font-sans); letter-spacing: .28em; margin-right: -.28em; }
+  .tapa .an { font: 400 15mm/1 var(--ha-font-sans); letter-spacing: .08em; color: var(--ha-sand); margin-top: 2mm; }
+  .tapa .cuando { font: 500 4.4mm var(--ha-font-sans); letter-spacing: .16em; margin-top: 8mm; }
+  .tapa .claim { font: italic 400 6.4mm/1.2 var(--ha-font-serif); color: var(--ha-sand); margin-top: 7mm; }
+  .tapa .pill { margin-top: 8mm; background: var(--ha-gold-grad); color: var(--ha-ink); font: 600 3.4mm var(--ha-font-sans); letter-spacing: .16em; padding: 2.4mm 7mm; }
+  .tapa .contacto { margin-top: auto; margin-bottom: 14mm; display: grid; grid-template-columns: 1fr 1fr; gap: 3mm 10mm; text-align: left;
+                    font: 400 2.9mm var(--ha-font-sans); letter-spacing: .08em; }
+</style>
+</head>
+<body class="pantalla guias">
+
+<div class="rotulo">EXTERIOR · SOLAPA (A) · CONTRATAPA (B) · TAPA (C)</div>
+<section class="lado" id="exterior">
+  <span class="tag" style="left:2mm">A · SOLAPA · 118 MM</span>
+  <span class="tag" style="left:120mm">B · CONTRATAPA · 121 MM</span>
+  <span class="tag" style="left:241mm">C · TAPA · 121 MM</span>
+  <!-- A: fila 1 -->
+  <div id="lote13" style="grid-column:1;grid-row:1"></div>
+  <div class="info" style="grid-column:2;grid-row:1">
+    <img class="sello-info" src="../../assets/logos/simply-the-best.png" alt="Simply the best blood. The best result.">
+    <div class="eyebrow paquete">Remate 2026</div>
+    <div class="tit">Cómo participar</div>
+    <div class="flare"></div>
+    <div class="modo"><h4>Presencial</h4><p>En Haras Abril, Lezama, durante el fin de semana del CSI 1★.</p></div>
+    <div class="modo"><h4>Virtual</h4><p>Desde la plataforma, con registro previo.</p></div>
+    <div class="modo"><h4>Mixta</h4><p>Ofertas en sala y en línea al mismo tiempo. Valores en U$S.</p></div>
+    <div class="caja">
+      <div class="eyebrow">Pre-ofertas</div>
+      <div class="fecha">23.11 → 27.11</div>
+      <p>Cierre viernes 27.11 · 20 h</p>
+    </div>
+    <div class="qr"><img src="qr/plataforma.svg" alt=""></div>
+    <div class="url">remateharasabril.com</div>
+  </div>
+  <!-- B y C ocupan las dos filas -->
+  <div class="sponsors" style="grid-column:3 / span 2;grid-row:1 / span 2">
+    <div class="top"><div class="eyebrow">Gracias a quienes nos acompañan</div><div class="tit">Sponsors</div><div class="flare"></div></div>
+    <div class="logos" id="logos"></div>
+  </div>
+  <div class="tapa" style="grid-column:5 / span 2;grid-row:1 / span 2">
+    <img class="agua" src="../../assets/logos/ha-sello-marca-agua.png" alt="">
+    <div class="foto"><img src="../../assets/fotos/dron-pistas-atardecer.jpg" alt=""></div>
+    <img class="sello" src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="">
+    <img class="logo" src="../../assets/logos/ha-logotipo-negativo.png" alt="">
+    <div class="flare"></div>
+    <div class="ev">REMATE</div>
+    <div class="an">2026</div>
+    <div class="cuando">SÁBADO 28.11.2026 · 17:30 H · LEZAMA</div>
+    <div class="claim">Tu próxima estrella cada vez más cerca.</div>
+    <div class="pill">CONOCÉ LOS LOTES</div>
+    <div class="contacto">
+      <span>+54 9 11 3140-9537</span><span>remate@harasabril.com.ar</span>
+      <span>harasabril.com.ar</span><span>Lezama, Bs. As. · Argentina</span>
+    </div>
+  </div>
+  <!-- A: fila 2 -->
+  <div class="programa" style="grid-column:1 / span 2;grid-row:2">
+    <div class="top"><div class="eyebrow">Remate &amp; Concurso CSI 1★</div><div class="tit">Programa del fin de semana</div></div>
+    <div class="dias">
+      <div class="dia"><div class="dn">VIERNES</div><div class="dd">27</div><div class="dm">NOVIEMBRE</div>
+        <ul><li>Caballos Jóvenes 4, 5 y 6 años<i>Campeonato Final F.E.A.</i></li><li class="r"><i>16:30 h</i>Serie Internacional<em>1,40 m</em></li><li><i>20 h</i>Cierre de pre-ofertas</li></ul></div>
+      <div class="dia hl"><div class="dn">SÁBADO</div><div class="dd">28</div><div class="dm">NOVIEMBRE</div>
+        <ul><li>Campeonatos A, B y C<i>Amateur · 1,05 a 1,30 m</i></li><li class="r"><i>17:30 h</i>Remate 2026</li></ul></div>
+      <div class="dia"><div class="dn">DOMINGO</div><div class="dd">29</div><div class="dm">NOVIEMBRE</div>
+        <ul><li>Campeonatos A, B y C<i>Amateur · 1,10 a 1,30 m</i></li><li class="r"><i>16:30 h</i>Gran Premio Ruiz Díaz<em>1,40 m</em></li></ul></div>
+    </div>
+    <div class="lugar"><img src="../../assets/fotos/dron-haras-boxes-pistas.jpg" alt=""><span>HARAS ABRIL · LEZAMA, BS. AS.</span></div>
+  </div>
+</section>
+
+<div class="rotulo">INTERIOR · LOTES 01 A 12</div>
+<section class="lado" id="interior">
+  <span class="tag" style="left:2mm">CUERPO 1 · 121 MM</span>
+  <span class="tag" style="left:123mm">CUERPO 2 · 121 MM</span>
+  <span class="tag" style="left:244mm">CUERPO 3 (DORSO DE LA SOLAPA) · 118 MM</span>
+</section>
+
+<script>
+const LOTES = [
+  ["01","Abril Top Fire I","Abril Ofire × Larino × Quality Touch","Macho","Tordillo","562994","07.10.2024"],
+  ["02","Abril Tap Blue","Chacco Blue II × Conthargos × Baloubet du Rouet","Macho","Zaino","562993","13.10.2024"],
+  ["03","Abril Talabet","Cornet du Lys × Conthargos × Baloubet du Rouet","Macho","Zaino","562987","02.11.2024"],
+  ["04","Abril Taleta","Cornet du Lys × Conthargos × Baloubet du Rouet","Hembra","Tordillo","562986","08.11.2024"],
+  ["05","Abril Tilsa","Cornet du Lys × Stakkato × Douglas","Hembra","Zaino","562984","10.11.2024"],
+  ["06","Abril Tilcha","Cornet du Lys × Conthargos × Chacco-Blue","Hembra","Zaino","562985","01.01.2025"],
+  ["07","Abril Tecna","Chacco Blue II × Connor × Calando I","Hembra","Zaino","562988","06.01.2025"],
+  ["08","Abril Tarbet","Abril Ofire × Conthargos × Baloubet du Rouet","Macho","Zaino","562995","10.01.2025"],
+  ["09","Abril Tarin","Conthargos × Crown Z × Caretano Z","Macho","Zaino","561566","16.01.2025"],
+  ["10","Abril Tifo","Abril Ofire × Alnok Z × Allegretto","Macho","Tordillo","562996","21.01.2025"],
+  ["11","Abril Tubai","Conthargos × Douglas × Corvado","Macho","Zaino","562997","22.01.2025"],
+  ["12","Abril Virroco Blue","Zirocco Blue VDL × Darco × Cento","Macho","Zaino","","22.06.2026"],
+  ["13","Abril Viconthon","Conthargos × Clinton × Kojak","Macho","Zaino negro","","25.09.2026"],
+];
+const tarjeta = ([n,nom,ped,sexo,pelo,aafe,nac]) => `
+  <div class="lote">
+    <div class="cab"><div class="num">LOTE ${n}</div><div class="nom">${nom}</div><div class="ped">${ped}</div></div>
+    <div class="f1"><img src="../../assets/fotos/lote${n}-pedigri.jpg" alt=""></div>
+    <div class="datos">
+      <div class="filas"><div><b>NAC.</b>${nac}</div>${aafe ? `<div><b>AAFE</b>${aafe}</div>` : ""}<div><b>PELO</b>${pelo}</div><div><b>SEXO</b>${sexo}</div></div>
+      <div class="qrl"><img src="qr/lote${n}.svg" alt=""></div>
+    </div>
+    <div class="f2${+n >= 12 ? " potrillo" : ""}"><img src="../../assets/fotos/lote${n}-salto.jpg" alt=""></div>
+  </div>`;
+document.getElementById("interior").insertAdjacentHTML("beforeend", LOTES.slice(0,12).map(tarjeta).join(""));
+document.getElementById("lote13").outerHTML = tarjeta(LOTES[12]).replace('class="lote"', 'class="lote" style="grid-column:1;grid-row:1"');
+
+// Sponsors en damero: fila par = negro|blanco, fila impar = blanco|negro
+const N = ["01-n-equi-care","03-n-equibox","06-n-tres-jagueles","08-n-mares-of-macha","09-n-invitro","11-n-synergy","14-n-volvo-madero","16-n-cooper","17-n-aranda","19-n-sport-horse"];
+const B = ["02-b-la-lucrecia","04-b-ruiz-diaz","05-b-madoc","07-b-biofarma","10-b-howard-johnson","12-b-aries","13-b-baldini","15-b-center-box","18-b-la-carpa","20-b-interpampas"];
+let h = "";
+for (let r = 0; r < 10; r++) { const par = r % 2 === 0 ? [N[r], B[r]] : [B[r], N[r]];
+  h += par.map(s => `<div><img src="../../assets/logos/sponsors/${s}.png" alt=""></div>`).join(""); }
+document.getElementById("logos").innerHTML = h;
+if (location.hash === "#imprimir") document.body.className = "";
+</script>
+</body>
+</html>

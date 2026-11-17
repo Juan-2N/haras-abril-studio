@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        /* Fondo de todo el video: negro con glow dorado y bokeh (la versión de marca del degradé azul de la referencia) */
+        #root { position: absolute; inset: 0; overflow: hidden; background: var(--ha-black); }
+        .fo-glow { position: absolute; border-radius: 50%; }
+        .fo-glow-a { left: -260px; top: 380px; width: 1600px; height: 1600px;
+          background: radial-gradient(circle, color-mix(in srgb, var(--ha-gold) 34%, transparent) 0%, transparent 62%); }
+        .fo-glow-b { left: 320px; top: -420px; width: 1200px; height: 1200px;
+          background: radial-gradient(circle, color-mix(in srgb, var(--ha-ink) 90%, transparent) 0%, transparent 65%); }
+        .fo-bokeh { position: absolute; border-radius: 50%; background: var(--ha-sand); filter: blur(14px); }
+      </style>
+
+      <div data-hf-id="hf-pmjr" id="root" data-composition-id="fondo" data-width="1080" data-height="1920">
+        <div data-hf-id="hf-t888" class="fo-glow fo-glow-b" data-layout-allow-overflow></div>
+        <div data-hf-id="hf-3ec3" class="fo-glow fo-glow-a" data-layout-allow-overflow></div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.querySelector('[data-composition-id="fondo"]');
+          const q = (s) => root.querySelector(s);
+          const DUR = 30.8, DROP = 11.64, FINAL = 22.95;
+          const tl = gsap.timeline({ paused: true });
+          // Bokeh: círculos dorados desenfocados que derivan lento (posiciones fijas, sin azar)
+          const BOKEH = [[120, 420, 90, 0.10], [860, 300, 140, 0.08], [700, 980, 60, 0.14], [210, 1380, 120, 0.07],
+                         [940, 1600, 80, 0.10], [480, 1720, 160, 0.06], [60, 820, 50, 0.12], [620, 560, 40, 0.16]];
+          BOKEH.forEach(([x, y, d, a], i) => {
+            const b = document.createElement("div");
+            b.className = "fo-bokeh";
+            Object.assign(b.style, { left: x + "px", top: y + "px", width: d + "px", height: d + "px", opacity: a });
+            root.appendChild(b);
+            tl.fromTo(b, { x: 0, y: 0 }, { x: (i % 2 ? -1 : 1) * (30 + i * 6), y: -(80 + i * 14), duration: DUR, ease: "none" }, 0);
+          });
+          // El glow respira con la música: sube en el drop y en el golpe final
+          tl.fromTo(q(".fo-glow-a"), { opacity: 0.55, scale: 0.9 }, { opacity: 0.8, scale: 1, duration: DROP, ease: "sine.inOut" }, 0);
+          tl.to(q(".fo-glow-a"), { opacity: 1, scale: 1.12, duration: 0.25, ease: "expo.out" }, DROP);
+          tl.to(q(".fo-glow-a"), { opacity: 0.75, scale: 1, duration: 3, ease: "sine.inOut" }, DROP + 0.26);
+          tl.to(q(".fo-glow-a"), { opacity: 1, scale: 1.1, duration: 0.25, ease: "expo.out" }, FINAL);
+          tl.fromTo(q(".fo-glow-b"), { x: 0 }, { x: -220, duration: DUR, ease: "none" }, 0);
+          window.__timelines["fondo"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>22-10-HA-MailingLista</title>
+  <!-- Mailing estático (estilo v2, 28/10): se exporta a PNG de 1200 px de ancho (se usa a 600 px en el mail).
+       Datos: herramientas/lotes.json (vía lotes-datos.js). Tarjeta y encabezado: herramientas/lista-v2.css.
+       Exportar: node herramientas/exportar-png.mjs mailing/22-10-HA-MailingLista/index.html salida/mailing/22-10-HA-MailingLista.png 1200 -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <link rel="stylesheet" href="../../herramientas/lista-v2.css" />
+  <script src="../../herramientas/lotes-datos.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 1200px; background: var(--ha-charcoal); }
+    body { color: var(--ha-white); -webkit-font-smoothing: antialiased; }
+
+    /* ── Encabezado: foto aérea + REMATE · sello · fecha + LISTA DE LOTES ── */
+    .hero { position: relative; width: 1200px; height: 600px; overflow: hidden; }
+    .hero .foto { position: absolute; left: 0; top: -60px; width: 1200px; height: 1266px; object-fit: cover; }
+    .hero .velo { position: absolute; inset: 0; background: var(--ha-ink); mix-blend-mode: multiply; opacity: 0.75; }
+    .hero .fundido { position: absolute; left: 0; right: 0; bottom: 0; height: 160px; background: linear-gradient(180deg, transparent, var(--ha-charcoal)); }
+    .hero .contenido { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--ha-s-5); }
+    .hero .encabezado { width: 1200px; }
+    .hero .sub {
+      display: flex; align-items: center; gap: var(--ha-s-3);
+      font-family: var(--ha-font-sans); font-weight: var(--ha-t-sub-weight); font-size: calc(var(--ha-t-sub-size) * 0.82);
+      letter-spacing: var(--ha-t-lot-track); text-transform: uppercase; line-height: 1;
+    }
+    .hero .sub .rule { display: block; width: 96px; height: 2px; background: var(--ha-gold); }
+
+    /* ── Intro ── */
+    .intro { padding: var(--ha-s-6) var(--ha-s-12) var(--ha-s-6); text-align: center; display: grid; gap: var(--ha-s-3); justify-items: center; }
+    .intro .eyebrow {
+      font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight); font-size: var(--ha-t-label-size);
+      letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-gold);
+    }
+    .intro p { font-family: var(--ha-font-sans); font-weight: var(--ha-t-data-weight); font-size: 40px; line-height: var(--ha-lh-text); color: var(--ha-white); max-width: 1000px; }
+    .intro p.destacado { font-weight: var(--ha-t-label-weight); color: var(--ha-sand); }
+    .flare { width: var(--ha-flare-w); height: var(--ha-flare-h); background: var(--ha-gold-flare); margin-top: var(--ha-s-2); }
+
+    /* ── Tarjetas ── */
+    .lotes { padding: var(--ha-s-4) 92px var(--ha-s-6); display: grid; gap: var(--ha-s-3); justify-content: center; }
+
+    /* ── Cierre ── */
+    .cierre { padding: var(--ha-s-6) 92px var(--ha-s-12); display: grid; gap: var(--ha-s-6); justify-items: center; }
+    .cierre .info { gap: var(--ha-s-5); }
+    .cierre .info .fila + .fila { margin-top: var(--ha-s-3); }
+    .boton {
+      height: 92px; padding: 0 var(--ha-s-10); border-radius: var(--ha-btn-radius); background: var(--ha-gold-grad);
+      display: inline-flex; align-items: center; gap: var(--ha-s-3);
+      font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight); font-size: 38px; letter-spacing: var(--ha-t-label-track);
+      text-transform: uppercase; color: var(--ha-white);
+    }
+    .firma { display: grid; gap: var(--ha-s-3); justify-items: center; }
+    .firma .seal { width: 220px; height: 220px; }
+    /* Frase de cierre: el único texto en EB Garamond (DESIGN.md §7) */
+    .firma .frase { font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-claim-weight); font-size: 48px; color: var(--ha-sand); }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <img class="foto" src="../../assets/fotos/dron-haras-boxes-pistas.jpg" alt="" />
+    <div class="velo"></div>
+    <div class="fundido"></div>
+    <div class="contenido">
+      <div class="encabezado">
+        <span class="head-txt head-l">Remate</span>
+        <img class="seal" src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+        <span class="head-txt head-r">28.11.2026</span>
+      </div>
+      <div class="sub"><span class="rule"></span>Lista de lotes<span class="rule"></span></div>
+    </div>
+  </header>
+
+  <section class="intro">
+    <span class="eyebrow">Remate Haras Abril 2026</span>
+    <p>Te invitamos a conocer la lista de productos que se rematarán el próximo 28 de noviembre en nuestras instalaciones de Lezama, en el marco del CSI 1*.</p>
+    <p>También podrás participar de manera online.</p>
+    <p class="destacado">Oportunidad única de acceder a potros de excelencia, con la mejor sangre y proyección deportiva.</p>
+    <div class="flare"></div>
+  </section>
+
+  <section class="lotes" id="lotes"></section>
+
+  <section class="cierre">
+    <div class="info">
+      <div class="fila"><span class="etiqueta">Preofertas</span><span class="valor">22 al 27.11.2026 · Online en la web</span></div>
+      <div class="fila"><span class="etiqueta">Remate</span><span class="valor">28.11.2026 · Lezama, Bs. As.</span></div>
+      <div class="fila"><span class="etiqueta">Más info</span><span class="valor"><span class="min">harasabril.com.ar</span></span></div>
+    </div>
+    <div class="boton">Ver los lotes <span>→</span></div>
+    <div class="firma">
+      <img class="seal" src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+      <span class="frase">Tu próxima estrella cada vez más cerca.</span>
+    </div>
+  </section>
+
+  <script>
+    const { lotes } = window.LOTES_DATOS;
+    document.getElementById("lotes").innerHTML = lotes.map((l) => `
+      <article class="lot">
+        <div class="lot-top">
+          <svg class="lot-diag" viewBox="0 0 115 170" preserveAspectRatio="none"><line x1="115" y1="0" x2="16" y2="170"/></svg>
+          <span class="lot-num">${l.lote}</span>
+          <div class="lot-text"><span class="lot-name">${l.nombre}</span><span class="lot-ped">${l.pedigri}</span></div>
+        </div>
+        <div class="lot-meta">
+          <span class="meta-item">${l.sexo}</span><span class="meta-sep"></span>
+          <span class="meta-item"><span>AAFE:</span><span>${l.registro}</span></span><span class="meta-sep"></span>
+          <span class="meta-item">${l.nac}</span>
+        </div>
+      </article>`).join("");
+  </script>
+</body>
+</html>

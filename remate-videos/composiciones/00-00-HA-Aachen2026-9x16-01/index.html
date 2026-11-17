@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>00-00-HA-Aachen2026-9x16-01</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; overflow: hidden; background: var(--ha-black); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ha-black); }
+
+      .lleno { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      #v-intro { object-fit: cover; }
+      /* Clips 16:9 al 120 % de la altura del lienzo, anclados arriba: así queda afuera la gráfica de TV de abajo.
+         El recorte vertical se mueve con x (sigue al caballo) */
+      .v-perfil { position: absolute; left: 0; top: 0; width: 4096px; height: 2304px; }
+      /* Aéreas de wm2026 (1600×808 → 3802×1920) */
+      .v-aerea { position: absolute; left: 0; top: 0; width: 3802px; height: 1920px; }
+      .velo-abajo { position: absolute; inset: 0; background: var(--ha-veil-bottom); }
+      /* Los clips del profile traen un marco azul oscuro de 106 px arriba (170 px en pantalla): se tapa con negro que se funde */
+      #velo-arriba { position: absolute; left: 0; top: 0; width: 1080px; height: 400px; background: linear-gradient(180deg, var(--ha-black) 0px, var(--ha-black) 176px, rgba(0,0,0,0) 400px); }
+
+      .txt { position: absolute; left: 0; width: 1080px; text-align: center; white-space: nowrap; line-height: var(--ha-lh-tight); text-transform: uppercase; }
+      .flare { width: var(--ha-flare-w); height: var(--ha-flare-h); margin: 0 auto; background: var(--ha-gold-flare); }
+
+      /* 1. Aérea de noche: FEI WORLD CHAMPIONSHIP / línea / AACHEN 2026 */
+      #aachen { position: absolute; left: 0; top: 1180px; width: 1080px; }
+      #aachen .eyebrow { position: static; color: var(--ha-sand); font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight); font-size: var(--ha-t-label-size); letter-spacing: var(--ha-t-label-track); }
+      #aachen .flare { margin-top: var(--ha-s-3); margin-bottom: var(--ha-s-3); }
+      #aachen .titulo { position: static; color: var(--ha-white); font-family: var(--ha-font-sans); font-size: var(--ha-t-event-size); }
+      #aachen .titulo b { font-weight: var(--ha-t-event-weight); letter-spacing: var(--ha-t-event-track); }
+      #aachen .titulo span { font-weight: var(--ha-t-year-weight); letter-spacing: var(--ha-t-year-track); }
+
+      /* 2. Lower third de los saltos, en dos filas: nombre / sangre a la izquierda; jinete / evento y altura a la derecha */
+      #lt { position: absolute; left: var(--ha-margin-x); top: 1410px; width: calc(1080px - 2 * var(--ha-margin-x)); height: 150px; }
+      #lt .barra { position: absolute; inset: 0; background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-line-gold); }
+      #lt .diag { position: absolute; left: 402px; top: 0; width: 74px; height: 150px; overflow: visible; }
+      #lt .diag line { stroke: var(--ha-gold); stroke-width: var(--ha-border); }
+      #lt .t { position: absolute; color: var(--ha-white); font-family: var(--ha-font-sans); line-height: 1.05; white-space: nowrap; text-transform: uppercase; }
+      #lt .nombre { left: var(--ha-s-4); top: 24px; font-weight: var(--ha-t-lot-weight); font-size: calc(var(--ha-t-lot-size) * 0.8); letter-spacing: var(--ha-t-lot-track); }
+      #lt .meta { right: var(--ha-s-4); top: 92px; color: var(--ha-sand); font-weight: var(--ha-t-meta-weight); font-size: var(--ha-t-meta-size); letter-spacing: var(--ha-t-meta-track); }
+      #lt .jinete { right: var(--ha-s-4); top: 30px; font-weight: var(--ha-t-data-weight); font-size: calc(var(--ha-t-data-size) * 1.4); letter-spacing: var(--ha-t-data-track); }
+      #lt .sangre { left: var(--ha-s-4); top: 92px; font-weight: var(--ha-t-data-weight); font-size: var(--ha-t-meta-size); letter-spacing: var(--ha-t-data-track); }
+
+      /* Sello arriba a la derecha, dentro de la zona segura */
+      #sello { position: absolute; left: 822px; top: 290px; width: 150px; height: 149.86px; }
+      #sello img { width: 150px; height: 149.86px; }
+
+      /* 3. Primer plano de Larocca */
+      #logro { position: absolute; left: 0; top: 1150px; width: 1080px; }
+      #logro .txt { position: static; }
+      #logro .eyebrow { color: var(--ha-sand); font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight); font-size: var(--ha-t-label-size); letter-spacing: var(--ha-t-label-track); }
+      #logro .flare { margin-top: var(--ha-s-3); margin-bottom: var(--ha-s-4); }
+      #logro .titulo { color: var(--ha-white); font-family: var(--ha-font-sans); font-weight: var(--ha-t-sub-weight); font-size: var(--ha-t-sub-size); letter-spacing: var(--ha-t-lot-track); }
+
+      /* 4. Cierre: la portada rearmada por capas (medida sobre HA_Cover.png) con Abril Iconthon.
+            En el CSS queda armada: es la tapa del frame 0. En F/2 se ocultan las capas y entran desde 22.3 */
+      #cierre { position: absolute; inset: 0; }
+      #c-fondo { position: absolute; inset: 0; transform-origin: 50% 50%; }
+      /* Foto de alta del mismo cuadro del clip de día (vlcsnap), con el encuadre de la portada */
+      #c-aerea { position: absolute; left: 0; top: 0; width: 3802px; height: 1920px; transform-origin: 0 0; transform: translate(-1122px, -11px) scale(1.00605); }
+      #c-velos { position: absolute; inset: 0; }
+      #c-velos div { position: absolute; inset: 0; }
+      /* Medido contra HA_Cover.png: arriba oscurece ~0.85 y abajo ~0.2 → velo general suave + degradé de abajo */
+      #c-velos .v1 { background: var(--ha-veil-dark); opacity: 0.3; }
+      #c-velos .v2 { background: var(--ha-veil-bottom); }
+      #c-agua { position: absolute; left: -10px; top: 550px; width: 1100px; height: 1100px; opacity: 0.08; }
+      /* Sello: el PNG tiene margen (el anillo ocupa el 87 %): a 480 px el anillo mide 415 como en HA_Cover.png, centrado en (540, 544) */
+      #c-sello { position: absolute; left: 300px; top: 304.2px; width: 480px; height: 479.56px; }
+      /* Caballo: 1547×1920 a escala 0.36 → figura de 653 px (y 690 → 1343), cara en x = 571 como en HA_Cover.png; el casco y las orejas pisan el sello */
+      #c-caballo { position: absolute; left: 293.4px; top: 664.4px; width: 556.92px; height: 691.2px; }
+      #c-estrella { position: absolute; left: 538px; top: 1312px; width: 24px; height: 24px; }
+      /* Textos con la posición de HA_Cover.png (borde superior de las mayúsculas en 1362, 1406 y 1469) */
+      #c-textos .txt { color: var(--ha-white); font-family: var(--ha-font-sans); }
+      #c-textos .nombre { top: 1357.6px; font-weight: var(--ha-t-lot-weight); font-size: calc(var(--ha-t-lot-size) * 0.6); letter-spacing: var(--ha-t-lot-track); }
+      #c-textos .sangre { top: 1403px; font-weight: var(--ha-t-data-weight); font-size: calc(var(--ha-t-data-size) * 0.96); letter-spacing: var(--ha-t-data-track); }
+      #c-textos .evento { top: 1465px; font-weight: var(--ha-t-data-weight); font-size: calc(var(--ha-t-label-size) * 1.06); letter-spacing: var(--ha-t-data-track); }
+      #fin { position: absolute; inset: 0; background: var(--ha-black); opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <!-- Escenas (s), con corte seco:
+         TAPA frame 0 · INTRO 0 · AÉREA NOCHE 2.6 · SALTOS 5.6 / 7.54 / 9.91 / 13.4 · FINAL 16 · LAROCCA 18.4 · AÉREA DÍA 21 → CIERRE POR CAPAS 22.3 · FIN 28.
+         Los saltos y el final salen de "Abril Iconthon profile.mp4" (0:09, 0:15, 0:19, 0:29, 1:25 y 1:28); las aéreas, de wm2026 (0:11 y 0:27). -->
+    <div data-hf-id="hf-dluy" id="root" data-composition-id="main" data-start="0" data-duration="28" data-width="1080" data-height="1920">
+
+      <!-- 0. Intro "Next Rider" (su último frame es negro: se corta en 2.6) -->
+      <video data-hf-id="hf-ui7g" id="v-intro" class="clip lleno" src="assets/clips/aachen-intro.mp4" muted playsinline
+             data-start="0" data-duration="2.6" data-media-start="0" data-track-index="0"></video>
+
+      <!-- 1. Aérea de noche -->
+      <video data-hf-id="hf-lmmh" id="v-noche" class="clip v-aerea" src="assets/clips/aachen-aerea-noche.mp4" muted playsinline
+             data-start="2.6" data-duration="3" data-media-start="0" data-track-index="0"></video>
+      <div data-hf-id="hf-ss6u" id="velo-noche" class="clip velo-abajo" data-start="2.6" data-duration="3" data-track-index="1"></div>
+      <div data-hf-id="hf-3fbt" id="aachen" class="clip" data-start="2.6" data-duration="3" data-track-index="2">
+        <div data-hf-id="hf-hmss" class="txt eyebrow">FEI World Championship</div>
+        <div data-hf-id="hf-asr8" class="flare"></div>
+        <div data-hf-id="hf-vx5b" class="txt titulo"><b data-hf-id="hf-4bf3">AACHEN</b> <span data-hf-id="hf-earr">2026</span></div>
+      </div>
+
+      <!-- 2. Saltos (los archivos tienen margen antes y después: data-media-start marca el arranque) -->
+      <video data-hf-id="hf-xov2" id="v-salto1" class="clip v-perfil" src="assets/clips/iconthon-salto1.mp4" muted playsinline
+             data-start="5.6" data-duration="1.94" data-media-start="0.4" data-track-index="0"></video>
+      <video data-hf-id="hf-cvny" id="v-salto2" class="clip v-perfil" src="assets/clips/iconthon-salto2.mp4" muted playsinline
+             data-start="7.54" data-duration="2.37" data-media-start="0.93" data-track-index="0"></video>
+      <video data-hf-id="hf-wg9w" id="v-salto3" class="clip v-perfil" src="assets/clips/iconthon-salto3.mp4" muted playsinline
+             data-start="9.91" data-duration="3.49" data-media-start="0.6" data-track-index="0"></video>
+      <video data-hf-id="hf-uo3r" id="v-salto4" class="clip v-perfil" src="assets/clips/iconthon-salto4.mp4" muted playsinline
+             data-start="13.4" data-duration="2.6" data-media-start="0.4" data-track-index="0"></video>
+
+      <!-- 3. Final del recorrido (1:25) y primer plano de Larocca (1:28) -->
+      <video data-hf-id="hf-d3tt" id="v-final" class="clip v-perfil" src="assets/clips/iconthon-final.mp4" muted playsinline
+             data-start="16" data-duration="2.4" data-media-start="0.3" data-track-index="0"></video>
+      <video data-hf-id="hf-qlr2" id="v-larocca" class="clip v-perfil" src="assets/clips/iconthon-larocca-lento.mp4" muted playsinline
+             data-start="18.4" data-duration="2.6" data-media-start="0.1" data-track-index="0"></video>
+      <!-- Negro que se funde arriba, sobre el marco de los clips del profile (saltos, final y primer plano) -->
+      <div id="velo-arriba" class="clip" data-start="5.6" data-duration="15.4" data-track-index="5"></div>
+      <div data-hf-id="hf-ab7s" id="velo-larocca" class="clip velo-abajo" data-start="18.4" data-duration="2.6" data-track-index="1"></div>
+      <div data-hf-id="hf-aoou" id="logro" class="clip" data-start="18.4" data-duration="2.6" data-track-index="2">
+        <div class="txt eyebrow">Aachen 2026</div>
+        <div data-hf-id="hf-forw" class="flare"></div>
+        <div data-hf-id="hf-ca2l" class="txt titulo">El logro del año</div>
+      </div>
+
+      <!-- Lower third y sello sobre los saltos -->
+      <div data-hf-id="hf-wga7" id="lt" class="clip" data-start="5.6" data-duration="12.8" data-track-index="3">
+        <div data-hf-id="hf-iask" class="barra"></div>
+        <svg data-hf-id="hf-7yil" class="diag" viewBox="0 0 74 150"><line data-hf-id="hf-1ggi" x1="0" y1="150" x2="74" y2="0" /></svg>
+        <div data-hf-id="hf-hcu1" class="t nombre">Abril Iconthon</div>
+        <div class="t meta">Aachen 2026 | 1.55 M</div>
+        <div data-hf-id="hf-elyl" class="t jinete">Matías Larocca</div>
+        <div class="t sangre">Conthargos × Clinton × Kojak</div>
+      </div>
+      <div data-hf-id="hf-uy2u" id="sello" class="clip" data-start="5.6" data-duration="15.4" data-track-index="4">
+        <img data-hf-id="hf-bnqo" src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+      </div>
+
+      <!-- 4. Aérea de día (la misma vista del fondo de la portada) -->
+      <video data-hf-id="hf-q7lq" id="v-dia" class="clip v-aerea" src="assets/clips/aachen-aerea-dia.mp4" muted playsinline
+             data-start="21" data-duration="3.2" data-media-start="0" data-track-index="0"></video>
+
+      <!-- Cierre: la portada por capas. Armada en el frame 0 (tapa); sus capas entran desde 22.3 -->
+      <div id="cierre">
+        <div id="c-fondo"><img id="c-aerea" src="assets/fotos/aachen-aerea-dia.jpg" alt="" /></div>
+        <div id="c-velos"><div class="v1"></div><div class="v2"></div></div>
+        <img id="c-agua" src="assets/logos/ha-sello-marca-agua.png" alt="" />
+        <img id="c-sello" src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+        <img id="c-caballo" src="assets/fotos/iconthon-mlaroca.png" alt="Abril Iconthon y Matías Larocca" />
+        <img id="c-estrella" src="assets/logos/ha-estrella-roja.png" alt="" />
+        <div id="c-textos">
+          <div class="txt nombre">Abril Iconthon</div>
+          <div class="txt sangre">Conthargos × Clinton × Kojak</div>
+          <div class="txt evento">FEI World Championship Aachen 2026</div>
+        </div>
+      </div>
+      <div data-hf-id="hf-sgeg" id="fin"></div>
+
+      <!-- Música: 11 variantes en pistas 10 a 20. Suena la que no tiene data-hidden;
+           para cambiarla, en el Studio se apaga el ojo de una y se prende el de otra. -->
+      <audio data-hf-id="hf-3xro" id="musica-crownshock" src="assets/musica/magnific-crownshock.mp3"
+             data-start="0" data-duration="28" data-track-index="10" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":26,"v":1},{"t":27.9,"v":0}]}]}' data-hidden=""></audio>
+      <audio data-hf-id="hf-ql1i" id="musica-battleborn" src="assets/musica/battleborn-symphony.mp3"
+             data-start="0" data-duration="28" data-track-index="11" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":26,"v":1},{"t":27.9,"v":0}]}]}' data-hidden=""></audio>
+      <audio data-hf-id="hf-90gd" id="musica-paradise" src="assets/musica/paradise-circus.mp3"
+             data-start="0" data-duration="28" data-track-index="12" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":26,"v":1},{"t":27.9,"v":0}]}]}' data-hidden=""></audio>
+      <audio data-hf-id="hf-1vzt" id="musica-throne" src="assets/musica/throne-of-ashes.mp3"
+             data-start="0" data-duration="28" data-track-index="13" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":26,"v":1},{"t":27.9,"v":0}]}]}'></audio>
+      <audio data-hf-id="hf-swb9" id="musica-gospel" src="assets/musica/saturated-gospel.mp3"
+             data-start="0" data-duration="28" data-track-index="14" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":26,"v":1},{"t":27.9,"v":0}]}]}' data-hidden=""></audio>
+      <audio data-hf-id="hf-eqj4" id="musica-barita" src="assets/musica/barita.mp3"
+             data-start="0" data-duration="28" data-track-index="15" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":26,"v":1},{"t":27.9,"v":0}]}]}' data-hidden=""></audio>
+      <audio data-hf-id="hf-0ef8" id="musica-ckt-rip" src="assets/musica/magnific-ckt-rip.mp3"
+             data-start="0" data-duration="28" data-track-index="16" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":26,"v":1},{"t":27.9,"v":0}]}]}' data-hidden=""></audio>
+      <audio data-hf-id="hf-3x31" id="musica-movie-time" src="assets/musica/magnific-movie-time.mp3"
+             data-start="0" data-duration="28" data-track-index="17" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":26,"v":1},{"t":27.9,"v":0}]}]}' data-hidden=""></audio>
+      <audio data-hf-id="hf-ai67" id="musica-hit-em-hard" src="assets/musica/hit-em-hard-evoli-main-version-40922-02-18.mp3"
+             data-start="0" data-duration="28" data-track-index="18" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":26,"v":1},{"t":27.9,"v":0}]}]}' data-hidden=""></audio>
+      <!-- It's Coming (31,1 s) y el empalme de Hit 'Em Hard (31,4 s) alcanzan justo -->
+      <audio data-hf-id="hf-867f" id="musica-its-coming" src="assets/musica/magnific-its-coming.mp3"
+             data-start="0" data-duration="28" data-track-index="19" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":26,"v":1},{"t":27.9,"v":0}]}]}' data-hidden=""></audio>
+      <audio data-hf-id="hf-vza1" id="musica-hit-em-hard-30s" src="assets/musica/hit-em-hard-promo-web-30s.mp3"
+             data-start="0" data-duration="28" data-track-index="20" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":26,"v":1},{"t":27.9,"v":0}]}]}' data-hidden=""></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const F = 1 / 30, W = 1080, H = 1920;
+
+      // Tapa: el cierre armado (CSS) en el frame 0; en F/2 sus capas pasan al estado inicial y arranca el video
+      tl.set(["#c-fondo", "#c-velos", "#c-agua"], { opacity: 0 }, F / 2);
+      tl.set(["#c-sello", "#c-estrella"], { opacity: 0, scale: 0.6 }, F / 2);
+      tl.set("#c-caballo", { opacity: 0, y: 40 }, F / 2);
+      tl.set("#c-textos .txt", { opacity: 0, y: 32 }, F / 2);
+
+      // Recorte vertical que sigue al caballo. keys: [segundo en el archivo original, centro del caballo (0–1 del ancho)]
+      // archivo0: segundo del original donde arranca el archivo de assets/clips.
+      // inicio y mediaStart tienen que ser los data-start y data-media-start del clip: si se recorta en el Studio, actualizarlos acá.
+      // Entre keys, curva suave (Hermite monótona, sin pasarse de los puntos) muestreada cuadro a cuadro: sin quiebres de velocidad
+      const VW = H * 1.2 * 16 / 9;
+      const seguir = (sel, inicio, mediaStart, archivo0, keys) => {
+        const pts = keys.map(([s, cx]) => [inicio + (s - archivo0 - mediaStart), Math.min(0, Math.max(W - VW, W / 2 - cx * VW))]);
+        const n = pts.length;
+        const pend = pts.slice(1).map((p, i) => (p[1] - pts[i][1]) / (p[0] - pts[i][0]));
+        const m = pts.map((_, i) => i === 0 ? pend[0] : i === n - 1 ? pend[n - 2]
+          : pend[i - 1] * pend[i] <= 0 ? 0 : 2 / (1 / pend[i - 1] + 1 / pend[i]));
+        const xEn = (t) => {
+          let i = 0;
+          while (i < n - 2 && t > pts[i + 1][0]) i++;
+          const h = pts[i + 1][0] - pts[i][0], u = (t - pts[i][0]) / h;
+          return (2 * u ** 3 - 3 * u ** 2 + 1) * pts[i][1] + (u ** 3 - 2 * u ** 2 + u) * h * m[i]
+            + (-2 * u ** 3 + 3 * u ** 2) * pts[i + 1][1] + (u ** 3 - u ** 2) * h * m[i + 1];
+        };
+        gsap.set(sel, { x: pts[0][1] });
+        for (let t = pts[0][0]; t < pts[n - 1][0] - 1e-6; t += F) {
+          const t2 = Math.min(t + F, pts[n - 1][0]);
+          tl.fromTo(sel, { x: xEn(t) }, { x: xEn(t2), duration: t2 - t, ease: "none", immediateRender: false }, t);
+        }
+      };
+      seguir("#v-salto1", 5.6, 0.4, 8.8, [[9.2, 0.38], [10.0, 0.44], [11.4, 0.34]]);
+      seguir("#v-salto2", 7.54, 0.93, 14.6, [[15.0, 0.26], [15.5, 0.30], [16.0, 0.38], [16.5, 0.45], [17.0, 0.47], [17.8, 0.54]]);
+      seguir("#v-salto3", 9.91, 0.6, 18.8, [[19.4, 0.64], [20.0, 0.66], [20.75, 0.65], [21.5, 0.62], [22.2, 0.58], [22.9, 0.56]]);
+      seguir("#v-salto4", 13.4, 0.4, 28.0, [[28.4, 0.32], [29.0, 0.33], [29.5, 0.40], [30.0, 0.47], [30.5, 0.57], [31.0, 0.59]]);
+      seguir("#v-final", 16, 0.3, 84.4, [[84.7, 0.43], [85.25, 0.45], [85.75, 0.53], [86.25, 0.59], [87.1, 0.59]]);
+      // Primer plano: solo el tramo limpio del original (88.25–89.65, antes y después hay desenfoque y la gráfica de banderas),
+      // al 50 % (el original es de 60 fps). Las keys van en segundos del archivo lento, por eso archivo0 = 0
+      seguir("#v-larocca", 18.4, 0.1, 0, [[0.1, 0.39], [0.7, 0.355], [1.2, 0.355], [1.7, 0.356], [2.3, 0.40], [2.7, 0.41]]);
+
+      // Aérea de noche: recorte fijo con zoom lento (Ken Burns 1.00 → 1.06) centrado en el estadio
+      const AW = 3802;
+      const xNoche = Math.min(0, Math.max(W - AW, W / 2 - 0.47 * AW));
+      gsap.set("#v-noche", { x: xNoche, transformOrigin: `${0.47 * AW}px ${H / 2}px` });
+      tl.fromTo("#v-noche", { scale: 1 }, { scale: 1.06, duration: 3, ease: "none" }, 2.6);
+      // Aérea de día: mismo encuadre que el fondo de la portada (es el cuadro del segundo 1.8 del clip = 22.8 de la pieza),
+      // medido con las torres de luz: 3825 px de ancho, x = -1122. El fundido a la portada se centra en 22.8
+      gsap.set("#v-dia", { transformOrigin: "0px 0px", scale: 3825 / AW, x: -1122, y: -11 });
+
+      // 1. AACHEN 2026: eyebrow, línea desde el centro y título; salida suave antes del corte
+      gsap.set("#aachen .flare", { scaleX: 0 });
+      tl.fromTo("#aachen .eyebrow", { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, 2.85);
+      tl.fromTo("#aachen .flare", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "expo.out", immediateRender: false }, 3.0);
+      tl.fromTo("#aachen .titulo", { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, 3.15);
+      tl.to("#aachen", { opacity: 0, duration: 0.5, ease: "power1.in" }, 5.05);
+
+      // 2. Lower third: la barra se despliega, diagonal, nombre y jinete; sale antes del primer plano
+      tl.fromTo("#lt .barra", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power3.out" }, 5.75);
+      tl.fromTo("#lt .diag line", { attr: { x2: 0, y2: 150 } }, { attr: { x2: 74, y2: 0 }, duration: 0.4, ease: "power2.out" }, 5.95);
+      tl.fromTo(["#lt .nombre", "#lt .sangre"], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out", stagger: 0.12 }, 6.05);
+      tl.fromTo(["#lt .jinete", "#lt .meta"], { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power2.out", stagger: 0.12 }, 6.3);
+      // Si un texto no entra en su columna (a cada lado de la diagonal), se achica la fuente (como en footer-lote)
+      const fit = (el, max) => {
+        let s = parseFloat(getComputedStyle(el).fontSize);
+        while (el.offsetWidth > max && s > 12) { s -= 1; el.style.fontSize = s + "px"; }
+      };
+      document.fonts.ready.then(() => {
+        ["#lt .nombre", "#lt .sangre"].forEach((q) => fit(document.querySelector(q), 362));
+        ["#lt .jinete", "#lt .meta"].forEach((q) => fit(document.querySelector(q), 340));
+      });
+      tl.to("#lt", { opacity: 0, duration: 0.5, ease: "power1.in" }, 17.85);
+
+      // Sello: crece desde un punto, como en las placas; sale con el primer plano
+      tl.fromTo("#sello img", { opacity: 0, scale: 0.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, 5.75);
+      tl.to("#sello", { opacity: 0, duration: 0.5, ease: "power1.in" }, 20.45);
+
+      // 3. AACHEN 2026 / línea / EL LOGRO DEL AÑO sobre el primer plano
+      gsap.set("#logro .flare", { scaleX: 0 });
+      tl.fromTo("#logro .eyebrow", { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, 18.55);
+      tl.fromTo("#logro .flare", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "expo.out", immediateRender: false }, 18.65);
+      tl.fromTo("#logro .titulo", { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, 18.75);
+      tl.to("#logro", { opacity: 0, duration: 0.5, ease: "power1.in" }, 20.45);
+
+      // 4. Cierre por capas. La foto aérea se funde sobre el clip centrada en 22.8 (mismo cuadro y encuadre) y sigue con zoom lento
+      tl.fromTo("#c-velos", { opacity: 0 }, { opacity: 1, duration: 1, ease: "power1.inOut", immediateRender: false }, 22.3);
+      tl.fromTo("#c-fondo", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none", immediateRender: false }, 22.65);
+      tl.fromTo("#c-fondo", { scale: 1 }, { scale: 1.03, duration: 28 - 22.95, ease: "none", immediateRender: false }, 22.95);
+      tl.fromTo("#c-agua", { opacity: 0 }, { opacity: 0.08, duration: 1.2, ease: "power1.inOut", immediateRender: false }, 22.6);
+      tl.fromTo("#c-sello", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.9, ease: "expo.out", immediateRender: false }, 22.9);
+      tl.fromTo("#c-caballo", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: "expo.out", immediateRender: false }, 23.2);
+      tl.fromTo("#c-estrella", { opacity: 0, scale: 0.6, rotation: -30 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.7, ease: "expo.out", immediateRender: false }, 23.6);
+      tl.fromTo("#c-textos .txt", { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out", stagger: 0.12, immediateRender: false }, 23.7);
+
+      // Salida a negro; el último medio segundo queda limpio
+      tl.fromTo("#fin", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.in" }, 27.0);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

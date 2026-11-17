@@ -1,0 +1,21 @@
+{
+  "slug": "carrusel-listas-lotes",
+  "titulo": "Carrusel Listas de Lotes",
+  "tipo": "carrusel",
+  "fecha_publicacion": "2026-10-22",
+  "descripcion": "5 slides de 8 s · Feed 4:5 y Stories 9:16 · 13 lotes",
+  "base": "../salida",
+  "formatos": ["4x5", "9x16"],
+  "slides": [
+    { "id": "00", "titulo": "Portada", "subtitulo": "Remate 2026 · Conocé la lista",
+      "video": "22-10-HA-ListaRemate-{formato}-00.mp4", "captura": "capturas/22-10-HA-ListaRemate-{formato}-00.jpg" },
+    { "id": "01", "titulo": "Lotes 1 a 4", "subtitulo": "Top Fire I · Tap Blue · Talabet · Taleta",
+      "video": "22-10-HA-ListaRemate-{formato}-01.mp4", "captura": "capturas/22-10-HA-ListaRemate-{formato}-01.jpg" },
+    { "id": "02", "titulo": "Lotes 5 a 8", "subtitulo": "Tilsa · Tilcha · Tecna · Tarbet",
+      "video": "22-10-HA-ListaRemate-{formato}-02.mp4", "captura": "capturas/22-10-HA-ListaRemate-{formato}-02.jpg" },
+    { "id": "03", "titulo": "Lotes 9 a 12", "subtitulo": "Tarin · Tifo · Tubai · Virroco Blue",
+      "video": "22-10-HA-ListaRemate-{formato}-03.mp4", "captura": "capturas/22-10-HA-ListaRemate-{formato}-03.jpg" },
+    { "id": "04", "titulo": "Lote 13 + info", "subtitulo": "Viconthon · Preofertas, remate y más info",
+      "video": "22-10-HA-ListaRemate-{formato}-04.mp4", "captura": "capturas/22-10-HA-ListaRemate-{formato}-04.jpg" }
+  ]
+}

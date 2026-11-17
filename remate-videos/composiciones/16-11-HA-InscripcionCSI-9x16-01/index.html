@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>16-11-HA-InscripcionCSI-9x16-01</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; overflow: hidden; background: var(--ha-black); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ha-black); }
+
+      .lleno { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      .velo-abajo { position: absolute; inset: 0; background: var(--ha-veil-bottom); }
+
+      /* Bloques de texto: centrados, en el tercio de abajo, dentro de la zona segura (y 270–1580) */
+      .bloque { position: absolute; left: 0; width: 1080px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+      .linea { white-space: nowrap; color: var(--ha-white); font-family: var(--ha-font-sans); text-transform: uppercase; line-height: var(--ha-lh-tight); }
+      .flare { width: var(--ha-flare-w); height: var(--ha-flare-h); background: var(--ha-gold-flare); }
+      /* Titulares en SemiBold (600, el peso de --ha-t-count-weight): el Bold 700 se leía pesado sobre el video */
+      .tit { font-weight: var(--ha-t-count-weight); }
+
+      /* 1. ¡Haras Abril vuelve a abrir sus puertas! — HARAS ABRIL es el logotipo (nunca texto) */
+      #b1 { top: 1120px; gap: var(--ha-s-4); }
+      /* 849×97 → 530 × 60.55 (escala 0.6243) */
+      #b1 .marca { position: relative; width: var(--ha-logo-w); height: 60.55px; margin-top: 95px; }
+      #b1 .logo { position: absolute; left: 0; top: 0; width: var(--ha-logo-w); height: 60.55px; }
+      /* Estrella con la proporción y la posición del logo oficial (brand/logos/PNG/HA_Logo_Color_Negativo.png):
+         ahí el texto mide 832×81 en (112, 530) y la estrella 111×111 en (507, 377) → a escala 0.6243 la estrella mide 69.3,
+         empieza 246.6 a la derecha del borde del texto y 95.5 por encima. El PNG de la estrella (130 px, visible 114 en +9,+7)
+         va a 79 px; el texto del logotipo arranca en +5,+5 → img en left 246.1, top -94.8 */
+      #b1 .estrella { position: absolute; left: 246.1px; top: -94.8px; width: 79px; height: 79px; }
+      #b1 .sub { font-size: calc(var(--ha-t-sub-size) * 0.72); letter-spacing: var(--ha-t-lot-track); }
+
+      /* 2. CSI 1* & Campeonato Nacional de Caballos Jóvenes 2026 F.E.A */
+      #b2 { top: 1130px; gap: var(--ha-s-3); }
+      #b2 .csi { display: flex; align-items: flex-start; font-size: var(--ha-t-event-size); letter-spacing: var(--ha-t-event-track); text-indent: var(--ha-t-event-track); }
+      /* La estrella roja reemplaza al asterisco de "1*" (DESIGN §2) */
+      #b2 .csi img { width: 44px; height: 44px; margin-left: -0.18em; margin-top: 4px; }
+      #b2 .y { font-weight: var(--ha-t-label-weight); font-size: var(--ha-t-lot-size); letter-spacing: 0; color: var(--ha-gold); }
+      #b2 .camp { font-size: var(--ha-t-lot-size); letter-spacing: var(--ha-t-lot-track); line-height: 1.08; }
+      #b2 .anio { font-weight: var(--ha-t-year-weight); font-size: calc(var(--ha-t-year-size) * 0.5); letter-spacing: var(--ha-t-year-track); color: var(--ha-sand); }
+
+      /* 3. No te lo pierdas. ¡Inscribite ahora! */
+      #b3 { top: 1290px; gap: var(--ha-s-5); }
+      #b3 .sub { font-size: calc(var(--ha-t-sub-size) * 0.72); letter-spacing: var(--ha-t-lot-track); }
+      #b3 .boton {
+        height: var(--ha-btn-h); padding: 0 var(--ha-btn-pad-x); border-radius: var(--ha-btn-radius); background: var(--ha-gold-grad);
+        display: flex; align-items: center; font-family: var(--ha-font-sans); font-weight: var(--ha-t-sub-weight);
+        font-size: var(--ha-t-label-size); letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-ink); line-height: 1;
+      }
+
+      /* Tapa (frame 0): cuadro del clip en 17,8 s con su velo; el bloque 2 lo muestra la animación en TAPA */
+      #tapa { position: absolute; inset: 0; }
+    </style>
+  </head>
+  <body>
+    <!-- Video de base: IMG_5323 (36 s, con música). Trae su placa de marca hasta 3,37 s y desde 32,13 s.
+         Cortes del clip: 3.37 · 4.0 · 4.8 · 5.67 · 6.9 · 8.33 · 10.77 · 11.87 · 12.8 · 13.6 · 15.67 · 17.2 · 18.5 · 21.43 · 22.27 · 23.3 · 26.37 · 32.13
+         Texto: bloque 1 de 4.0 a 10.7 · bloque 2 de 12.0 a 21.3 · bloque 3 de 22.5 a 32.0 -->
+    <div id="root" data-composition-id="main" data-start="0" data-duration="36" data-width="1080" data-height="1920">
+
+      <video id="v-base" class="clip lleno" src="assets/clips/inscripcion-csi-img5323.mp4" muted playsinline
+             data-start="0" data-duration="36" data-media-start="0" data-track-index="0"></video>
+      <div id="velo" class="clip velo-abajo" data-start="3.35" data-duration="28.78" data-track-index="1"></div>
+
+      <div id="tapa">
+        <img class="lleno" src="assets/fotos/inscripcion-csi-tapa.jpg" alt="" />
+        <div class="velo-abajo"></div>
+      </div>
+
+      <div id="b1" class="bloque">
+        <div class="marca">
+          <img class="logo" src="assets/logos/ha-logotipo-negativo.png" alt="Haras Abril" />
+          <img class="estrella" src="assets/logos/ha-estrella-roja.png" alt="" />
+        </div>
+        <div class="flare"></div>
+        <div class="linea sub tit">¡Vuelve a abrir sus puertas!</div>
+      </div>
+
+      <div id="b2" class="bloque">
+        <div class="linea csi tit">CSI 1<img src="assets/logos/ha-estrella-roja.png" alt="*" /></div>
+        <div class="linea y">&amp;</div>
+        <div class="linea camp tit">Campeonato Nacional<br />de Caballos Jóvenes</div>
+        <div class="flare"></div>
+        <div class="linea anio">2026 F.E.A</div>
+      </div>
+
+      <div id="b3" class="bloque">
+        <div class="linea sub tit">No te lo pierdas.</div>
+        <div class="boton">¡Inscribite ahora!</div>
+      </div>
+
+      <audio id="audio" src="assets/musica/inscripcion-csi-img5323.mp3" data-start="0" data-duration="36" data-track-index="10" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const F = 1 / 30, D = 36, TAPA = 17.8;
+      const anim = gsap.timeline({ paused: true });
+      const IN = { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" };
+      const entra = (sel, t, stagger = 0.12) => anim.fromTo(sel, { opacity: 0, y: 32 }, { ...IN, stagger }, t);
+      const linea = (sel, t) => anim.fromTo(sel, { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "expo.out" }, t);
+      const sale = (sel, t) => anim.to(sel, { opacity: 0, duration: 0.5, ease: "power1.in" }, t);
+
+      // 1. Logotipo, línea y frase
+      anim.fromTo("#b1 .estrella", { opacity: 0, scale: 0.6, rotation: -20 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.8, ease: "expo.out" }, 3.85);
+      entra("#b1 .logo", 4.0);
+      linea("#b1 .flare", 4.2);
+      entra("#b1 .sub", 4.35);
+      sale("#b1", 10.2);
+
+      // 2. CSI 1*, &, campeonato, línea y año
+      entra("#b2 .csi", 12.0);
+      entra(["#b2 .y", "#b2 .camp"], 12.25);
+      linea("#b2 .flare", 12.6);
+      entra("#b2 .anio", 12.75);
+      sale("#b2", 20.8);
+
+      // 3. Frase y botón
+      entra("#b3 .sub", 22.6);
+      entra("#b3 .boton", 22.9);
+      sale("#b3", 31.5);
+
+      // Tapa en el frame 0; del frame 1 en adelante, la animación
+      tl.add(anim.tweenFromTo(TAPA, TAPA, { duration: F, ease: "none" }), 0);
+      tl.set("#tapa", { opacity: 0 }, F / 2);
+      tl.add(anim.tweenFromTo(0, D - F, { duration: D - F, ease: "none" }), F);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

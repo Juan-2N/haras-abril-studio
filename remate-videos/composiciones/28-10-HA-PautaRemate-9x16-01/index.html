@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920">
+    <title>28-10-HA-PautaRemate-9x16-01</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--ha-black); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ha-black); }
+
+      /* Edit de tomas (10,47 s), sin audio */
+      #medio { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+
+      /* Placas de apertura y cierre: PDF 23_10_HA_Launch (819×1456 pt) llevado a 1080 px (× 1,3187) */
+      .placa { position: absolute; inset: 0; overflow: hidden; }
+      #cierre { opacity: 0; }
+      /* back-2 (1440×2090) cubre el lienzo de 1920 px de alto: 1323×1920 centrado; el zoom in llega a 1,1 sin perder resolución */
+      .p-fondo { position: absolute; left: -122px; top: 0; width: 1323px; height: 1920px; transform-origin: 50% 50%; }
+      /* Sello de marca de agua: el círculo mide 1376 px de 1920 y queda centrado en (540, 959) */
+      .p-sello { position: absolute; left: -420px; top: -1px; width: 1920px; height: 1920px; }
+
+      .p-col {
+        position: absolute; left: 0; width: 1080px; display: flex; justify-content: center; align-items: center;
+        white-space: nowrap; line-height: var(--ha-lh-tight);
+      }
+      .p-evento {
+        height: 82px;
+        font-family: var(--ha-font-sans); font-weight: 700; /* el PDF usa Bold */
+        font-size: calc(var(--ha-t-event-size) * 0.63); letter-spacing: calc(var(--ha-t-event-track) * 0.25);
+        color: var(--ha-white); text-transform: uppercase;
+      }
+      /* El espaciado deja aire a la derecha de la última letra: se compensa para centrar */
+      .p-evento span { margin-right: calc(var(--ha-t-event-track) * -0.25); }
+
+      /* Apertura (página 2 del PDF): emblema y evento. El círculo del emblema mide 950 de 1081 px; a 443 px queda de 389 */
+      #a-emblema { position: absolute; left: 319px; top: 716px; width: 443px; height: 442px; }
+      #a-evento { top: 1150px; }
+
+      /* Cierre (página 1 del PDF): estrella, logotipo, línea dorada, evento, fecha y claim */
+      #c-estrella { position: absolute; left: 507px; top: 713px; width: 66px; height: 66px; }
+      #c-logo { position: absolute; left: 317px; top: 790px; width: 447px; height: 51px; } /* alto fijo (849×97 a 447 px) */
+      #c-flare { position: absolute; left: 257px; top: 889px; width: 567px; height: var(--ha-flare-h); background: var(--ha-gold-flare); }
+      #c-evento { top: 917px; }
+      #c-fecha { top: 998px; }
+      #c-claim {
+        top: 1130px; height: 50px;
+        font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-claim-weight);
+        font-size: calc(var(--ha-t-claim-size) * 1.045); color: var(--ha-sand);
+      }
+      .c-linea { position: absolute; top: 1158px; width: 90px; height: var(--ha-hairline); background: var(--ha-gold); }
+      #c-linea-izq { left: 112px; transform-origin: 100% 50%; }
+      #c-linea-der { left: 923px; transform-origin: 0% 50%; }
+
+      /* Overlay durante las tomas (overlay.png): estrella y logotipo arriba, evento y fecha abajo */
+      #overlay { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+      /* Velos para que el blanco se lea sobre tomas claras (el de arriba es el mismo degradé, invertido) */
+      .ov-velo { position: absolute; left: 0; width: 1080px; background: var(--ha-veil-bottom); opacity: 0.7; }
+      #ov-velo-top { top: 0; height: 360px; transform: rotate(180deg); }
+      #ov-velo-bot { top: 1280px; height: 640px; }
+      #ov-estrella { position: absolute; left: 497px; top: 70px; width: 68px; height: 68px; }
+      #ov-logo { position: absolute; left: 288px; top: 148px; width: 449px; height: 51px; } /* alto fijo (849×97 a 449 px) */
+      #ov-pie {
+        top: 1450px; height: 82px; gap: 0.45em;
+        font-family: var(--ha-font-sans); font-size: calc(var(--ha-t-event-size) * 0.59);
+        color: var(--ha-white); text-transform: uppercase;
+      }
+      #ov-pie .ov-fuerte { font-weight: 700; letter-spacing: calc(var(--ha-t-event-track) * 0.4); margin-right: calc(var(--ha-t-event-track) * -0.4); }
+      #ov-pie .ov-punto { font-weight: 700; }
+      #ov-pie .ov-fecha { font-weight: var(--ha-t-num-weight); letter-spacing: calc(var(--ha-t-event-track) * 0.22); margin-right: calc(var(--ha-t-event-track) * -0.22); }
+    </style>
+  </head>
+  <body>
+    <!-- Apertura (emblema) 0–2,8 (funde al video desde 2,4) · Tomas 2,4–12,87 · Cierre (fecha) 12,47–15 (entra fundiendo hasta 12,87) -->
+    <div data-hf-id="hf-pr01" id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+
+      <video data-hf-id="hf-pr02" id="medio" class="clip" src="assets/clips/pauta-remate-medio-a.mp4" muted playsinline
+             data-start="2.4" data-duration="10.467" data-track-index="1"></video>
+
+      <div data-hf-id="hf-pr30" id="overlay" class="clip" data-start="2.4" data-duration="10.467" data-track-index="4">
+        <div data-hf-id="hf-pr31" id="ov-velo-top" class="ov-velo"></div>
+        <div data-hf-id="hf-pr32" id="ov-velo-bot" class="ov-velo"></div>
+        <img data-hf-id="hf-pr33" id="ov-estrella" src="assets/logos/ha-estrella-roja.png" alt="">
+        <img data-hf-id="hf-pr34" id="ov-logo" src="assets/logos/ha-logotipo-negativo.png" alt="Haras Abril">
+        <div data-hf-id="hf-pr35" id="ov-pie" class="p-col"><span data-hf-id="hf-pr36" class="ov-fuerte">Remate 2026</span><span data-hf-id="hf-pr37" class="ov-punto">•</span><span data-hf-id="hf-pr38" class="ov-fecha">28 de noviembre</span></div>
+      </div>
+
+      <div data-hf-id="hf-pr03" id="apertura" class="placa clip" data-start="0" data-duration="2.8" data-track-index="2">
+        <img data-hf-id="hf-pr04" id="a-fondo" class="p-fondo" src="assets/fotos/pauta-remate-back-2.jpg" alt="">
+        <img data-hf-id="hf-pr05" id="a-sello" class="p-sello" data-layout-allow-overflow src="assets/logos/ha-sello-marca-agua.png" alt="">
+        <img data-hf-id="hf-pr19" id="a-emblema" src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril">
+        <div data-hf-id="hf-pr20" id="a-evento" class="p-col p-evento"><span data-hf-id="hf-pr21">Remate 2026</span></div>
+      </div>
+
+      <div data-hf-id="hf-pr16" id="cierre" class="placa clip" data-start="12.467" data-duration="2.533" data-track-index="3">
+        <img data-hf-id="hf-pr17" id="c-fondo" class="p-fondo" src="assets/fotos/pauta-remate-back-2.jpg" alt="">
+        <img data-hf-id="hf-pr18" id="c-sello" class="p-sello" data-layout-allow-overflow src="assets/logos/ha-sello-marca-agua.png" alt="">
+        <img data-hf-id="hf-pr06" id="c-estrella" src="assets/logos/ha-estrella-roja.png" alt="">
+        <img data-hf-id="hf-pr07" id="c-logo" src="assets/logos/ha-logotipo-negativo.png" alt="Haras Abril">
+        <div data-hf-id="hf-pr08" id="c-flare"></div>
+        <div data-hf-id="hf-pr09" id="c-evento" class="p-col p-evento"><span data-hf-id="hf-pr10">Remate 2026</span></div>
+        <div data-hf-id="hf-pr11" id="c-fecha" class="p-col p-evento"><span data-hf-id="hf-pr12">28 de noviembre</span></div>
+        <div data-hf-id="hf-pr13" id="c-linea-izq" class="c-linea"></div>
+        <div data-hf-id="hf-pr14" id="c-claim" class="p-col">Tu próxima estrella cada vez más cerca.</div>
+        <div data-hf-id="hf-pr15" id="c-linea-der" class="c-linea"></div>
+      </div>
+
+      <!-- Música: magnific-saturated-gospel desde el principio; fundido de salida sobre el cierre -->
+      <audio data-hf-id="hf-pr22" id="musica" src="assets/musica/saturated-gospel.mp3"
+             data-start="0" data-duration="15" data-track-index="10" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":1},{"t":13.8,"v":1},{"t":15,"v":0}]}]}'></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // APERTURA. Fondo y sello desde el frame 0. El emblema cae acelerando desde grande y golpea a los 0,6 s;
+      // en el golpe el sello de fondo late. Sin rebote.
+      tl.fromTo("#a-emblema", { opacity: 0, scale: 2.6, rotation: -25, filter: "blur(10px)" },
+        { opacity: 1, scale: 1, rotation: 0, filter: "blur(0px)", duration: 0.45, ease: "power4.in" }, 0.15);
+      tl.fromTo("#a-sello", { scale: 1.1, rotation: -6 }, { scale: 1, rotation: 0, duration: 2.2, ease: "expo.out" }, 0.6);
+      tl.fromTo("#a-evento", { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, 0.8);
+      tl.fromTo("#a-fondo", { scale: 1 }, { scale: 1.1, duration: 2.8, ease: "none" }, 0);
+      // Funde al video
+      tl.to("#apertura", { opacity: 0, duration: 0.4, ease: "power1.inOut" }, 2.4);
+
+      // OVERLAY durante las tomas: entra cuando se va la apertura y sale bajo el cierre
+      tl.fromTo("#overlay", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 2.6);
+      tl.fromTo("#ov-pie", { y: 16 }, { y: 0, duration: 0.8, ease: "expo.out" }, 2.6);
+      tl.to("#overlay", { opacity: 0, duration: 0.4, ease: "power1.inOut" }, 12.467);
+
+      // CIERRE. Entra fundiendo sobre la última toma; el resto en cascada y el último tramo queda quieto
+      tl.fromTo("#cierre", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.inOut" }, 12.467);
+      tl.fromTo("#c-fondo", { scale: 1 }, { scale: 1.1, duration: 2.533, ease: "none" }, 12.467);
+      tl.fromTo("#c-sello", { scale: 1.06, rotation: -6 }, { scale: 1, rotation: 0, duration: 2.0, ease: "power2.out" }, 12.467);
+      tl.fromTo("#c-estrella", { opacity: 0, scale: 0.6, rotation: -45 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.8, ease: "power3.out" }, 12.6);
+      tl.fromTo("#c-logo", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, 12.7);
+      tl.fromTo("#c-flare", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, 12.85);
+      tl.fromTo("#c-evento", { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, 12.95);
+      tl.fromTo("#c-fecha", { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, 13.05);
+      tl.fromTo("#c-claim", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, 13.2);
+      tl.fromTo(".c-linea", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power2.out" }, 13.3);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

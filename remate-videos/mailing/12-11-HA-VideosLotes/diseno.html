@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>12-11-HA-VideosLotes-diseno</title>
+  <!-- Diseño del mail en cortes. Cada <section> es un corte: se exporta a JPG al doble (1200 px) y se usa a 600 px.
+       data-href = link del corte · data-alt = texto alternativo (lo que se lee si el cliente de mail no muestra imágenes).
+       Generar: node herramientas/cortar-mail.mjs mailing/12-11-HA-VideosLotes/diseno.html salida/mailing/12-11-HA-VideosLotes -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 600px; background: var(--ha-charcoal); }
+    body { color: var(--ha-white); font-family: var(--ha-font-sans); -webkit-font-smoothing: antialiased; }
+    section { display: block; width: 600px; background: var(--ha-charcoal); }
+    .hero img { display: block; width: 600px; height: 338px; }
+
+    .intro { padding: var(--ha-s-5) var(--ha-s-6) var(--ha-s-1); text-align: center; }
+    .eyebrow { font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 0.45); letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-gold); }
+    .titulo { font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-event-size) * 0.34); line-height: 1.05; letter-spacing: 0.04em; text-transform: uppercase; padding-top: 12px; }
+    .texto { font-weight: var(--ha-t-data-weight); font-size: calc(var(--ha-t-label-size) * 0.6); line-height: 1.35; padding-top: 20px; }
+
+    .cta { padding: 28px var(--ha-s-6) 36px; text-align: center; }
+    .cta.sec { padding: 36px var(--ha-s-6) 8px; }
+    .boton {
+      display: inline-flex; align-items: center; gap: 12px; height: 52px; padding: 0 36px; border-radius: var(--ha-btn-radius);
+      background: var(--ha-gold-grad); font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 0.56);
+      letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-white); line-height: 1;
+    }
+    .boton .tri { width: 0; height: 0; border-style: solid; border-width: 7px 0 7px 12px; border-color: transparent transparent transparent var(--ha-white); }
+    .boton.linea { background: none; border: 1px solid var(--ha-gold); color: var(--ha-gold); height: 46px; padding: 0 32px; font-size: calc(var(--ha-t-label-size) * 0.5); }
+
+    .fila { margin: 0 var(--ha-s-6); padding: 20px 0; display: grid; grid-template-columns: 150px 1fr; border-top: 1px solid var(--ha-line-gold-soft); }
+    .fila.ultima { border-bottom: 1px solid var(--ha-line-gold-soft); }
+    .etq { font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 0.47); letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-gold); padding-top: 2px; }
+    .val { font-weight: var(--ha-t-data-weight); font-size: calc(var(--ha-t-label-size) * 0.56); line-height: 1.35; }
+    .val .lnk { color: var(--ha-sand); }
+
+    .firma { padding: 40px var(--ha-s-6) var(--ha-s-6); display: grid; justify-items: center; gap: 16px; }
+    .firma img { width: 96px; height: 96px; }
+    .frase { font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-claim-weight); font-size: 24px; color: var(--ha-sand); }
+  </style>
+</head>
+<body>
+  <section class="hero" data-href="https://youtube.com/playlist?list=PLRpMvaeQJNdQ" data-alt="Remate 2026 · Ver los videos de los lotes">
+    <img src="../../salida/mailing/12-11-HA-VideosLotes-play-e.png" alt="" />
+  </section>
+
+  <section class="intro" data-alt="Ya están disponibles los videos de los lotes. Los 13 productos del catálogo, en pista: trote, salto y pedigree de cada lote. Conocelos con tiempo, antes de las pre-ofertas.">
+    <div class="eyebrow">Remate Haras Abril 2026</div>
+    <div class="titulo">Ya están disponibles<br />los videos de los lotes</div>
+    <div class="texto">Los 13 productos del catálogo, en pista:<br />trote, salto y pedigree de cada lote.<br />Conocelos con tiempo, antes de las pre-ofertas.</div>
+  </section>
+
+  <section class="cta" data-href="https://youtube.com/playlist?list=PLRpMvaeQJNdQ" data-alt="Ver los videos">
+    <span class="boton"><span class="tri"></span>Ver los videos</span>
+  </section>
+
+  <section data-href="https://remateharasabril.com/Remate/338/haras-abril" data-alt="Pre-ofertas: del lunes 23.11 a las 10:00 h al viernes 27.11 a las 20:00 h, en remateharasabril.com">
+    <div class="fila"><span class="etq">Pre-ofertas</span><span class="val">Del lunes 23.11 a las 10:00 h<br />al viernes 27.11 a las 20:00 h<br /><span class="lnk">remateharasabril.com</span></span></div>
+  </section>
+
+  <section data-alt="Remate en vivo: sábado 28.11.2026, 17:30 h, en Haras Abril, Lezama. Presencial y online, en el marco del CSI 1*.">
+    <div class="fila"><span class="etq">Remate en vivo</span><span class="val">Sábado 28.11.2026 · 17:30 h<br />Haras Abril, Lezama · Presencial y online<br />En el marco del CSI 1*</span></div>
+  </section>
+
+  <section data-href="https://harasabril.com.ar/remate" data-alt="Más info: todos los detalles del remate en harasabril.com.ar/remate">
+    <div class="fila ultima"><span class="etq">Más info</span><span class="val">Todos los detalles del remate<br /><span class="lnk">harasabril.com.ar/remate</span></span></div>
+  </section>
+
+  <section class="cta sec" data-href="https://remateharasabril.com/Remate/338/haras-abril" data-alt="Registrate para pre-ofertar">
+    <span class="boton linea">Registrate para pre-ofertar</span>
+  </section>
+
+  <section class="firma" data-href="https://harasabril.com.ar/" data-alt="Haras Abril · Tu próxima estrella cada vez más cerca.">
+    <img src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="" />
+    <span class="frase">Tu próxima estrella cada vez más cerca.</span>
+  </section>
+</body>
+</html>

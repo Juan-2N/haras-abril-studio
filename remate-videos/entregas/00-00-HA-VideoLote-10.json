@@ -1,0 +1,20 @@
+{
+  "slug": "video-lote-10",
+  "titulo": "Video Lote 10 · Abril Tifo",
+  "tipo": "video",
+  "descripcion": "Video del lote para YouTube · 16:9 · 42 s",
+  "base": "../salida",
+  "formatos": [
+    "16x9",
+    "9x16"
+  ],
+  "slides": [
+    {
+      "id": "10",
+      "titulo": "Lote 10",
+      "subtitulo": "Abril Tifo · Abril Ofire × Alnok Z × Allegretto",
+      "video": "00-00-HA-VideoLote-{formato}-10.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-{formato}-10.jpg"
+    }
+  ]
+}

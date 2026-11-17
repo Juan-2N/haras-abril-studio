@@ -1,0 +1,53 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"evento","type":"string","label":"Evento","default":"Remate"},
+    {"id":"fecha","type":"string","label":"Fecha","default":"28.11.2026"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        #root {
+          position: absolute; inset: 0;
+          display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+          column-gap: var(--ha-s-10);
+        }
+        .head-txt {
+          display: block; white-space: nowrap;
+          font-family: var(--ha-font-sans);
+          font-size: calc(var(--ha-t-lot-size) * 0.8);
+          line-height: var(--ha-lh-tight); color: var(--ha-white); text-transform: uppercase;
+        }
+        /* v2: evento en Bold con tracking abierto, fecha en Regular */
+        .head-l { font-weight: var(--ha-t-event-weight); letter-spacing: var(--ha-t-label-track); }
+        .head-r { font-weight: var(--ha-t-year-weight); letter-spacing: var(--ha-t-meta-track); }
+        .head-l { justify-self: end; }
+        .head-r { justify-self: start; }
+        /* El PNG trae aire alrededor del sello: 194 px de imagen = 170 px de círculo */
+        .seal { display: block; width: 194px; height: 194px; }
+      </style>
+
+      <div data-hf-id="hf-wm4k" id="root" data-composition-id="encabezado-remate" data-width="1080" data-height="200">
+        <span data-hf-id="hf-ot9l" class="head-txt head-l" data-var-text="evento">Remate</span>
+        <img data-hf-id="hf-wyrj" class="seal" src="../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+        <span data-hf-id="hf-1rs9" class="head-txt head-r" data-var-text="fecha">28.11.2026</span>
+      </div>
+
+      <script>
+        const tl = gsap.timeline({ paused: true });
+        tl.fromTo(".seal", { opacity: 0, scale: 0.6, rotation: -20 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.9, ease: "power3.out" }, 0);
+        tl.fromTo(".head-l", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.9, ease: "expo.out" }, 0.25);
+        tl.fromTo(".head-r", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.9, ease: "expo.out" }, 0.25);
+        // Salida (local): 6.75 s desde el inicio de la pieza = 6.4 s locales
+        tl.to("#root", { opacity: 0, y: -24, duration: 0.6, ease: "power2.in" }, 6.4);
+        window.__timelines["encabezado-remate"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

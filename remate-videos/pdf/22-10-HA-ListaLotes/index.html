@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>22-10-HA-ListaLotes</title>
+  <!-- PDF estático de la lista de lotes (estilo v2, 28/10): una página 9:16 por story
+       (22-10-HA-ListaRemate-9x16-00 a 04), en el estado del segundo 3 de cada video.
+       Datos: herramientas/lotes.json (vía lotes-datos.js), con el mismo reparto que el carrusel.
+       Exportar: node herramientas/exportar-pdf.mjs pdf/22-10-HA-ListaLotes/index.html salida/pdf/22-10-HA-ListaLotes.pdf -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <link rel="stylesheet" href="../../herramientas/lista-v2.css" />
+  <script src="../../herramientas/lotes-datos.js"></script>
+  <style>
+    @page { size: 1080px 1920px; margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 1080px; background: var(--ha-charcoal); }
+    body { -webkit-font-smoothing: antialiased; }
+    .pagina { position: relative; width: 1080px; height: 1920px; overflow: hidden; break-after: page; background: var(--ha-charcoal); }
+    .pagina:last-child { break-after: auto; }
+
+    /* ── Portada (story 00, v2) ── */
+    .portada .foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .portada .velo { position: absolute; inset: 0; background: var(--ha-ink); mix-blend-mode: multiply; opacity: 0.7; }
+    .portada .sello { position: absolute; left: 337px; top: 525px; width: 406px; height: 406px; }
+    .portada .linea { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; color: var(--ha-white); line-height: var(--ha-lh-tight); font-family: var(--ha-font-sans); text-transform: uppercase; }
+    .portada .evento {
+      top: 929px; font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-event-size) * 1.43);
+      letter-spacing: var(--ha-t-label-track); text-indent: var(--ha-t-label-track);
+    }
+    .portada .anio {
+      top: 1064px; font-weight: var(--ha-t-year-weight); font-size: var(--ha-t-count-size);
+      letter-spacing: var(--ha-t-year-track); text-indent: var(--ha-t-year-track);
+    }
+    /* En el PDF el botón es un link a la web del remate */
+    .portada .boton {
+      position: absolute; left: 0; right: 0; margin: 0 auto; width: fit-content;
+      top: 1251px; height: var(--ha-btn-h); padding: 0 var(--ha-s-6);
+      border-radius: var(--ha-btn-radius); background: var(--ha-gold-grad);
+      display: flex; align-items: center; gap: var(--ha-s-3);
+      font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight);
+      font-size: var(--ha-t-label-size); letter-spacing: var(--ha-t-data-track);
+      color: var(--ha-white); text-transform: uppercase; line-height: 1; text-decoration: none;
+    }
+
+    /* ── Páginas de lista (stories 01 a 04) ── */
+    .lista .bg { position: absolute; left: 0; top: 0; height: 1920px; width: auto; max-width: none; transform: translateX(-315px); }
+    .lista .tint { position: absolute; inset: 0; background: var(--ha-ink); mix-blend-mode: multiply; opacity: 0.9; }
+    .lista .encabezado { position: absolute; left: 0; top: 326px; }
+    .lista .lot { position: absolute; left: 32px; }
+    .lista .info { position: absolute; left: 32px; top: 860px; height: 688px; padding: var(--ha-s-5) var(--ha-s-8); }
+    .lista .info .fila + .fila { margin-top: var(--ha-s-3); } /* mismo aire extra que la story 9:16 */
+  </style>
+</head>
+<body>
+  <section class="pagina portada">
+    <img class="foto" src="../../assets/fotos/dron-haras-boxes-pistas.jpg" alt="" />
+    <div class="velo"></div>
+    <img class="sello" src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+    <div class="linea evento">Remate</div>
+    <div class="linea anio">2026</div>
+    <a class="boton" href="https://harasabril.com.ar/remate/"><span>Conocé la lista</span><span>→</span></a>
+  </section>
+  <div id="listas"></div>
+
+  <script>
+    const { lotes, carrusel } = window.LOTES_DATOS;
+    const porNumero = Object.fromEntries(lotes.map((l) => [l.lote, l]));
+    const FONDOS = { "01": "piamant-cuerpo.jpg", "02": "quibarino-cuerpo.jpg", "03": "qalaiko-cuerpo.jpg", "04": "qassiana-cuerpo.jpg" };
+    const TOPS = [572, 828, 1084, 1340];
+
+    const tarjeta = (l, i) => `
+      <div class="lot" style="top:${TOPS[i]}px">
+        <div class="lot-top">
+          <svg class="lot-diag" viewBox="0 0 115 170" preserveAspectRatio="none"><line x1="115" y1="0" x2="16" y2="170"/></svg>
+          <span class="lot-num">${l.lote}</span>
+          <div class="lot-text"><span class="lot-name">${l.nombre}</span><span class="lot-ped">${l.pedigri}</span></div>
+        </div>
+        <div class="lot-meta">
+          <span class="meta-item">${l.sexo}</span><span class="meta-sep"></span>
+          <span class="meta-item"><span>AAFE:</span><span>${l.registro}</span></span><span class="meta-sep"></span>
+          <span class="meta-item">${l.nac}</span>
+        </div>
+      </div>`;
+
+    const info = `
+      <div class="info">
+        <div class="fila"><span class="etiqueta">Preofertas</span><span class="valor">22 al 27.11.2026 · Online en la web</span></div>
+        <div class="fila"><span class="etiqueta">Remate</span><span class="valor">28.11.2026 · Lezama, Bs. As.</span></div>
+        <div class="fila"><span class="etiqueta">Más info</span><span class="valor"><a class="min" href="https://harasabril.com.ar/remate/">harasabril.com.ar</a></span></div>
+        <div class="destello"></div>
+        <span class="cierre">Tu próxima estrella cada vez más cerca.</span>
+      </div>`;
+
+    const slides = Object.keys(carrusel).filter((k) => !k.startsWith("_"));
+    document.getElementById("listas").outerHTML = slides.map((s, idx) => {
+      const del = carrusel[s].map((n) => porNumero[n]);
+      const ultima = idx === slides.length - 1;
+      return `
+      <section class="pagina lista">
+        <img class="bg" src="../../assets/fotos/${FONDOS[s]}" alt="" />
+        <div class="tint"></div>
+        <div class="encabezado">
+          <span class="head-txt head-l">Remate</span>
+          <img class="seal" src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+          <span class="head-txt head-r">28.11.2026</span>
+        </div>
+        ${del.map(tarjeta).join("")}
+        ${ultima ? info : ""}
+      </section>`;
+    }).join("");
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "slug": "anteprograma-csi",
+  "titulo": "Anteprograma CSI 1* 2026",
+  "tipo": "documento",
+  "descripcion": "PDF A4 · 3 páginas · para pantalla",
+  "base": "../salida",
+  "formatos": ["a4"],
+  "slides": [
+    { "id": "PDF", "titulo": "Anteprograma completo", "subtitulo": "3 páginas: programa, estabulación y observaciones, información general",
+      "video": "pdf/01-HA-AnteprogramaCSI.pdf", "captura": "capturas/01-HA-AnteprogramaCSI-p1.jpg" }
+  ]
+}

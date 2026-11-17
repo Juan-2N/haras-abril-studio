@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        /* Atardecer sobre la pista (3200 × 1800) a 1920 de alto, centrado en el sol */
+        .eg-foto { position: absolute; left: -1520px; top: 0; width: 3413px; height: 1920px; transform-origin: 2116px 760px; }
+        .eg-velo { position: absolute; inset: 0; background: var(--ha-veil-dark); }
+        .eg-vineta { position: absolute; inset: 0;
+          background: radial-gradient(ellipse 80% 60% at 50% 45%, transparent 0%, color-mix(in srgb, var(--ha-black) 75%, transparent) 100%); }
+        .eg-flash { position: absolute; inset: 0; opacity: 0;
+          background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--ha-sand) 70%, transparent) 0%, transparent 60%); }
+        /* Tarjeta de vidrio con el sello, centrada */
+        .eg-tile { position: absolute; left: 300px; top: 720px; width: 480px; height: 480px; overflow: hidden;
+          background: color-mix(in srgb, var(--ha-ink) 55%, transparent); backdrop-filter: blur(22px);
+          border: var(--ha-hairline) solid var(--ha-line-gold);
+          box-shadow: 0 0 140px color-mix(in srgb, var(--ha-gold) 35%, transparent); }
+        .eg-tile::before { content: ""; position: absolute; inset: 0;
+          background: linear-gradient(160deg, color-mix(in srgb, var(--ha-white) 14%, transparent) 0%, transparent 45%); }
+        .eg-sello { position: absolute; left: 60px; top: 60px; width: 360px; height: 360px; }
+        .eg-brillo { position: absolute; left: -300px; top: 0; width: 240px; height: 480px; mix-blend-mode: screen;
+          background: linear-gradient(100deg, transparent 0%, color-mix(in srgb, var(--ha-sand) 45%, transparent) 50%, transparent 100%); }
+        .eg-negro { position: absolute; inset: 0; background: var(--ha-black); opacity: 0; }
+      </style>
+
+      <div data-hf-id="hf-mhpm" id="root" data-composition-id="escena-golpe" data-width="1080" data-height="1920">
+        <img data-hf-id="hf-n818" class="eg-foto" data-layout-allow-overflow src="../assets/fotos/pista-atardecer-portada.jpg" alt="" />
+        <div data-hf-id="hf-f8ul" class="eg-velo"></div>
+        <div data-hf-id="hf-j8lk" class="eg-vineta"></div>
+        <div data-hf-id="hf-d34t" class="eg-flash"></div>
+        <div data-hf-id="hf-al28" class="eg-negro"></div>
+        <div data-hf-id="hf-0m8p" class="eg-tile">
+          <img data-hf-id="hf-d96g" class="eg-sello" src="../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+          <div data-hf-id="hf-21g5" class="eg-brillo"></div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.querySelector('[data-composition-id="escena-golpe"]');
+          const q = (s) => root.querySelector(s);
+          q(".eg-foto").decode().then(() => {
+            const tl = gsap.timeline({ paused: true });
+            // Punch-in sobre el sol y deriva lenta; el golpe de la pista cae en 0,67
+            tl.fromTo(q(".eg-foto"), { scale: 1.35, filter: "blur(12px)" }, { scale: 1.06, filter: "blur(0px)", duration: 0.75, ease: "expo.out" }, 0);
+            tl.to(q(".eg-foto"), { scale: 1, duration: 1.85, ease: "none" }, 0.75);
+            tl.fromTo(q(".eg-flash"), { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, 0.62);
+            tl.to(q(".eg-flash"), { opacity: 0, duration: 0.7, ease: "power2.out" }, 0.7);
+            // La tarjeta entra desde el desenfoque, con el sello
+            tl.fromTo(q(".eg-tile"), { opacity: 0, scale: 0.7, filter: "blur(24px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.7, ease: "expo.out" }, 0.62);
+            tl.fromTo(q(".eg-sello"), { scale: 0.6, rotation: -8 }, { scale: 1, rotation: 0, duration: 0.9, ease: "expo.out" }, 0.66);
+            tl.fromTo(q(".eg-brillo"), { x: 0 }, { x: 1080, duration: 0.9, ease: "power2.inOut" }, 1.2);
+            // Salida: la tarjeta viene hacia cámara y la foto se apaga
+            tl.to(q(".eg-tile"), { scale: 1.9, opacity: 0, filter: "blur(30px)", duration: 0.45, ease: "power3.in" }, 2.15);
+            tl.to(q(".eg-negro"), { opacity: 1, duration: 0.4, ease: "power1.in" }, 2.15);
+            window.__timelines["escena-golpe"] = tl;
+          });
+        })();
+      </script>
+    </template>
+  </body>
+</html>

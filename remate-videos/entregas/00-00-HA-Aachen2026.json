@@ -1,0 +1,47 @@
+{
+  "slug": "aachen-2026-iconthon",
+  "titulo": "Abril Iconthon · Aachen 2026",
+  "tipo": "reel",
+  "descripcion": "Abril Iconthon en el FEI World Championship Aachen 2026 con Matías Larocca · Reel y Stories 9:16 · 28 s",
+  "base": "../salida",
+  "formatos": ["9x16"],
+  "slides": [
+    { "id": "01", "titulo": "Aachen 2026", "subtitulo": "Abril Iconthon · Matías Larocca",
+      "video": "00-00-HA-Aachen2026-{formato}-01.mp4", "captura": "capturas/00-00-HA-Aachen2026-{formato}-01.jpg" }
+  ],
+  "copy": [
+    {
+      "titulo": "Logro",
+      "comentario": "Estructura de resultado: el nombre primero, el dato y la firma.",
+      "texto": [
+        "ABRIL ICONTHON 💫 (Conthargos x Clinton x Kojak)",
+        "FEI World Championship Aachen 2026 · 1.55 m, junto a Matías Larocca.",
+        "Un producto criado en Haras Abril, saltando en la pista de Aachen.",
+        "El mayor logro de nuestro año.",
+        "Simplemente la mejor sangre, los mejores resultados.",
+        "#harasabril #simplementelamejorsangre #losmejoresresultados"
+      ]
+    },
+    {
+      "titulo": "Emoción",
+      "comentario": "Más narrativo, con agradecimiento. Para el reel en el feed.",
+      "texto": [
+        "De Argentina a Aachen. 💫",
+        "ABRIL ICONTHON (Conthargos x Clinton x Kojak) y Matías Larocca llevaron la sangre de Haras Abril al FEI World Championship 2026.",
+        "Un camino que empezó en casa y llegó a la cita más alta del salto.",
+        "Gracias, Matías. Gracias a todo el equipo.",
+        "Simplemente la mejor sangre, los mejores resultados.",
+        "#harasabril #simplementelamejorsangre #losmejoresresultados"
+      ]
+    },
+    {
+      "titulo": "Corta",
+      "comentario": "Dos líneas y la firma. Para la story o si el video habla solo.",
+      "texto": [
+        "ABRIL ICONTHON en Aachen 💫",
+        "FEI World Championship 2026 · con Matías Larocca.",
+        "Simplemente la mejor sangre, los mejores resultados."
+      ]
+    }
+  ]
+}

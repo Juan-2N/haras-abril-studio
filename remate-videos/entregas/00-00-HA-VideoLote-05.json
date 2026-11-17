@@ -1,0 +1,20 @@
+{
+  "slug": "video-lote-05",
+  "titulo": "Video Lote 05 · Abril Tilsa",
+  "tipo": "video",
+  "descripcion": "Video del lote para YouTube · 16:9 · 42 s",
+  "base": "../salida",
+  "formatos": [
+    "16x9",
+    "9x16"
+  ],
+  "slides": [
+    {
+      "id": "05",
+      "titulo": "Lote 05",
+      "subtitulo": "Abril Tilsa · Cornet du Lys × Stakkato × Douglas",
+      "video": "00-00-HA-VideoLote-{formato}-05.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-{formato}-05.jpg"
+    }
+  ]
+}

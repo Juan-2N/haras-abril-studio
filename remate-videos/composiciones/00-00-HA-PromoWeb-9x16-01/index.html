@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>00-00-HA-PromoWeb-9x16-01</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; overflow: hidden; background: var(--ha-black); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ha-black); }
+      .escena { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      #fin { position: absolute; inset: 0; background: var(--ha-black); opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <!-- Escenas (s), al ritmo de la pista (161,5 BPM, beat 0,372 s; drop en 11,64; empalme al golpe final en 22,95):
+         GOLPE 0 · PALABRAS 2,6 · TILES 8 · CELULAR 11,64 · BLOQUES 14,6 · CIERRE 22,95 → 30,8.
+         Frame 0 = tapa (sub-composición arriba de todo, visible un solo frame). -->
+    <div data-hf-id="hf-k3cj" id="root" data-composition-id="main" data-start="0" data-duration="30.8" data-width="1080" data-height="1920">
+
+      <div data-hf-id="hf-2d26" id="fondo" class="escena" data-composition-id="fondo" data-composition-src="compositions/fondo.html"
+           data-start="0" data-duration="30.8" data-track-index="0" data-width="1080" data-height="1920"></div>
+
+      <div data-hf-id="hf-z3rr" id="golpe" class="escena" data-composition-id="escena-golpe" data-composition-src="compositions/escena-golpe.html"
+           data-start="0" data-duration="2.6" data-track-index="1" data-width="1080" data-height="1920"></div>
+
+      <div data-hf-id="hf-stng" id="palabras" class="escena" data-composition-id="escena-palabras" data-composition-src="compositions/escena-palabras.html"
+           data-start="2.6" data-duration="5.4" data-track-index="1" data-width="1080" data-height="1920"
+           data-variable-values='{"palabras":"Genética.|Resultados.|Pedigrí.|Remate."}'></div>
+
+      <div data-hf-id="hf-llv2" id="tiles" class="escena" data-composition-id="escena-tiles" data-composition-src="compositions/escena-tiles.html"
+           data-start="8" data-duration="3.64" data-track-index="1" data-width="1080" data-height="1920"></div>
+
+      <div data-hf-id="hf-lgkf" id="celular" class="escena" data-composition-id="escena-celular" data-composition-src="compositions/escena-celular.html"
+           data-start="11.64" data-duration="2.96" data-track-index="1" data-width="1080" data-height="1920"></div>
+
+      <div data-hf-id="hf-vpia" id="bloques" class="escena" data-composition-id="escena-bloques" data-composition-src="compositions/escena-bloques.html"
+           data-start="14.6" data-duration="8.35" data-track-index="1" data-width="1080" data-height="1920"></div>
+
+      <div data-hf-id="hf-z1en" id="cierre" class="escena" data-composition-id="escena-cierre" data-composition-src="compositions/escena-cierre.html"
+           data-start="22.95" data-duration="7.85" data-track-index="1" data-width="1080" data-height="1920"
+           data-variable-values='{"url":"harasabril.com.ar","frase":"La mejor sangre. Los mejores resultados."}'></div>
+
+      <div data-hf-id="hf-rzgs" id="tapa" class="escena" data-composition-id="tapa" data-composition-src="compositions/tapa.html"
+           data-start="0" data-duration="0.5" data-track-index="5" data-width="1080" data-height="1920"
+           data-variable-values='{"url":"harasabril.com.ar"}'></div>
+
+      <div data-hf-id="hf-sgeg" id="fin"></div>
+
+      <!-- Música: Hit 'Em Hard (Evoli), empalme 0–22,98 s + 127,08 s al final, con fade out propio desde 29,6 s -->
+      <audio data-hf-id="hf-hqgl" id="musica" src="assets/musica/hit-em-hard-promo-web-30s.mp3"
+             data-start="0" data-duration="30.8" data-track-index="10" data-volume="0.9"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      // Salida a negro; el último medio segundo queda limpio
+      tl.fromTo("#fin", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.in" }, 29.7);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

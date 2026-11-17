@@ -1,0 +1,75 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"anio","type":"string","label":"Año","default":"2026"},
+    {"id":"subtitulo","type":"string","label":"Subtítulo","default":"Lista de Lotes"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        #root { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; }
+        .head-row { display: flex; align-items: baseline; justify-content: center; gap: var(--ha-s-3); color: var(--ha-white); }
+        .event { display: flex; }
+        .ch {
+          display: block;
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-event-weight);
+          font-size: var(--ha-t-event-size); line-height: var(--ha-lh-tight);
+          margin-right: var(--ha-t-event-track);
+        }
+        .ch:last-child { margin-right: 0; }
+        .ast { display: block; font-family: var(--ha-font-serif); font-size: 72px; line-height: 1; }
+        .year {
+          display: block;
+          font-family: var(--ha-font-serif); font-weight: var(--ha-t-year-weight);
+          font-size: var(--ha-t-year-size); letter-spacing: var(--ha-t-year-track);
+          line-height: var(--ha-lh-tight);
+        }
+        .sub-row { display: flex; align-items: center; justify-content: center; gap: var(--ha-s-3); margin-top: var(--ha-s-1); }
+        .sub {
+          display: block;
+          font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-sub-weight);
+          font-size: var(--ha-t-sub-size); line-height: 1.1; color: var(--ha-white);
+        }
+        .rule { display: block; width: 96px; height: 2px; background: var(--ha-gold); }
+        .rule-l { transform-origin: 100% 50%; }
+        .rule-r { transform-origin: 0% 50%; }
+      </style>
+
+      <div data-hf-id="hf-6xyb" id="root" data-composition-id="encabezado-lista" data-width="1080" data-height="260">
+        <div data-hf-id="hf-hp2p" class="head-row">
+          <span data-hf-id="hf-aqpr" class="event">
+            <span data-hf-id="hf-syle" class="ch">R</span><span data-hf-id="hf-1b0z" class="ch">E</span><span data-hf-id="hf-y4kr" class="ch">M</span><span data-hf-id="hf-zpsv" class="ch">A</span><span data-hf-id="hf-vcfk" class="ch">T</span><span data-hf-id="hf-dg8j" class="ch">E</span>
+          </span>
+          <span data-hf-id="hf-f60f" class="ast">*</span>
+          <span data-hf-id="hf-zi4g" class="year" data-var-text="anio">2026</span>
+        </div>
+        <div data-hf-id="hf-z2g1" class="sub-row">
+          <span data-hf-id="hf-l0ws" class="rule rule-l"></span>
+          <span data-hf-id="hf-1f32" class="sub" data-var-text="subtitulo">Lista de Lotes</span>
+          <span data-hf-id="hf-s1vu" class="rule rule-r"></span>
+        </div>
+      </div>
+
+      <script>
+        // "REMATE" se abre desde el centro (tracking simulado con x por letra).
+        const tl = gsap.timeline({ paused: true });
+        const SPREAD = 26;
+        tl.fromTo(".ch", { opacity: 0, y: 30, x: (i) => (2.5 - i) * SPREAD },
+          { opacity: 1, y: 0, x: 0, duration: 1.3, ease: "expo.out", stagger: 0.03 }, 0);
+        tl.fromTo(".ast", { opacity: 0, scale: 0.4, rotation: -90 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.9, ease: "power3.out" }, 0.25);
+        tl.fromTo(".year", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "expo.out" }, 0.35);
+        tl.fromTo(".sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.0, ease: "expo.out" }, 0.55);
+        tl.fromTo(".rule", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, 0.6);
+        // Salida (local): 6.75 s desde el inicio de la pieza = 6.4 s locales
+        tl.to("#root", { opacity: 0, y: -24, duration: 0.6, ease: "power2.in" }, 6.4);
+        window.__timelines["encabezado-lista"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

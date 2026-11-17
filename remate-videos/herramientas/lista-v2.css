@@ -1,0 +1,83 @@
+/* Kit estático de la lista de lotes v2, para piezas que no son video (PDF, mailing).
+   Es la misma tarjeta, encabezado y bloque de info que las sub-composiciones del
+   carrusel (composiciones/22-10-HA-ListaRemate-9x16-01/compositions/*), en su estado
+   final (sin animación). Si cambia el diseño de la tarjeta, cambiar los dos lados.
+   Requiere brand/tokens.css. Los datos salen de herramientas/lotes-datos.js. */
+
+/* ── Encabezado: REMATE · sello · fecha ── */
+.encabezado {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  column-gap: var(--ha-s-10); width: 1080px; height: 200px;
+}
+.encabezado .head-txt {
+  display: block; white-space: nowrap; font-family: var(--ha-font-sans);
+  font-size: calc(var(--ha-t-lot-size) * 0.8); line-height: var(--ha-lh-tight);
+  color: var(--ha-white); text-transform: uppercase;
+}
+.encabezado .head-l { justify-self: end; font-weight: var(--ha-t-event-weight); letter-spacing: var(--ha-t-label-track); }
+.encabezado .head-r { justify-self: start; font-weight: var(--ha-t-year-weight); letter-spacing: var(--ha-t-meta-track); }
+.encabezado .seal { display: block; width: 194px; height: 194px; } /* 194 px de imagen = 170 px de círculo */
+
+/* ── Tarjeta de lote ── */
+.lot {
+  --k: 1.2;
+  position: relative; width: 1016px; height: 232px;
+  background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-line-gold);
+  display: flex; flex-direction: column;
+}
+.lot-top { position: relative; height: 170px; }
+.lot-diag { position: absolute; left: 0; top: 0; width: 115px; height: 100%; overflow: visible; }
+.lot-diag line { stroke: var(--ha-gold); stroke-width: 2; }
+.lot-num {
+  position: absolute; left: 18px; top: 14px;
+  font-family: var(--ha-font-sans); font-weight: var(--ha-t-num-weight);
+  font-size: calc(var(--ha-t-num-size) * 0.8); letter-spacing: var(--ha-t-num-track);
+  line-height: 1; color: var(--ha-gold);
+}
+.lot-text {
+  position: absolute; left: 56px; right: 24px; top: 0; bottom: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+}
+.lot-name {
+  white-space: nowrap; font-family: var(--ha-font-sans); font-weight: var(--ha-t-lot-weight);
+  font-size: calc(var(--ha-t-lot-size) * var(--k)); letter-spacing: var(--ha-t-lot-track);
+  line-height: 1; color: var(--ha-white); text-transform: uppercase;
+}
+.lot-ped {
+  white-space: nowrap; font-family: var(--ha-font-sans); font-weight: var(--ha-t-data-weight);
+  font-size: calc(var(--ha-t-label-size) * var(--k)); letter-spacing: var(--ha-t-data-track);
+  line-height: 1; color: var(--ha-white); text-transform: uppercase;
+}
+.lot-meta {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: var(--ha-s-3);
+  background: var(--ha-strip-light);
+  font-family: var(--ha-font-sans); font-weight: var(--ha-t-meta-weight);
+  font-size: calc(var(--ha-t-meta-size) * 1.15 * var(--k)); letter-spacing: var(--ha-t-meta-track);
+  color: var(--ha-strip-text); text-transform: uppercase; line-height: 1;
+}
+.meta-item { display: flex; align-items: center; gap: var(--ha-s-1); white-space: nowrap; }
+.meta-sep { display: block; width: 2px; height: calc(30px * var(--k)); background: currentColor; opacity: 0.6; }
+
+/* ── Bloque de info del remate (slide final) ── */
+.info {
+  width: 1016px; background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-line-gold);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--ha-s-5);
+  padding: var(--ha-s-6) var(--ha-s-8); text-align: center;
+}
+.info .fila { display: flex; flex-direction: column; align-items: center; gap: var(--ha-s-1); }
+.info .etiqueta {
+  font-family: var(--ha-font-sans); font-weight: 600; font-size: calc(var(--ha-t-label-size) * 1.18);
+  letter-spacing: var(--ha-t-label-track); text-indent: var(--ha-t-label-track); text-transform: uppercase;
+  line-height: var(--ha-lh-tight); color: var(--ha-gold);
+}
+.info .valor {
+  font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 1.47);
+  letter-spacing: var(--ha-t-data-track); text-transform: uppercase; line-height: var(--ha-lh-tight); color: var(--ha-white);
+}
+.info .valor .min { text-transform: none; }
+.info a { color: inherit; text-decoration: none; }
+.info .destello { width: 520px; height: var(--ha-flare-h); background: var(--ha-gold-flare); }
+.info .cierre {
+  font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-claim-weight);
+  font-size: var(--ha-t-claim-size); line-height: 1.2; color: var(--ha-sand);
+}

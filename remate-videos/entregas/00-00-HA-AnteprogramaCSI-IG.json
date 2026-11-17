@@ -1,0 +1,20 @@
+{
+  "slug": "anteprograma-csi-ig",
+  "titulo": "Anteprograma CSI 1* 2026 · Carrusel IG",
+  "tipo": "carrusel",
+  "descripcion": "5 placas fijas (PNG) · Feed 4:5 y Stories 9:16",
+  "base": "../salida",
+  "formatos": ["4x5", "9x16"],
+  "slides": [
+    { "id": "00", "titulo": "Portada", "subtitulo": "Anteprograma CSI 1* 2026 · 27, 28 y 29 de noviembre · Lezama",
+      "video": "00-00-HA-AnteprogramaCSI-{formato}-00.png" },
+    { "id": "01", "titulo": "Viernes 27.11", "subtitulo": "Caballos jóvenes · Serie Internacional 16:30 h",
+      "video": "00-00-HA-AnteprogramaCSI-{formato}-01.png" },
+    { "id": "02", "titulo": "Sábado 28.11", "subtitulo": "Campeonatos A, B y C · Remate 17:30 h",
+      "video": "00-00-HA-AnteprogramaCSI-{formato}-02.png" },
+    { "id": "03", "titulo": "Domingo 29.11", "subtitulo": "Campeonatos A, B y C · Gran Premio Ruiz Díaz 16:30 h",
+      "video": "00-00-HA-AnteprogramaCSI-{formato}-03.png" },
+    { "id": "04", "titulo": "Inscripciones", "subtitulo": "Cierre 16.11 · bolsas de premios · link al anteprograma",
+      "video": "00-00-HA-AnteprogramaCSI-{formato}-04.png" }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "slug": "video-lote-02",
+  "titulo": "Video Lote 02 · Abril Tap Blue",
+  "tipo": "video",
+  "descripcion": "Video del lote para YouTube · 16:9 · 42 s",
+  "base": "../salida",
+  "formatos": [
+    "16x9",
+    "9x16"
+  ],
+  "slides": [
+    {
+      "id": "02",
+      "titulo": "Lote 02",
+      "subtitulo": "Abril Tap Blue · Chacco Blue II × Conthargos × Baloubet du Rouet",
+      "video": "00-00-HA-VideoLote-{formato}-02.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-{formato}-02.jpg"
+    }
+  ]
+}

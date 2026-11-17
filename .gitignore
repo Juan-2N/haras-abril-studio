@@ -1,0 +1,31 @@
+# Windows / editores
+desktop.ini
+Thumbs.db
+.DS_Store
+node_modules/
+*.log
+
+# ── Material pesado: se pasa aparte (pendrive / Drive), no por git ──
+remate-videos/assets/
+remate-videos/videosreferencias/
+remate-videos/salida/
+remate-videos/AACHEN2026/
+
+# ── Dentro de cada pieza: cachés y copias que se regeneran ──
+.hyperframes/
+.thumbnails/
+.transcode-cache/
+.waveform-cache/
+renders/
+snapshots/
+
+# Copias de assets/ y de brand/ (las restaura herramientas/restaurar-assets.mjs).
+# tokens.css SÍ va: cada pieza tiene su versión (v1 o v2).
+remate-videos/composiciones/**/assets/**
+remate-videos/composiciones/**/brand/fonts/
+remate-videos/composiciones/**/brand/logos/
+
+# Excepciones: archivos que solo existen dentro de la pieza (no están en assets/)
+!remate-videos/composiciones/**/assets/**/
+!remate-videos/composiciones/00-00-HA-VideoLoteD-16x9-01/assets/**/lote01[bcd]-*
+!remate-videos/composiciones/00-00-HA-PromoWeb-9x16-01/assets/web/*

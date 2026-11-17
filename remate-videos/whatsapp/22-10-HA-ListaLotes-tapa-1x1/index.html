@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>22-10-HA-ListaLotes-tapa-1x1</title>
+  <!-- Tapa 1:1 de la lista de lotes (portada v2 reacomodada), para encabezado de envío por WhatsApp.
+       Exportar: node herramientas/exportar-png.mjs whatsapp/22-10-HA-ListaLotes-tapa-1x1/index.html <png> 1080 -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 1080px; height: 1080px; overflow: hidden; background: var(--ha-charcoal); }
+    body { -webkit-font-smoothing: antialiased; }
+    .tapa { position: relative; width: 1080px; height: 1080px; overflow: hidden; }
+    .foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+    .velo { position: absolute; inset: 0; background: var(--ha-ink); mix-blend-mode: multiply; opacity: 0.7; }
+    .bloque { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    /* El PNG del sello trae aire: 340 px de imagen ≈ 298 px de círculo */
+    .sello { width: 340px; height: 340px; margin-bottom: var(--ha-s-2); }
+    .linea { white-space: nowrap; color: var(--ha-white); line-height: var(--ha-lh-tight); font-family: var(--ha-font-sans); text-transform: uppercase; }
+    .evento { font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-event-size) * 1.25); letter-spacing: var(--ha-t-label-track); text-indent: var(--ha-t-label-track); }
+    .anio { font-weight: var(--ha-t-year-weight); font-size: calc(var(--ha-t-count-size) * 0.87); letter-spacing: var(--ha-t-year-track); text-indent: var(--ha-t-year-track); margin-top: var(--ha-s-1); }
+    .boton {
+      margin-top: var(--ha-s-6); height: var(--ha-btn-h); padding: 0 var(--ha-s-6);
+      border-radius: var(--ha-btn-radius); background: var(--ha-gold-grad);
+      display: flex; align-items: center; gap: var(--ha-s-3);
+      font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight);
+      font-size: var(--ha-t-label-size); letter-spacing: var(--ha-t-data-track);
+      color: var(--ha-white); text-transform: uppercase; line-height: 1;
+    }
+  </style>
+</head>
+<body>
+  <section class="tapa">
+    <img class="foto" src="../../assets/fotos/dron-haras-boxes-pistas.jpg" alt="" />
+    <div class="velo"></div>
+    <div class="bloque">
+      <img class="sello" src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+      <div class="linea evento">Remate</div>
+      <div class="linea anio">2026</div>
+      <div class="boton"><span>Conocé la lista</span><span>→</span></div>
+    </div>
+  </section>
+</body>
+</html>

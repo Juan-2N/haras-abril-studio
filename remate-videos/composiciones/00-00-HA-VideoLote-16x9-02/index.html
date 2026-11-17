@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>00-00-HA-VideoLote-16x9-02</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; overflow: hidden; background: var(--ha-black); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ha-black); }
+      .placa { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .clip-video { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; object-fit: cover; }
+      /* Velo sobre el dron (PDF págs. 1 y 4: la foto queda al ~62 %) */
+      .velo { position: absolute; inset: 0; background: var(--ha-veil-dark); }
+      /* Sello arriba a la derecha sobre los clips (PDF págs. 3, 6, 7 y 8): 155 px de círculo centrado en (1745,5, 132) */
+      .sello-esquina { position: absolute; left: 1657.4px; top: 41.4px; width: 176.4px; height: 176.4px; }
+      .sello-esquina img { width: 176.4px; height: 176.4px; transform-origin: 49.95% 51.39%; }
+      #fin { position: absolute; inset: 0; background: var(--ha-black); opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <!-- Escenas (s), con corte seco:
+         REMATE 0 (frame 0 = tapa) · SLOW 4 · INTRO 7.93 · BLOOD 11.5 · BODY 16 · LEFT 20.5 + RIGHT 23.05 · SALTO 29.05 + SALTO2 32.45 · CIERRE 36.55 → 41.55.
+         Lower third en el SLOW y en los trotes; sello arriba a la derecha en el SLOW, los trotes y los saltos. -->
+    <div id="root" data-composition-id="main" data-start="0" data-duration="41.55" data-width="1920" data-height="1080">
+
+      <!-- 0. Placa Remate (pág. 1) sobre el dron al atardecer (DJI 0011 desde el segundo 2, a media velocidad).
+              La placa muestra la tapa en el frame 0 y anima desde el frame 1 -->
+      <video id="v-remate" class="clip clip-video" src="assets/clips/video-lote-dron-remate.mp4" muted playsinline
+             data-start="0" data-duration="4" data-media-start="0" data-track-index="0"></video>
+      <div id="velo-remate" class="clip velo" data-start="0" data-duration="4" data-track-index="0"></div>
+      <div id="remate" class="placa" data-composition-id="placa-remate" data-composition-src="compositions/placa-remate.html"
+           data-start="0" data-duration="4" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"evento":"Remate","anio":"2026","fecha_texto":"28 de noviembre"}'></div>
+
+      <!-- 1. Clip slow: el tramo del salto de SALTO SLOW (pág. 3) -->
+      <video id="v-slow" class="clip clip-video" src="assets/clips/lote02-slow.mp4" muted playsinline
+             data-start="4" data-duration="3.93" data-media-start="1.8" data-track-index="2"></video>
+
+      <!-- 2. Placa intro (pág. 2): la cabeza es una foto hasta que esté el clip -->
+      <video id="v-cabeza" class="clip clip-video" src="assets/clips/lote02-cabeza.mp4" muted playsinline
+             data-start="7.93" data-duration="3.57" data-media-start="0" data-track-index="0"></video>
+      <div id="intro" class="placa" data-composition-id="placa-intro" data-composition-src="compositions/placa-intro.html"
+           data-start="7.93" data-duration="3.57" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"02","nombre":"Abril Tap Blue","sangre":"Chacco Blue II × Conthargos × Baloubet du Rouet"}'></div>
+
+      <!-- 3. Placa blood (pág. 4) sobre el dron (DJI 0012 desde el segundo 5,5, a media velocidad) -->
+      <video id="v-pedigri" class="clip clip-video" src="assets/clips/video-lote-dron-pedigri.mp4" muted playsinline
+             data-start="11.5" data-duration="4.5" data-media-start="0" data-track-index="0"></video>
+      <div id="velo-pedigri" class="clip velo" data-start="11.5" data-duration="4.5" data-track-index="0"></div>
+      <div id="blood" class="placa" data-composition-id="placa-blood" data-composition-src="compositions/placa-blood.html"
+           data-start="11.5" data-duration="4.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"pedigri":"CHACCO BLUE II|ABRIL JENTARBET|CHACCO-BLUE|NAITI ROUGE|CONTHARGOS|GODETTE MUSTERD|CHAMBERTIN|CONTARA|CINCABA ROUGE|HAITI ROUGE|CONVERTER|CAJANDRA Z|BALOUBET DU ROUET|ODETTE","destacados":"0|4|12"}'></div>
+
+      <!-- 4. Placa body (pág. 5) -->
+      <div id="body" class="placa" data-composition-id="placa-body" data-composition-src="compositions/placa-body.html"
+           data-start="16" data-duration="4.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"nombre":"Abril Tap Blue","sangre":"Chacco Blue II × Conthargos × Baloubet du Rouet","sexo":"M","pelo":"Zaino","aafe":"562993","nac":"13.10.2024"}'></div>
+
+      <!-- 5. Trotes: left (TROTE 1) y right (SLOW TROTE), con corte directo (págs. 6 y 7) -->
+      <video id="v-left" class="clip clip-video" src="assets/clips/lote02-trote.mp4" muted playsinline
+             data-start="20.5" data-duration="2.55" data-media-start="1" data-track-index="2"></video>
+      <video id="v-right" class="clip clip-video" src="assets/clips/lote02-slow-trote.mp4" muted playsinline
+             data-start="23.05" data-duration="6" data-media-start="1" data-track-index="2"></video>
+
+      <!-- 6. Saltos 1 y 2, con corte directo y solo el sello (pág. 8) -->
+      <video id="v-salto1" class="clip clip-video" src="assets/clips/lote02-salto1.mp4" muted playsinline
+             data-start="29.05" data-duration="3.4" data-media-start="0" data-track-index="2"></video>
+      <video id="v-salto2" class="clip clip-video" src="assets/clips/lote02-salto2.mp4" muted playsinline
+             data-start="32.45" data-duration="3.467" data-media-start="0" data-track-index="2"></video>
+
+      <!-- Lower third (págs. 3, 6 y 7): entra en el SLOW, se oculta en las placas y vuelve a entrar en los trotes -->
+      <div id="footer" class="placa" data-composition-id="footer-lote" data-composition-src="compositions/footer-lote.html"
+           data-start="4" data-duration="25.05" data-track-index="3" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"02","nombre":"Abril Tap Blue","sangre":"Chacco Blue II × Conthargos × Baloubet du Rouet","oculto_desde":3.93,"oculto_hasta":16.5}'></div>
+
+      <!-- Sello arriba a la derecha: SLOW, y de los trotes al final de los saltos -->
+      <div id="sello-slow" class="clip sello-esquina" data-start="4" data-duration="3.93" data-track-index="4">
+        <img src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+      </div>
+      <div id="sello-clips" class="clip sello-esquina" data-start="20.5" data-duration="15.417" data-track-index="4">
+        <img src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+      </div>
+
+      <!-- 7. Placa cierre (pág. 9) -->
+      <div id="cierre" class="placa" data-composition-id="placa-cierre" data-composition-src="compositions/placa-cierre.html"
+           data-start="35.917" data-duration="5.633" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"02","nombre":"Abril Tap Blue","sangre":"Chacco Blue II × Conthargos × Baloubet du Rouet"}'></div>
+
+      <div id="fin"></div>
+
+      <!-- Música: Battleborn Symphony, con fundido de entrada y de salida -->
+      <audio id="musica-battleborn" src="assets/musica/battleborn-symphony.mp3"
+             data-start="0" data-duration="41.55" data-track-index="10" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.6,"v":1},{"t":38.55,"v":1},{"t":41.45,"v":0}]}]}'></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      // Sellos de esquina: crecen desde un punto, como en las placas
+      tl.fromTo("#sello-slow img", { opacity: 0, scale: 0.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, 4.1);
+      tl.fromTo("#sello-clips img", { opacity: 0, scale: 0.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, 20.6);
+      // Salida a negro; el último medio segundo queda limpio
+      tl.fromTo("#fin", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.in" }, 40.55);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>22-10-HA-ListaRemate-9x16-03</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; overflow: hidden; background: var(--ha-black); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ha-black); }
+
+      /* Fondo: foto del lote a toda altura (más ancha que el lienzo) con paneo lateral */
+      #bg { position: absolute; left: 0; top: 0; height: 100%; width: auto; max-width: none; }
+      /* Velo multiply al 90 % (pedido: #2D2722 ≈ --ha-ink #2C2723) */
+      #tint { position: absolute; inset: 0; background: var(--ha-ink); mix-blend-mode: multiply; opacity: 0.9; }
+      #veil { position: absolute; inset: 0; background: var(--ha-black); }
+
+      /* Encabezado y tarjetas (sub-composiciones) */
+      #encabezado { position: absolute; left: 0; top: 326px; width: 1080px; height: 200px; }
+      /* Tarjetas más anchas que el margen de marca (108 px) a pedido: 1016 px centradas, 232 de alto */
+      .lote { position: absolute; left: 32px; width: 1016px; height: calc(var(--ha-lot-card-h) + 14px); }
+      #lote-1 { top: 572px; }
+      #lote-2 { top: 828px; }
+      #lote-3 { top: 1084px; }
+      #lote-4 { top: 1340px; }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-gr2s" id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1080" data-height="1920">
+      <img data-hf-id="hf-x82o" id="bg" class="clip" data-start="0" data-duration="8" data-track-index="0"
+           src="assets/fotos/qalaiko-cuerpo.jpg" alt="" />
+      <div data-hf-id="hf-k7ti" id="tint" class="clip" data-start="0" data-duration="8" data-track-index="1"></div>
+
+      <div data-hf-id="hf-9ajv" id="encabezado" data-composition-id="encabezado-remate" data-composition-src="compositions/encabezado-remate.html"
+           data-start="0.2" data-duration="7.8" data-track-index="2" data-width="1080" data-height="200"
+           data-variable-values='{"evento":"Remate","fecha":"28.11.2026"}'></div>
+
+      <div data-hf-id="hf-1k2c" id="lote-1" class="lote" data-composition-id="tarjeta-lote" data-composition-src="compositions/tarjeta-lote.html"
+           data-start="0.6" data-duration="7.4" data-track-index="3" data-width="1016" data-height="232"
+           data-variable-values='{"lote":"09","nombre":"Abril Tarin","pedigri":"Conthargos × Crown Z × Caretano Z","sexo":"Macho","registro":"561566","nac":"16.01.2025"}'></div>
+      <div data-hf-id="hf-9jyo" id="lote-2" class="lote" data-composition-id="tarjeta-lote" data-composition-src="compositions/tarjeta-lote.html"
+           data-start="0.88" data-duration="7.12" data-track-index="4" data-width="1016" data-height="232"
+           data-variable-values='{"lote":"10","nombre":"Abril Tifo","pedigri":"Abril Ofire × Alnok Z × Allegretto","sexo":"Macho","registro":"562996","nac":"21.01.2025"}' data-playback-start="0"></div>
+      <div data-hf-id="hf-o29h" id="lote-3" class="lote" data-composition-id="tarjeta-lote" data-composition-src="compositions/tarjeta-lote.html"
+           data-start="1.21" data-duration="6.79" data-track-index="5" data-width="1016" data-height="232"
+           data-variable-values='{"lote":"11","nombre":"Abril Tubai","pedigri":"Conthargos × Douglas × Corvado","sexo":"Macho","registro":"562997","nac":"22.01.2025"}' data-playback-start="0"></div>
+      <div data-hf-id="hf-n4io" id="lote-4" class="lote" data-composition-id="tarjeta-lote" data-composition-src="compositions/tarjeta-lote.html"
+           data-start="1.5" data-duration="6.5" data-track-index="6" data-width="1016" data-height="232"
+           data-variable-values='{"lote":"12","nombre":"Abril Virroco Blue","pedigri":"Zirocco Blue VDL × Darco × Cento","sexo":"Macho","registro":"—","nac":"22.09.2026"}' data-playback-start="0"></div>
+
+      <!-- Música de fondo de los slides de lista (la portada lleva otra). -->
+      <audio data-hf-id="hf-nlto" id="musica-ambient" src="assets/musica/ambient.mp3" data-start="0" data-duration="8" data-track-index="10" data-volume="1"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":7.2,"v":1},{"t":7.95,"v":0}]}]}'></audio>
+
+      <div data-hf-id="hf-6528" id="veil" class="clip" data-start="0" data-duration="8" data-track-index="8"></div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      // Paneo lateral continuo: la cámara recorre la foto de la grupa a la cabeza
+      tl.fromTo("#bg", { x: 0 }, { x: -840, duration: 8, ease: "none" }, 0);
+      // Entrada: fundido corto desde negro (el primer frame es la miniatura del carrusel)
+      tl.fromTo("#veil", { opacity: 1 }, { opacity: 0, duration: 0.6, ease: "power1.out" }, 0);
+      // Salida: fundido a negro
+      tl.to("#veil", { opacity: 1, duration: 0.8, ease: "power1.in" }, 7.2);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

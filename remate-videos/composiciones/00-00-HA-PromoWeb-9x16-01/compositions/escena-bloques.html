@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; perspective: 1600px; perspective-origin: 540px 1000px; }
+        .eb-bloque { position: absolute; inset: 0; opacity: 0; transform-style: preserve-3d; }
+        .eb-titulo { position: absolute; left: 0; top: 300px; width: 1080px; text-align: center; white-space: nowrap;
+          color: var(--ha-white); font-family: var(--ha-font-sans); font-weight: var(--ha-t-sub-weight);
+          font-size: calc(var(--ha-t-sub-size) * 2); line-height: var(--ha-lh-tight);
+          letter-spacing: var(--ha-t-lot-track); text-transform: uppercase; }
+        .eb-titulo.grande { font-size: calc(var(--ha-t-count-size) * 1.9); top: 250px; }
+        /* Barrido de luz: copia del título con degradé recortado al texto */
+        .eb-titulo.brillo { color: transparent; background: linear-gradient(100deg, transparent 40%, var(--ha-sand) 50%, transparent 60%);
+          background-size: 300% 100%; background-position: 100% 0; -webkit-background-clip: text; background-clip: text; }
+        .eb-sub { position: absolute; left: 96px; width: 888px; text-align: center; color: var(--ha-sand);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight); font-size: var(--ha-t-label-size);
+          letter-spacing: var(--ha-t-label-track); line-height: var(--ha-lh-text); text-transform: uppercase; }
+        .eb-fecha { color: var(--ha-white); font-weight: var(--ha-t-year-weight); font-size: calc(var(--ha-t-year-size) * 0.75); letter-spacing: var(--ha-t-year-track); }
+        .eb-tile { position: absolute; padding: 12px;
+          background: color-mix(in srgb, var(--ha-ink) 45%, transparent); border: var(--ha-hairline) solid var(--ha-line-gold);
+          box-shadow: 0 40px 100px color-mix(in srgb, var(--ha-black) 75%, transparent), 0 0 80px color-mix(in srgb, var(--ha-gold) 22%, transparent); }
+        .eb-tile img { display: block; }
+        .eb-tile::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+          background: linear-gradient(150deg, color-mix(in srgb, var(--ha-white) 12%, transparent) 0%, transparent 40%); }
+        .eb-recorte { position: absolute; }
+        .eb-halo { position: absolute; border-radius: 50%;
+          background: radial-gradient(circle, color-mix(in srgb, var(--ha-gold) 40%, transparent) 0%, transparent 65%); }
+      </style>
+
+      <div data-hf-id="hf-gwam" id="root" data-composition-id="escena-bloques" data-width="1080" data-height="1920">
+        <!-- 1. +18 años (cifras del sitio) -->
+        <div data-hf-id="hf-r23f" class="eb-bloque" id="eb-1">
+          <div data-hf-id="hf-usgl" class="eb-titulo grande" data-cuenta="18" data-prefijo="+">+18</div>
+          <div data-hf-id="hf-91gw" class="eb-titulo grande brillo">+18</div>
+          <div data-hf-id="hf-dttn" class="eb-sub" style="top: 560px">Años de cría<br data-hf-id="hf-x5px" />de alto rendimiento</div>
+          <div data-hf-id="hf-plad" class="eb-tile" style="left: 318px; top: 790px"><img data-hf-id="hf-6l93" src="../assets/web/tile-cifras.png" alt="" style="width: 420px; height: 721.5px" /></div>
+        </div>
+        <!-- 2. Aachen 2026: Abril Iconthon -->
+        <div data-hf-id="hf-ie7k" class="eb-bloque" id="eb-2">
+          <div data-hf-id="hf-ct3q" class="eb-halo" style="left: 90px; top: 700px; width: 900px; height: 900px"></div>
+          <img data-hf-id="hf-gzm8" class="eb-recorte" src="../assets/fotos/iconthon-salto.png" alt="" style="left: 230px; top: 680px; width: 620px; height: 859.2px" />
+          <div data-hf-id="hf-khaz" class="eb-titulo">Aachen 2026</div>
+          <div data-hf-id="hf-g2k1" class="eb-titulo brillo">Aachen 2026</div>
+          <div data-hf-id="hf-e6i5" class="eb-sub" style="top: 500px">Abril Iconthon<br data-hf-id="hf-rsrt" />caballo mundialista</div>
+        </div>
+        <!-- 3. Próximo remate -->
+        <div data-hf-id="hf-j5vd" class="eb-bloque" id="eb-3">
+          <div data-hf-id="hf-6z3v" class="eb-titulo" style="letter-spacing: var(--ha-t-event-track); padding-left: var(--ha-t-event-track)">Remate</div>
+          <div data-hf-id="hf-dg5l" class="eb-titulo brillo" style="letter-spacing: var(--ha-t-event-track); padding-left: var(--ha-t-event-track)">Remate</div>
+          <div data-hf-id="hf-u4cz" class="eb-sub eb-fecha" style="top: 490px">28.11.2026</div>
+          <div data-hf-id="hf-hzos" class="eb-tile" style="left: 228px; top: 760px"><img data-hf-id="hf-la5e" src="../assets/web/tile-proximo-remate.png" alt="" style="width: 600px; height: 680.3px" /></div>
+        </div>
+        <!-- 4. Caballos saltando en el mundo -->
+        <div data-hf-id="hf-ahzi" class="eb-bloque" id="eb-4">
+          <div data-hf-id="hf-pr36" class="eb-titulo grande" data-cuenta="31">31</div>
+          <div data-hf-id="hf-qr7k" class="eb-titulo grande brillo">31</div>
+          <div data-hf-id="hf-v89o" class="eb-sub" style="top: 560px">Caballos saltando<br data-hf-id="hf-szow" />en distintos países</div>
+          <div data-hf-id="hf-a5uu" class="eb-tile" style="left: 78px; top: 880px"><img data-hf-id="hf-335z" src="../assets/web/tile-mapa.png" alt="" style="width: 900px; height: 527.3px" /></div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.querySelector('[data-composition-id="escena-bloques"]');
+          const bloques = [...root.querySelectorAll(".eb-bloque")];
+          const imgs = [...root.querySelectorAll("img")];
+
+          Promise.all([...imgs.map((i) => i.decode()), document.fonts.load('700 285px "Barlow Condensed"'), document.fonts.load('500 34px "Barlow Condensed"')]).then(() => {
+            const tl = gsap.timeline({ paused: true });
+            const DUR = 8.35 / bloques.length; // 2,09 s por bloque (≈ 5,6 beats)
+            bloques.forEach((b, i) => {
+              const t = i * DUR;
+              const titulos = b.querySelectorAll(".eb-titulo:not(.brillo)");
+              const brillo = b.querySelector(".brillo");
+              const sub = b.querySelectorAll(".eb-sub");
+              const visual = b.querySelectorAll(".eb-tile, .eb-recorte");
+              const halo = b.querySelector(".eb-halo");
+              tl.fromTo(b, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, t);
+              tl.fromTo([...titulos, brillo], { y: 50, opacity: 0, filter: "blur(20px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "expo.out" }, t);
+              tl.fromTo(sub, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "expo.out" }, t + 0.12);
+              tl.fromTo(visual, { rotationX: 32, rotationY: i % 2 ? 14 : -14, z: -380, y: 120, opacity: 0, filter: "blur(14px)" },
+                { rotationX: 8, rotationY: i % 2 ? 4 : -4, z: 0, y: 0, opacity: 1, filter: "blur(0px)", duration: 0.7, ease: "expo.out" }, t + 0.08);
+              // Deriva lenta mientras se lee
+              tl.to(visual, { rotationX: 0, rotationY: i % 2 ? -4 : 4, y: -24, duration: DUR - 0.8, ease: "none" }, t + 0.78);
+              if (halo) tl.fromTo(halo, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "expo.out" }, t + 0.05);
+              // El barrido pasa cuando la cifra ya terminó de contar
+              tl.fromTo(brillo, { backgroundPosition: "100% 0" }, { backgroundPosition: "0% 0", duration: 0.8, ease: "power2.inOut" }, t + 0.85);
+              // Cifra que cuenta
+              const cuenta = b.querySelector("[data-cuenta]");
+              if (cuenta) {
+                const fin = Number(cuenta.dataset.cuenta), pre = cuenta.dataset.prefijo || "";
+                const o = { v: 0 };
+                const pintar = () => { cuenta.textContent = pre + Math.round(o.v); };
+                tl.fromTo(o, { v: 0 }, { v: fin, duration: 0.8, ease: "power3.out", onUpdate: pintar }, t);
+              }
+              // Salida (corte con barrido vertical desenfocado), salvo el último que sale con la escena
+              if (i < bloques.length - 1) {
+                tl.to(b, { y: -90, opacity: 0, filter: "blur(16px)", duration: 0.22, ease: "power2.in" }, t + DUR - 0.22);
+              } else {
+                tl.to(b, { opacity: 0, scale: 1.08, filter: "blur(18px)", duration: 0.3, ease: "power2.in" }, t + DUR - 0.3);
+              }
+            });
+            window.__timelines["escena-bloques"] = tl;
+          });
+        })();
+      </script>
+    </template>
+  </body>
+</html>

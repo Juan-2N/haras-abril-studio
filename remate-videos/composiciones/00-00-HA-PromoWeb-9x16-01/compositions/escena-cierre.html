@@ -1,0 +1,90 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"url","type":"string","label":"URL","default":"harasabril.com.ar"},
+    {"id":"frase","type":"string","label":"Frase de cierre (el punto separa las líneas)","default":"La mejor sangre. Los mejores resultados."}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        .ec2-flash { position: absolute; inset: 0; opacity: 0;
+          background: radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--ha-sand) 55%, transparent) 0%, transparent 55%); }
+        /* Sello de 300 px centrado */
+        .ec2-sello { position: absolute; left: 390px; top: 540px; width: 300px; height: 300px; }
+        /* Barra de vidrio donde se tipea la URL */
+        .ec2-pill { position: absolute; left: 140px; top: 970px; width: 800px; height: 128px; border-radius: var(--ha-btn-radius); overflow: hidden;
+          border: var(--ha-border) solid var(--ha-line-gold); background: color-mix(in srgb, var(--ha-ink) 70%, transparent);
+          backdrop-filter: blur(18px); box-shadow: 0 0 100px color-mix(in srgb, var(--ha-gold) 28%, transparent); }
+        .ec2-texto { position: absolute; left: 0; top: 0; width: 800px; height: 124px; display: flex; align-items: center; justify-content: center;
+          color: var(--ha-white); font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight);
+          font-size: calc(var(--ha-t-label-size) * 1.6); letter-spacing: var(--ha-t-num-track); white-space: nowrap; }
+        .ec2-cursor { display: inline-block; width: 4px; height: 0.9em; margin-left: 6px; background: var(--ha-sand); vertical-align: -0.1em; }
+        .ec2-barrido { position: absolute; left: -260px; top: 0; width: 200px; height: 128px; mix-blend-mode: screen;
+          background: linear-gradient(100deg, transparent 0%, color-mix(in srgb, var(--ha-sand) 50%, transparent) 50%, transparent 100%); }
+        /* Línea dorada con destello, desde el centro */
+        .ec2-linea { position: absolute; left: 195px; top: 1202px; width: var(--ha-flare-w); height: var(--ha-flare-h);
+          background: var(--ha-gold-flare); }
+        /* Frase de cierre institucional: único texto en EB Garamond */
+        .ec2-frase { position: absolute; left: 96px; top: 1250px; width: 888px; text-align: center; color: var(--ha-sand);
+          font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-claim-weight);
+          font-size: calc(var(--ha-t-claim-size) * 1.45); line-height: var(--ha-lh-text); }
+        .ec2-frase span { display: block; }
+      </style>
+
+      <div data-hf-id="hf-mcrv" id="root" data-composition-id="escena-cierre" data-width="1080" data-height="1920">
+        <div data-hf-id="hf-5rob" class="ec2-flash"></div>
+        <img data-hf-id="hf-kd38" class="ec2-sello" src="../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+        <div data-hf-id="hf-ct0u" class="ec2-pill">
+          <div data-hf-id="hf-urnd" class="ec2-texto"><span data-hf-id="hf-a5at" class="ec2-url"></span><span data-hf-id="hf-3hbo" class="ec2-cursor"></span></div>
+          <div data-hf-id="hf-l9sf" class="ec2-barrido" data-layout-allow-overflow></div>
+        </div>
+        <div data-hf-id="hf-3qse" class="ec2-linea"></div>
+        <div data-hf-id="hf-hzjo" class="ec2-frase"></div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.querySelector('[data-composition-id="escena-cierre"]');
+          const q = (s) => root.querySelector(s);
+          const vars = window.__hyperframes.getVariables();
+          const url = String(vars.url || "");
+          // Una línea por oración
+          (String(vars.frase || "").match(/[^.]+\./g) || []).forEach((o) => {
+            const s = document.createElement("span");
+            s.textContent = o.trim();
+            q(".ec2-frase").appendChild(s);
+          });
+          const urlEl = q(".ec2-url"), cursor = q(".ec2-cursor");
+
+          Promise.all([q(".ec2-sello").decode(), document.fonts.load('500 54px "Barlow Condensed"'), document.fonts.load('italic 400 67px "EB Garamond"')]).then(() => {
+            const tl = gsap.timeline({ paused: true });
+            // Golpe final de la pista
+            tl.fromTo(q(".ec2-flash"), { opacity: 1 }, { opacity: 0, duration: 0.9, ease: "power2.out" }, 0);
+            tl.fromTo(q(".ec2-sello"), { opacity: 0, scale: 0.04, rotation: -10 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.7, ease: "expo.out" }, 0.05);
+            tl.fromTo(q(".ec2-pill"), { opacity: 0, scale: 0.9, filter: "blur(16px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.5, ease: "expo.out" }, 0.35);
+            // Tipeo de la URL y cursor que titila (todo derivado del tiempo, para que el seek sea exacto)
+            const tipeo = { n: 0 };
+            const pintar = () => {
+              urlEl.textContent = url.slice(0, Math.round(tipeo.n));
+              cursor.style.opacity = Math.floor(tl.time() / 0.4) % 2 === 0 || tipeo.n < url.length ? 1 : 0;
+            };
+            tl.fromTo(tipeo, { n: 0 }, { n: url.length, duration: 1.1, ease: "none", onUpdate: pintar }, 0.6);
+            tl.eventCallback("onUpdate", pintar);
+            pintar();
+            tl.fromTo(q(".ec2-barrido"), { x: 0 }, { x: 1320, duration: 0.8, ease: "power2.inOut" }, 1.9);
+            tl.fromTo(q(".ec2-linea"), { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "expo.out" }, 2.0);
+            tl.fromTo(q(".ec2-frase").children, { opacity: 0, y: 30, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "power2.out", stagger: 0.18 }, 2.3);
+            window.__timelines["escena-cierre"] = tl;
+          });
+        })();
+      </script>
+    </template>
+  </body>
+</html>

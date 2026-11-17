@@ -1,0 +1,13 @@
+{
+  "slug": "story-fechas",
+  "titulo": "Story Fechas · Remate & Concurso CSI 1*",
+  "tipo": "story",
+  "fecha_publicacion": "2026-10-24",
+  "descripcion": "Muestra del diseño, sin animar · Stories 9:16",
+  "base": "../salida",
+  "formatos": ["9x16"],
+  "slides": [
+    { "id": "01", "titulo": "Fechas", "subtitulo": "27, 28 y 29 de noviembre 2026",
+      "video": "24-10-HA-StoryFechas-{formato}-01.mp4", "captura": "capturas/24-10-HA-StoryFechas-{formato}-01.jpg" }
+  ]
+}

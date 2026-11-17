@@ -1,0 +1,410 @@
+<title>Revisión Carrusel Listas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+  /* Layout: hoja de revisión de una agencia — cabecera con el estado general,
+     grilla de slides en el orden del carrusel, cada uno con su control de estado. */
+  :root {
+    --bg: #FBFAF8;
+    --surface: #FFFFFF;
+    --fg: #2C2723;          /* ink de marca */
+    --muted: #6E655B;
+    --line: #E6DFD5;
+    --gold: #C6A47E;
+    --gold-text: #8F7353;
+    --gold-grad: linear-gradient(90deg, #977B4C 0%, #C6A47E 35%, #E0CB94 70%, #F3E9C4 100%);
+    --wait-bg: #F1EEE9; --wait-fg: #5E564D;
+    --fix-bg: #FBEBD3;  --fix-fg: #8A5300;
+    --ok-bg: #E2F1E4;   --ok-fg: #24693A;
+    --focus: #8F7353;
+    --font-display: "EB Garamond", Garamond, "Times New Roman", serif;
+    --font-ui: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151311; --surface: #1E1B18; --fg: #F1ECE5; --muted: #A99F93; --line: #3A342E;
+      --gold: #C6A47E; --gold-text: #D2B48E;
+      --wait-bg: #2C2824; --wait-fg: #CFC6BB;
+      --fix-bg: #3B2C14;  --fix-fg: #F1C27D;
+      --ok-bg: #1C3322;   --ok-fg: #8FD3A1;
+      --focus: #D2B48E;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151311; --surface: #1E1B18; --fg: #F1ECE5; --muted: #A99F93; --line: #3A342E;
+    --gold: #C6A47E; --gold-text: #D2B48E;
+    --wait-bg: #2C2824; --wait-fg: #CFC6BB;
+    --fix-bg: #3B2C14;  --fix-fg: #F1C27D;
+    --ok-bg: #1C3322;   --ok-fg: #8FD3A1;
+    --focus: #D2B48E;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--fg);
+    font-family: var(--font-ui); font-size: 17px; line-height: 1.4;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px 64px;
+  }
+  .wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 32px; }
+
+  /* Cabecera */
+  header { display: grid; gap: 20px; border-bottom: 1px solid var(--line); padding-bottom: 24px; }
+  .eyebrow {
+    font-size: 14px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-text);
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .eyebrow .star { width: 12px; height: 12px; fill: #E54235; flex: none; }
+  h1 {
+    font-family: var(--font-display); font-weight: 500; font-size: clamp(34px, 5vw, 52px);
+    line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: 0.01em;
+  }
+  .meta { color: var(--muted); font-size: 17px; margin: 0; max-width: 62ch; }
+  .meta strong { color: var(--fg); font-weight: 600; }
+  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; justify-content: space-between; }
+  .summary { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px;
+    font-size: 15px; font-weight: 500; letter-spacing: 0.04em; font-variant-numeric: tabular-nums;
+  }
+  .chip i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .s-espera { background: var(--wait-bg); color: var(--wait-fg); }
+  .s-ajustes { background: var(--fix-bg); color: var(--fix-fg); }
+  .s-aprobado { background: var(--ok-bg); color: var(--ok-fg); }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+
+  /* Selector de formato */
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--surface); }
+  .seg button {
+    font: inherit; font-size: 15px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+    border: 0; background: transparent; color: var(--muted); padding: 6px 14px; border-radius: 999px; cursor: pointer;
+  }
+  .seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+
+  .btn-zip {
+    font: inherit; font-size: 16px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    border: 0; border-radius: 999px; padding: 10px 26px; cursor: pointer; color: #2C2723; background: var(--gold-grad);
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn-zip:disabled { opacity: 0.6; cursor: progress; }
+  .zip-msg { font-size: 15px; color: var(--muted); min-height: 1.4em; }
+
+  :is(button, textarea, a):focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  /* Grilla de slides */
+  .grid { display: grid; gap: 28px 20px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+  .slide { display: grid; gap: 12px; align-content: start; min-width: 0; }
+  .frame {
+    position: relative; width: 100%; max-width: 100%; aspect-ratio: 4 / 5; background: #000;
+    border-radius: 6px; overflow: hidden; border: 1px solid var(--line);
+  }
+  .grid[data-formato="9x16"] .frame { aspect-ratio: 9 / 16; }
+  .frame video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .slide[data-estado="aprobado"] .frame { border-color: var(--ok-fg); }
+  .slide[data-estado="ajustes"] .frame { border-color: var(--fix-fg); }
+
+  .slide-head { display: flex; align-items: baseline; gap: 10px; justify-content: space-between; }
+  .slide-num { font-size: 15px; font-weight: 500; letter-spacing: 0.1em; color: var(--gold-text); font-variant-numeric: tabular-nums; }
+  .slide-title { font-family: var(--font-display); font-size: 22px; font-weight: 500; line-height: 1.1; margin: 0; }
+  .slide-sub { font-size: 15px; color: var(--muted); margin: 0; }
+  .slide-sub em { font-style: normal; color: var(--fix-fg); }
+
+  /* Control de estado: tres opciones, una activa */
+  .estado { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; border: 1px solid var(--line); border-radius: 8px; padding: 3px; background: var(--surface); }
+  .estado button {
+    font: inherit; font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; line-height: 1.15;
+    border: 0; border-radius: 6px; padding: 7px 4px; cursor: pointer; background: transparent; color: var(--muted);
+  }
+  .estado button:hover:not(:disabled) { color: var(--fg); }
+  .estado button[aria-pressed="true"][data-v="espera"] { background: var(--wait-bg); color: var(--wait-fg); }
+  .estado button[aria-pressed="true"][data-v="ajustes"] { background: var(--fix-bg); color: var(--fix-fg); }
+  .estado button[aria-pressed="true"][data-v="aprobado"] { background: var(--ok-bg); color: var(--ok-fg); }
+  .estado button:disabled { cursor: default; }
+
+  .nota { display: grid; gap: 6px; }
+  .nota textarea {
+    font: inherit; font-size: 15px; width: 100%; min-height: 64px; resize: vertical; padding: 8px 10px;
+    border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg);
+  }
+  .nota-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .nota-row button, .dl {
+    font: inherit; font-size: 14px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+    border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 999px; padding: 4px 12px; cursor: pointer;
+  }
+  .nota-row button:disabled { opacity: 0.5; cursor: default; }
+  .quien { font-size: 13px; color: var(--muted); }
+
+  .aviso { font-size: 15px; color: var(--muted); border-left: 2px solid var(--gold); padding-left: 12px; margin: 0; max-width: 70ch; }
+
+  footer { border-top: 1px solid var(--line); padding-top: 16px; color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 8px 24px; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">
+      <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+      <span>Haras Abril · Remate 2026</span>
+    </div>
+    <h1>Carrusel Listas de Lotes</h1>
+    <p class="meta">Publicación: <strong>jueves 22/10</strong> · 5 slides en dos formatos: <strong>Feed 4:5</strong> para el carrusel y <strong>Stories 9:16</strong>. Cada slide dura 8 s. Marquen el estado de cada slide y, si hace falta un cambio, déjenlo en la nota.</p>
+    <div class="bar">
+      <div class="summary" id="summary" aria-live="polite"></div>
+      <div class="actions">
+        <div class="seg" role="group" aria-label="Formato">
+          <button type="button" id="f-4x5" data-f="4x5" aria-pressed="true">Feed 4:5</button>
+          <button type="button" id="f-9x16" data-f="9x16" aria-pressed="false">Stories 9:16</button>
+        </div>
+        <button type="button" class="btn-zip" id="zip">Descargar todo (.zip)</button>
+      </div>
+    </div>
+    <div class="zip-msg" id="zip-msg" aria-live="polite"></div>
+    <p class="aviso" id="aviso-lectura" hidden>Esta vista es de solo lectura: podés ver los videos y su estado, pero no cambiarlo.</p>
+  </header>
+
+  <main class="grid" id="grid" data-formato="4x5"></main>
+
+  <footer>
+    <span>Firma: <em>Tu próxima estrella cada vez más cerca.</em></span>
+    <span>Remate sáb 28/11 · remateharasabril.com</span>
+  </footer>
+</div>
+
+<script>
+  const SLIDES = [
+    { id: "00", titulo: "Portada", sub: "Abril Iconthon · Conocé la lista" },
+    { id: "01", titulo: "Lotes 1 a 4", sub: "Top Fire I · Tap Blue · Tinchacco · Talabet" },
+    { id: "02", titulo: "Lotes 5 a 8", sub: "Taleta · Tilsa · Tala · Tilcha" },
+    { id: "03", titulo: "Lotes 9 a 12", sub: "Tecna · Tarbet · Tarin · Tifo" },
+    { id: "04", titulo: "Lotes 13 a 15", sub: "Tubai · <em>14 y 15 a confirmar</em>" },
+  ];
+  const FORMATOS = ["4x5", "9x16"];
+  const ESTADOS = [
+    { v: "espera", label: "Espera feedback" },
+    { v: "ajustes", label: "Realizando ajustes" },
+    { v: "aprobado", label: "Aprobado" },
+  ];
+  const base = (f, id) => `22-10-HA-ListaRemate-${f}-${id}`;
+
+  let formato = "4x5";
+  try { const f = localStorage.getItem("formato"); if (FORMATOS.includes(f)) formato = f; } catch {}
+
+  const state = {};             // id -> {estado, nota, por, cuando}
+  let db = null, user = null, puedeEscribir = true;
+  const nombres = {};           // userId -> nombre
+
+  const grid = document.getElementById("grid");
+
+  function estadoDe(id) { return state[id]?.estado || "espera"; }
+
+  function fecha(iso) {
+    if (!iso) return "";
+    const d = new Date(iso);
+    if (isNaN(d)) return "";
+    return d.toLocaleString("es-AR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+  }
+
+  function renderSummary() {
+    const c = { espera: 0, ajustes: 0, aprobado: 0 };
+    SLIDES.forEach(s => c[estadoDe(s.id)]++);
+    const el = document.getElementById("summary");
+    el.innerHTML = ESTADOS.map(e =>
+      `<span class="chip s-${e.v}"><i></i>${c[e.v]} ${e.label.toLowerCase()}</span>`).join("");
+  }
+
+  // Construye la grilla una vez por formato; los estados se actualizan en el lugar
+  function buildGrid() {
+    grid.dataset.formato = formato;
+    grid.innerHTML = "";
+    for (const s of SLIDES) {
+      const b = base(formato, s.id);
+      const art = document.createElement("article");
+      art.className = "slide";
+      art.dataset.id = s.id;
+      art.innerHTML = `
+        <div class="frame">
+          <video src="videos/${b}.mp4" poster="capturas/${b}.jpg" muted loop playsinline controls preload="none"
+                 aria-label="Slide ${s.id}: ${s.titulo}"></video>
+        </div>
+        <div class="slide-head">
+          <h2 class="slide-title">${s.titulo}</h2>
+          <span class="slide-num">${s.id}</span>
+        </div>
+        <p class="slide-sub">${s.sub}</p>
+        <div class="estado" role="group" aria-label="Estado del slide ${s.id}">
+          ${ESTADOS.map(e => `<button type="button" id="e-${s.id}-${e.v}" data-v="${e.v}" aria-pressed="false">${e.label}</button>`).join("")}
+        </div>
+        <div class="nota">
+          <textarea id="nota-${s.id}" placeholder="Nota o cambio pedido (opcional)" aria-label="Nota del slide ${s.id}"></textarea>
+          <div class="nota-row">
+            <span class="quien" id="quien-${s.id}"></span>
+            <button type="button" id="guardar-${s.id}" disabled>Guardar nota</button>
+          </div>
+        </div>
+        <button type="button" class="dl" id="dl-${s.id}">Descargar MP4</button>`;
+      grid.appendChild(art);
+
+      art.querySelectorAll(".estado button").forEach(btn =>
+        btn.addEventListener("click", () => guardar(s.id, { estado: btn.dataset.v })));
+      const ta = art.querySelector("textarea");
+      const gb = art.querySelector(`#guardar-${s.id}`);
+      ta.addEventListener("input", () => { gb.disabled = !puedeEscribir || ta.value === (state[s.id]?.nota || ""); });
+      gb.addEventListener("click", () => guardar(s.id, { nota: ta.value.trim() }));
+      const dlb = art.querySelector(`#dl-${s.id}`);
+      dlb.hidden = sinDescargas;
+      dlb.addEventListener("click", () => descargarUno(s.id));
+
+      // Reproduce al pasar el mouse; con toque, usa los controles del video
+      const v = art.querySelector("video");
+      art.querySelector(".frame").addEventListener("mouseenter", () => v.play().catch(() => {}));
+      art.querySelector(".frame").addEventListener("mouseleave", () => v.pause());
+    }
+    renderEstados();
+  }
+
+  function renderEstados() {
+    for (const s of SLIDES) {
+      const art = grid.querySelector(`[data-id="${s.id}"]`);
+      if (!art) continue;
+      const est = estadoDe(s.id);
+      art.dataset.estado = est;
+      art.querySelectorAll(".estado button").forEach(b => {
+        b.setAttribute("aria-pressed", String(b.dataset.v === est));
+        b.disabled = !puedeEscribir;
+      });
+      const ta = art.querySelector("textarea");
+      if (document.activeElement !== ta) ta.value = state[s.id]?.nota || "";
+      ta.readOnly = !puedeEscribir;
+      art.querySelector(`#guardar-${s.id}`).disabled = !puedeEscribir || ta.value === (state[s.id]?.nota || "");
+      const d = state[s.id];
+      const quien = d?.por ? (nombres[d.por] || "Alguien") : "";
+      art.querySelector(`#quien-${s.id}`).textContent =
+        d?.cuando ? `Actualizado ${fecha(d.cuando)}${quien ? " · " + quien : ""}` : "Sin cambios todavía";
+    }
+    renderSummary();
+  }
+
+  async function guardar(id, cambio) {
+    if (!db || !puedeEscribir) return;
+    const actual = state[id] || {};
+    const uid = user ? await user.id().catch(() => null) : null;
+    const doc = {
+      estado: actual.estado || "espera",
+      nota: actual.nota || "",
+      ...cambio,
+      cuando: new Date().toISOString(),
+      ...(uid ? { por: uid } : {}),
+    };
+    if (doc.estado === actual.estado && doc.nota === actual.nota) return;
+    try {
+      await db.doc(`piezas/${id}`).set(doc);
+    } catch (e) {
+      if (e?.code === "invalid_argument") { puedeEscribir = false; mostrarLectura(); renderEstados(); }
+      else if (e?.code === "unavailable") setTimeout(() => guardar(id, cambio), 800 + Math.random() * 800);
+    }
+  }
+
+  async function resolverNombres() {
+    if (!user) return;
+    const ids = [...new Set(Object.values(state).map(d => d.por).filter(Boolean))];
+    if (!ids.length) return;
+    try {
+      const ps = await user.profiles(ids);
+      for (const id of ids) nombres[id] = ps?.[id]?.name || "Alguien";
+      renderEstados();
+    } catch {}
+  }
+
+  function mostrarLectura() { document.getElementById("aviso-lectura").hidden = false; }
+
+  // Formato
+  function setFormato(f) {
+    formato = f;
+    try { localStorage.setItem("formato", f); } catch {}
+    document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.f === f)));
+    buildGrid();
+  }
+  document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => setFormato(b.dataset.f)));
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.f === formato)));
+
+  // Descargas
+  let downloads = null, sinDescargas = false;
+  const zipBtn = document.getElementById("zip");
+  const zipMsg = document.getElementById("zip-msg");
+
+  async function descargarUno(id) {
+    if (!downloads) return;
+    const b = base(formato, id);
+    try {
+      const blob = await (await fetch(`videos/${b}.mp4`)).blob();
+      await downloads.save({ filename: `${b}.mp4`, data: blob });
+    } catch (e) {
+      if (e?.code && e.code !== "declined") zipMsg.textContent = "No se pudo descargar el video. Probá de nuevo en unos segundos.";
+    }
+  }
+
+  zipBtn.addEventListener("click", async () => {
+    if (!downloads || typeof JSZip === "undefined") return;
+    zipBtn.disabled = true;
+    try {
+      const zip = new JSZip();
+      const archivos = [];
+      for (const f of FORMATOS) for (const s of SLIDES) {
+        const b = base(f, s.id);
+        archivos.push([`videos/${b}.mp4`, `${f}/${b}.mp4`]);
+        archivos.push([`capturas/${b}.jpg`, `capturas/${f}/${b}.jpg`]);
+      }
+      let n = 0;
+      for (const [url, dest] of archivos) {
+        zipMsg.textContent = `Preparando archivos… ${++n} de ${archivos.length}`;
+        const r = await fetch(url);
+        if (!r.ok) throw new Error(`No se encontró ${url}`);
+        zip.file(dest, await r.blob());
+      }
+      zipMsg.textContent = "Armando el .zip…";
+      const blob = await zip.generateAsync({ type: "blob", compression: "STORE" });
+      zipMsg.textContent = "Confirmá la descarga en el aviso.";
+      await downloads.save({ filename: "22-10-HA-ListaRemate.zip", data: blob });
+      zipMsg.textContent = "Descarga lista: 10 videos y 10 capturas, ordenados por formato.";
+    } catch (e) {
+      zipMsg.textContent = e?.code === "declined" ? "Descarga cancelada."
+        : e?.code === "rate_limited" ? "Ya hay una descarga esperando confirmación."
+        : "No se pudo armar el .zip. Probá de nuevo en unos segundos.";
+    } finally {
+      zipBtn.disabled = false;
+    }
+  });
+
+  buildGrid();
+
+  // Capacidades: la página funciona sin ellas y se activan al llegar
+  (async () => {
+    const ocultarDescargas = () => {
+      sinDescargas = true; zipBtn.hidden = true;
+      document.querySelectorAll(".dl").forEach(b => b.hidden = true);
+    };
+    if (!window.claude?.use) { puedeEscribir = false; mostrarLectura(); renderEstados(); ocultarDescargas(); return; }
+    const [d, u, dl] = await Promise.all([
+      window.claude.use("db"), window.claude.use("user"), window.claude.use("downloads"),
+    ]);
+    db = d; user = u; downloads = dl;
+    if (!downloads) ocultarDescargas();
+    if (!db) { puedeEscribir = false; mostrarLectura(); renderEstados(); return; }
+    const w = user ? await user.can("data.write") : null;
+    if (w === false) { puedeEscribir = false; mostrarLectura(); }
+    renderEstados();
+    db.collection("piezas").onSnapshot(snap => {
+      for (const doc of snap.docs) state[doc.id] = doc.data();
+      renderEstados();
+      resolverNombres();
+    }, () => {});
+  })();
+
+</script>

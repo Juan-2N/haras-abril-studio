@@ -1,0 +1,20 @@
+{
+  "slug": "video-lote-06",
+  "titulo": "Video Lote 06 · Abril Tilcha",
+  "tipo": "video",
+  "descripcion": "Video del lote para YouTube · 16:9 · 42 s",
+  "base": "../salida",
+  "formatos": [
+    "16x9",
+    "9x16"
+  ],
+  "slides": [
+    {
+      "id": "06",
+      "titulo": "Lote 06",
+      "subtitulo": "Abril Tilcha · Cornet du Lys × Conthargos × Chacco-Blue",
+      "video": "00-00-HA-VideoLote-{formato}-06.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-{formato}-06.jpg"
+    }
+  ]
+}

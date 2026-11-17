@@ -1,0 +1,13 @@
+{
+  "slug": "lista-lotes-pdf",
+  "titulo": "Lista de Lotes · PDF",
+  "tipo": "documento",
+  "fecha_publicacion": "2026-10-22",
+  "descripcion": "PDF 9:16 · 5 páginas (portada + 13 lotes + info) · texto vectorial y links a harasabril.com.ar/remate",
+  "base": "../salida",
+  "formatos": ["9x16"],
+  "slides": [
+    { "id": "PDF", "titulo": "Lista de lotes completa", "subtitulo": "Portada, lotes 1 a 13 y bloque de preofertas y remate",
+      "video": "pdf/22-10-HA-ListaLotes.pdf", "captura": "capturas/22-10-HA-ListaLotes-p1.jpg" }
+  ]
+}

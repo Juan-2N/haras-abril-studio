@@ -1,0 +1,20 @@
+{
+  "slug": "video-lote-09",
+  "titulo": "Video Lote 09 · Abril Tarin",
+  "tipo": "video",
+  "descripcion": "Video del lote para YouTube · 16:9 · 42 s",
+  "base": "../salida",
+  "formatos": [
+    "16x9",
+    "9x16"
+  ],
+  "slides": [
+    {
+      "id": "09",
+      "titulo": "Lote 09",
+      "subtitulo": "Abril Tarin · Conthargos × Crown Z × Caretano Z",
+      "video": "00-00-HA-VideoLote-{formato}-09.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-{formato}-09.jpg"
+    }
+  ]
+}

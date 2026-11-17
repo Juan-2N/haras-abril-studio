@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>00-00-HA-VideoLote-9x16-06</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; overflow: hidden; background: var(--ha-black); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ha-black); font-family: var(--ha-font-sans); color: var(--ha-white); }
+      .vid, .capa { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      .vid { object-fit: cover; }
+      .abs { position: absolute; }
+      .pleno { inset: 0; background: var(--ha-veil-dark); }
+      .velo { left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, transparent 0%, color-mix(in srgb, var(--ha-black) 62%, transparent) 42%, color-mix(in srgb, var(--ha-black) 78%, transparent) 100%); }
+      .foto canvas { position: absolute; left: 0; top: 0; }
+      .foto img.fuente { position: absolute; width: 1080px; height: 1920px; visibility: hidden; }
+      .col { position: absolute; left: 0; width: 1080px; display: flex; flex-direction: column; align-items: center; text-transform: uppercase; }
+      .nombre { white-space: nowrap; line-height: 1.05; font-weight: var(--ha-t-lot-weight); letter-spacing: var(--ha-t-lot-track); font-size: calc(var(--ha-t-lot-size) * 1.333); text-shadow: 0 1px 3px color-mix(in srgb, var(--ha-black) 80%, transparent), 0 0 16px color-mix(in srgb, var(--ha-black) 60%, transparent); }
+      .mask { display: inline-block; overflow: hidden; vertical-align: top; }
+      .pal { display: inline-block; }
+      .linea { width: 620px; height: 6px; margin: 18px 0; background: var(--ha-gold); transform-origin: 0% 50%; clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 50% 100%); }
+      .sangre { white-space: nowrap; line-height: 1.25; font-weight: var(--ha-t-data-weight); letter-spacing: var(--ha-t-data-track); font-size: calc(var(--ha-t-data-size) * 1.45); text-shadow: 0 1px 3px color-mix(in srgb, var(--ha-black) 80%, transparent), 0 0 12px color-mix(in srgb, var(--ha-black) 55%, transparent); }
+      .lote { display: flex; align-items: center; gap: 16px; margin-top: 16px; color: var(--ha-sand); font-weight: var(--ha-t-num-weight); letter-spacing: var(--ha-t-label-track); font-size: calc(var(--ha-t-label-size) * 1.247); text-transform: uppercase; }
+      .diag { width: 37.3px; height: 64px; overflow: visible; }
+      .diag line { stroke: currentColor; stroke-width: var(--ha-border); }
+      .fila-sup { position: absolute; left: 0; top: 270px; width: 1080px; display: flex; align-items: center; justify-content: center; gap: 16px; color: var(--ha-taupe); font-weight: var(--ha-t-num-weight); letter-spacing: var(--ha-t-label-track); font-size: calc(var(--ha-t-label-size) * 1.247); text-transform: uppercase; }
+      .evento { white-space: nowrap; font-weight: var(--ha-t-event-weight); letter-spacing: 0.15em; font-size: calc(var(--ha-t-event-size) * 0.9); line-height: 1.05; }
+      .anio { white-space: nowrap; font-weight: var(--ha-t-year-weight); letter-spacing: 0.173em; font-size: calc(var(--ha-t-year-size) * 0.9); line-height: 1.1; }
+      .fecha { display: flex; align-items: center; gap: 30px; margin-top: 18px; color: var(--ha-sand); white-space: nowrap; font-weight: var(--ha-t-meta-weight); letter-spacing: 0.27em; font-size: calc(var(--ha-t-label-size) * 1.05); }
+      .fecha i { width: 79px; height: var(--ha-border); background: var(--ha-gold); }
+      #esc-pedigri { background: var(--ha-ink); }
+      .celda { position: absolute; display: flex; align-items: center; padding-left: 16px; white-space: nowrap; overflow: hidden; text-transform: uppercase; color: var(--ha-sand); background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-line-gold); font-weight: var(--ha-t-data-weight); font-size: calc(var(--ha-t-data-size) * 1.15); }
+      .celda.dest { color: var(--ha-white); font-weight: var(--ha-t-lot-weight); letter-spacing: 0.045em; }
+      .cajas { position: absolute; left: 60px; top: 1324px; display: grid; grid-template-columns: repeat(4, 229.5px); gap: 14px; }
+      .caja { height: 64px; display: flex; align-items: center; justify-content: center; white-space: nowrap; text-transform: uppercase; background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-line-gold); font-weight: var(--ha-t-data-weight); letter-spacing: var(--ha-t-data-track); font-size: calc(var(--ha-t-data-size) * 1.3); }
+      .ft-barra { position: absolute; left: 60px; top: 1408px; width: 960px; height: 172px; background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-line-gold); }
+      .ft-diag { position: absolute; left: 142px; top: 1408px; width: 119px; height: 172px; overflow: visible; }
+      .ft-diag line { stroke: var(--ha-gold); stroke-width: var(--ha-border); }
+      .ft-txt { position: absolute; white-space: nowrap; line-height: normal; text-transform: uppercase; }
+      .ft-num { left: 87.5px; top: 1456px; color: var(--ha-sand); font-weight: var(--ha-t-num-weight); font-size: calc(var(--ha-t-num-size) * 0.944); letter-spacing: var(--ha-t-num-track); }
+      .ft-nombre { left: 284px; top: 1424px; font-weight: var(--ha-t-lot-weight); font-size: calc(var(--ha-t-lot-size) * 0.939); letter-spacing: var(--ha-t-lot-track); }
+      .ft-sangre { left: 284px; top: 1510px; font-weight: var(--ha-t-data-weight); font-size: calc(var(--ha-t-data-size) * 1.326); letter-spacing: var(--ha-t-data-track); }
+      /* En Body la segunda línea de la barra lleva sexo y nacimiento en lugar de la sangre */
+      .ft-datos { left: 284px; top: 1510px; font-weight: var(--ha-t-data-weight); font-size: calc(var(--ha-t-data-size) * 1.326); letter-spacing: var(--ha-t-data-track); }
+      .ft-sangre, .ft-datos { opacity: 0; }
+      #sello-ch { position: absolute; left: 60px; top: 270px; width: 176.4px; height: 176.4px; }
+      #sello-ch img { width: 176.4px; height: 176.4px; transform-origin: 49.95% 51.39%; }
+      #esc-cierre { opacity: 0; z-index: 8; }
+      #ft { z-index: 5; opacity: 0; }
+      #fin { position: absolute; inset: 0; background: var(--ha-black); opacity: 0; pointer-events: none; z-index: 9; }
+    </style>
+  </head>
+  <body>
+    <!-- Tapa en el frame 0: el cierre completo. Escenas con los mismos tiempos que la pieza 16:9 -->
+    <div id="root" data-composition-id="main" data-start="0" data-duration="41.55" data-width="1080" data-height="1920">
+      <video id="v-remate" class="clip vid" src="assets/clips/ig-dron-remate.mp4" muted playsinline data-start="0" data-duration="4" data-media-start="0" data-track-index="0"></video>
+      <video id="v-slow" class="clip vid" src="assets/clips/lote06-ig-slow.mp4" muted playsinline data-start="4" data-duration="3.93" data-media-start="0" data-track-index="0"></video>
+      <video id="v-cabeza" class="clip vid" src="assets/clips/lote06-ig-cabeza.mp4" muted playsinline data-start="7.93" data-duration="3.57" data-media-start="0" data-track-index="0"></video>
+      <video id="v-left" class="clip vid" src="assets/clips/lote06-ig-trote.mp4" muted playsinline data-start="20.5" data-duration="2.55" data-media-start="0" data-track-index="0"></video>
+      <video id="v-right" class="clip vid" src="assets/clips/lote06-ig-slow-trote.mp4" muted playsinline data-start="23.05" data-duration="6" data-media-start="0" data-track-index="0"></video>
+      <video id="v-salto1" class="clip vid" src="assets/clips/lote06-ig-salto1.mp4" muted playsinline data-start="29.05" data-duration="3.4" data-media-start="0" data-track-index="0"></video>
+      <video id="v-salto2" class="clip vid" src="assets/clips/lote06-ig-salto2.mp4" muted playsinline data-start="32.45" data-duration="3.867" data-media-start="0" data-track-index="0"></video>
+
+      <div id="esc-remate" class="clip capa" data-start="0" data-duration="4" data-track-index="1">
+        <div class="abs pleno"></div>
+        <img id="r-sello" class="abs" src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" style="left:353px;top:470px;width:374px;height:374px" alt="" />
+        <div class="col" style="top:850px"><div class="evento r-t">Remate</div><div class="anio r-t">2026</div><div class="fecha r-t"><i></i><span>28 de noviembre</span><i></i></div></div>
+      </div>
+
+      <div id="esc-pedigri" class="clip capa" data-start="11.5" data-duration="4.5" data-track-index="1"><div class="celda dest" style="left:60px;top:470px;width:317.3333333333333px;height:448px">CORNET DU LYS</div><div class="celda " style="left:60px;top:922px;width:317.3333333333333px;height:448px">ABRIL OHILCHA</div><div class="celda " style="left:381.3333333333333px;top:470px;width:317.3333333333333px;height:222px">CORNET OBOLENSK</div><div class="celda " style="left:381.3333333333333px;top:696px;width:317.3333333333333px;height:222px">CHABLIS DU LYS</div><div class="celda dest" style="left:381.3333333333333px;top:922px;width:317.3333333333333px;height:222px">CONTHARGOS</div><div class="celda " style="left:381.3333333333333px;top:1148px;width:317.3333333333333px;height:222px">ABRIL HILCHA Z</div><div class="celda " style="left:702.6666666666666px;top:470px;width:317.3333333333333px;height:109px">CLINTON</div><div class="celda " style="left:702.6666666666666px;top:583px;width:317.3333333333333px;height:109px">RABANNA V.CLOST</div><div class="celda " style="left:702.6666666666666px;top:696px;width:317.3333333333333px;height:109px">CHAMPION DU LYS</div><div class="celda " style="left:702.6666666666666px;top:809px;width:317.3333333333333px;height:109px">AYETTE</div><div class="celda " style="left:702.6666666666666px;top:922px;width:317.3333333333333px;height:109px">CONVERTER</div><div class="celda " style="left:702.6666666666666px;top:1035px;width:317.3333333333333px;height:109px">CAJANDRA Z</div><div class="celda dest" style="left:702.6666666666666px;top:1148px;width:317.3333333333333px;height:109px">CHACCO-BLUE</div><div class="celda " style="left:702.6666666666666px;top:1261px;width:317.3333333333333px;height:109px">LLAVANERAS QUIELLE</div></div>
+
+      <div id="esc-body" class="clip capa foto" data-start="16" data-duration="4.5" data-track-index="1">
+        <img class="fuente" src="assets/fotos/lote06-ig-cuerpo.jpg" alt="" />
+      </div>
+
+      <div id="ft" class="capa" style="pointer-events:none">
+        <div class="ft-barra"></div>
+        <svg class="ft-diag" viewBox="0 0 119 172"><line x1="0" y1="172" x2="119" y2="0" /></svg>
+        <div class="ft-txt ft-num">06</div>
+        <div class="ft-txt ft-nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Tilcha</span></span></div>
+        <div class="ft-txt ft-sangre">Cornet du Lys × Conthargos × Chacco-Blue</div>
+        <div class="ft-txt ft-datos">Hembra · 01.01.2025</div>
+      </div>
+
+      <div id="sello-ch" class="clip" data-start="4" data-duration="32.317" data-track-index="4"><img src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="" /></div>
+
+      <div id="esc-cierre" class="capa foto">
+        <img class="fuente" src="assets/fotos/lote06-ig-salto.jpg" alt="" />
+        <div class="abs velo" style="height:760px;z-index:1"></div>
+        <div class="fila-sup" style="z-index:2"><span>Remate 2026</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>Lote 06</span></div>
+        <img id="c-sello" class="abs" src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" style="left:421.65px;top:350px;width:236.7px;height:236.7px;z-index:2" alt="" />
+        <div class="col" style="top:1330px;z-index:2"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Tilcha</span></span></div><div class="linea"></div><div class="sangre">Cornet du Lys × Conthargos × Chacco-Blue</div></div>
+      </div>
+
+      <div id="fin"></div>
+      <audio id="musica" src="assets/musica/battleborn-symphony.mp3" data-start="0" data-duration="41.55" data-track-index="10" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.6,"v":1},{"t":38.55,"v":1},{"t":41.45,"v":0}]}]}'></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const anim = gsap.timeline({ paused: true });
+      const F = 1 / 30, D = 41.55, C = 36.317, TAPA = C + 2.2;
+
+      // Zoom lento en canvas con coordenadas decimales, como en las placas horizontales
+      const zoom = (sel, origen) => {
+        const caja = document.querySelector(sel), img = caja.querySelector("img.fuente");
+        const cv = document.createElement("canvas");
+        cv.width = 1080; cv.height = 1920;
+        caja.insertBefore(cv, caja.firstChild);
+        const ctx = cv.getContext("2d");
+        ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high";
+        const ox = 1080 * origen[0], oy = 1920 * origen[1], estado = { s: 1 };
+        const dibujar = () => { if (img.complete && img.naturalWidth) ctx.drawImage(img, ox - ox * estado.s, oy - oy * estado.s, 1080 * estado.s, 1920 * estado.s); };
+        if (!img.complete) img.addEventListener("load", dibujar);
+        return { estado, dibujar };
+      };
+      const entra = (sel, t) => {
+        anim.fromTo(sel + " .pal", { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "expo.out", stagger: 0.12 }, t + 0.15);
+        anim.fromTo(sel + " .linea", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out" }, t + 0.3);
+        anim.fromTo(sel + " .sangre", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power2.out" }, t + 0.5);
+      };
+      const crece = (sel, t) => anim.fromTo(sel, { opacity: 0, scale: 0.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, t);
+      const barra = (t, linea) => {
+        const v = { immediateRender: false };
+        anim.fromTo(".ft-barra", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power3.out", ...v }, t + 0.1);
+        anim.fromTo(".ft-diag line", { attr: { x2: 0, y2: 172 } }, { attr: { x2: 119, y2: 0 }, duration: 0.4, ease: "power2.out", ...v }, t + 0.3);
+        anim.fromTo(".ft-num", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "power2.out", ...v }, t + 0.35);
+        anim.fromTo(".ft-nombre .pal", { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "expo.out", stagger: 0.12, ...v }, t + 0.45);
+        anim.fromTo(linea, { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power2.out", ...v }, t + 0.75);
+      };
+      // Deja la barra vacía mientras está oculta: si no, al volver se ve un instante completa y salta a vacía
+      const vaciarBarra = (t) => {
+        anim.set(".ft-barra", { clipPath: "inset(0% 100% 0% 0%)" }, t);
+        anim.set(".ft-diag line", { attr: { x2: 0, y2: 172 } }, t);
+        anim.set(".ft-num", { opacity: 0 }, t);
+        anim.set(".ft-nombre .pal", { yPercent: 110 }, t);
+        anim.set([".ft-sangre", ".ft-datos"], { opacity: 0 }, t);
+      };
+
+      // La línea de tiempo se registra de entrada: si se espera a las fotos, el reproductor no la encuentra
+      {
+        const zb = zoom("#esc-body", [0.5, 0.45]), zc = zoom("#esc-cierre", [0.5, 0.45]);
+        zb.dibujar(); zc.dibujar();
+
+        // Remate
+        crece("#r-sello", 0.15);
+        anim.fromTo(".r-t", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.15 }, 0.5);
+
+        // Sello chico desde el Slow. Barra: del Slow al final del clip de cabeza, en Body (con sexo y nacimiento) y en los trotes
+        anim.fromTo("#sello-ch img", { opacity: 0, scale: 0.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, 4.1);
+        const TROTES = 20.5;
+        anim.set("#ft", { autoAlpha: 0 }, 0.01);
+        vaciarBarra(0.01);
+        anim.set("#ft", { autoAlpha: 1 }, 4);
+        barra(4, ".ft-sangre");
+        anim.set("#ft", { autoAlpha: 0 }, 11.5);
+        vaciarBarra(11.5);
+        anim.set("#ft", { autoAlpha: 1 }, 16);
+        barra(16, ".ft-datos");
+        // De Body a los trotes la barra sigue quieta: solo cambia la segunda línea
+        anim.to(".ft-datos", { opacity: 0, duration: 0.15, ease: "power1.in", immediateRender: false }, TROTES - 0.15);
+        anim.fromTo(".ft-sangre", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "power2.out", immediateRender: false }, TROTES);
+        anim.set("#ft", { autoAlpha: 0 }, 29.05);
+
+        // Pedigrí: las celdas entran por columnas
+        anim.fromTo("#esc-pedigri .celda", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.45, ease: "power2.out", stagger: 0.05 }, 11.7);
+
+        // Body
+        anim.fromTo(zb.estado, { s: 1 }, { s: 1.05, duration: 4.5, ease: "none", onUpdate: zb.dibujar }, 16);
+
+        // Cierre
+        anim.set("#esc-cierre", { opacity: 1 }, C);
+        anim.fromTo(zc.estado, { s: 1 }, { s: 1.05, duration: D - C, ease: "none", onUpdate: zc.dibujar }, C);
+        crece("#c-sello", C + 0.15);
+        anim.fromTo("#esc-cierre .fila-sup", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power2.out" }, C + 0.3);
+        entra("#esc-cierre", C + 0.25);
+
+        anim.fromTo("#fin", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.in" }, D - 1);
+        anim.to({}, { duration: 0.001 }, D);
+
+        // Tapa en el frame 0 y la animación corrida un frame (regla de IG)
+        tl.add(anim.tweenFromTo(TAPA, TAPA, { duration: F, ease: "none" }), 0);
+        tl.add(anim.tweenFromTo(0, D - F, { duration: D - F, ease: "none" }), F);
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+      }
+    </script>
+  </body>
+</html>

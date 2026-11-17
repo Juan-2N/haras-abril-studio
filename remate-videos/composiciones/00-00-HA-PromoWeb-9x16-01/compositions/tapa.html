@@ -1,0 +1,54 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"url","type":"string","label":"URL","default":"harasabril.com.ar"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        /* Tapa (solo el frame 0, miniatura de IG): celular con la home, sello y la URL */
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        .tp-capa { position: absolute; inset: 0; background: var(--ha-black); }
+        .tp-glow { position: absolute; left: -260px; top: 300px; width: 1600px; height: 1600px; border-radius: 50%;
+          background: radial-gradient(circle, color-mix(in srgb, var(--ha-gold) 40%, transparent) 0%, transparent 62%); }
+        .tp-sello { position: absolute; left: 450px; top: 282px; width: 180px; height: 180px; }
+        .tp-cel { position: absolute; left: 305px; top: 500px; width: 470px; height: 984.5px; border-radius: 64px;
+          border: 14px solid var(--ha-charcoal-elev); outline: var(--ha-hairline) solid var(--ha-line-gold); overflow: hidden;
+          background: var(--ha-black); box-shadow: 0 0 120px color-mix(in srgb, var(--ha-gold) 30%, transparent); }
+        .tp-cel img { position: absolute; left: 0; top: 0; width: 442px; height: 956.5px; }
+        .tp-pill { position: absolute; left: 190px; top: 1420px; width: 700px; height: 112px; border-radius: var(--ha-btn-radius);
+          border: var(--ha-border) solid var(--ha-line-gold); background: color-mix(in srgb, var(--ha-ink) 85%, transparent);
+          display: flex; align-items: center; justify-content: center; color: var(--ha-white); white-space: nowrap;
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 1.45);
+          letter-spacing: var(--ha-t-num-track);
+          box-shadow: 0 0 80px color-mix(in srgb, var(--ha-gold) 25%, transparent); }
+      </style>
+
+      <div data-hf-id="hf-kqkr" id="root" data-composition-id="tapa" data-width="1080" data-height="1920">
+        <div data-hf-id="hf-by94" class="tp-capa">
+          <div data-hf-id="hf-yqgy" class="tp-glow"></div>
+          <img data-hf-id="hf-cs1g" class="tp-sello" src="../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+          <div data-hf-id="hf-osqb" class="tp-cel"><img data-hf-id="hf-zcxn" src="../assets/web/mobile-hero-01-estandar.png" alt="" /></div>
+          <div data-hf-id="hf-beit" class="tp-pill" data-var-text="url">harasabril.com.ar</div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.querySelector('[data-composition-id="tapa"]');
+          const F = 1 / 30;
+          const tl = gsap.timeline({ paused: true });
+          // Visible en el frame 0 (por CSS); se oculta a mitad de camino al frame 1, para que ese frame ya salga limpio
+          tl.fromTo(root.querySelector(".tp-capa"), { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.001, ease: "none", immediateRender: false }, F / 2);
+          window.__timelines["tapa"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

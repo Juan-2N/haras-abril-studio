@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>00-00-HA-PresentacionLotes-16x9</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; overflow: hidden; background: var(--ha-black); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ha-black); }
+      .placa { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .clip-video { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; object-fit: cover; }
+      .velo { position: absolute; inset: 0; background: var(--ha-veil-dark); }
+      #fin { position: absolute; inset: 0; background: var(--ha-black); opacity: 0; pointer-events: none; z-index: 9; }
+    </style>
+  </head>
+  <body>
+    <!-- Presentación de los lotes: REMATE 0 → 4 y un lote cada 2.5 s, con corte seco. Generado por armar-presentacion-lotes.mjs -->
+    <div id="root" data-composition-id="main" data-start="0" data-duration="36.5" data-width="1920" data-height="1080">
+      <video id="v-remate" class="clip clip-video" src="assets/clips/video-lote-dron-remate.mp4" muted playsinline
+             data-start="0" data-duration="4" data-media-start="0" data-track-index="0"></video>
+      <div id="velo-remate" class="clip velo" data-start="0" data-duration="4" data-track-index="0"></div>
+      <div id="remate" class="placa" data-composition-id="placa-remate" data-composition-src="compositions/placa-remate.html"
+           data-start="0" data-duration="4" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"evento":"Remate","anio":"2026","fecha_texto":"28 de noviembre"}'></div>
+
+      <!-- Lote 01 · Abril Top Fire I -->
+      <video id="v-cabeza-01" class="clip clip-video" src="assets/clips/lote01-cabeza.mp4" muted playsinline
+             data-start="4" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="intro-01" class="placa" data-composition-id="placa-intro-01" data-composition-src="compositions/placa-intro-01.html"
+           data-start="4" data-duration="2.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"01","nombre":"Abril Top Fire I","sangre":"Abril Ofire × Larino × Quality Touch"}'></div>
+
+      <!-- Lote 02 · Abril Tap Blue -->
+      <video id="v-cabeza-02" class="clip clip-video" src="assets/clips/lote02-cabeza.mp4" muted playsinline
+             data-start="6.5" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="intro-02" class="placa" data-composition-id="placa-intro-02" data-composition-src="compositions/placa-intro-02.html"
+           data-start="6.5" data-duration="2.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"02","nombre":"Abril Tap Blue","sangre":"Chacco Blue II × Conthargos × Baloubet du Rouet"}'></div>
+
+      <!-- Lote 03 · Abril Talabet -->
+      <video id="v-cabeza-03" class="clip clip-video" src="assets/clips/lote03-cabeza.mp4" muted playsinline
+             data-start="9" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="intro-03" class="placa" data-composition-id="placa-intro-03" data-composition-src="compositions/placa-intro-03.html"
+           data-start="9" data-duration="2.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"03","nombre":"Abril Talabet","sangre":"Cornet du Lys × Conthargos × Baloubet du Rouet"}'></div>
+
+      <!-- Lote 04 · Abril Taleta -->
+      <video id="v-cabeza-04" class="clip clip-video" src="assets/clips/lote04-cabeza.mp4" muted playsinline
+             data-start="11.5" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="intro-04" class="placa" data-composition-id="placa-intro-04" data-composition-src="compositions/placa-intro-04.html"
+           data-start="11.5" data-duration="2.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"04","nombre":"Abril Taleta","sangre":"Cornet du Lys × Conthargos × Baloubet du Rouet"}'></div>
+
+      <!-- Lote 05 · Abril Tilsa -->
+      <video id="v-cabeza-05" class="clip clip-video" src="assets/clips/lote05-cabeza.mp4" muted playsinline
+             data-start="14" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="intro-05" class="placa" data-composition-id="placa-intro-05" data-composition-src="compositions/placa-intro-05.html"
+           data-start="14" data-duration="2.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"05","nombre":"Abril Tilsa","sangre":"Cornet du Lys × Stakkato × Douglas"}'></div>
+
+      <!-- Lote 06 · Abril Tilcha -->
+      <video id="v-cabeza-06" class="clip clip-video" src="assets/clips/lote06-cabeza.mp4" muted playsinline
+             data-start="16.5" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="intro-06" class="placa" data-composition-id="placa-intro-06" data-composition-src="compositions/placa-intro-06.html"
+           data-start="16.5" data-duration="2.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"06","nombre":"Abril Tilcha","sangre":"Cornet du Lys × Conthargos × Chacco-Blue"}'></div>
+
+      <!-- Lote 07 · Abril Tecna -->
+      <video id="v-cabeza-07" class="clip clip-video" src="assets/clips/lote07-cabeza.mp4" muted playsinline
+             data-start="19" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="intro-07" class="placa" data-composition-id="placa-intro-07" data-composition-src="compositions/placa-intro-07.html"
+           data-start="19" data-duration="2.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"07","nombre":"Abril Tecna","sangre":"Chacco Blue II × Connor × Calando I"}'></div>
+
+      <!-- Lote 08 · Abril Tarbet -->
+      <video id="v-cabeza-08" class="clip clip-video" src="assets/clips/lote08-cabeza.mp4" muted playsinline
+             data-start="21.5" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="intro-08" class="placa" data-composition-id="placa-intro-08" data-composition-src="compositions/placa-intro-08.html"
+           data-start="21.5" data-duration="2.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"08","nombre":"Abril Tarbet","sangre":"Abril Ofire × Conthargos × Baloubet du Rouet"}'></div>
+
+      <!-- Lote 09 · Abril Tarin -->
+      <video id="v-cabeza-09" class="clip clip-video" src="assets/clips/lote09-cabeza.mp4" muted playsinline
+             data-start="24" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="intro-09" class="placa" data-composition-id="placa-intro-09" data-composition-src="compositions/placa-intro-09.html"
+           data-start="24" data-duration="2.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"09","nombre":"Abril Tarin","sangre":"Conthargos × Crown Z × Caretano Z"}'></div>
+
+      <!-- Lote 10 · Abril Tifo -->
+      <video id="v-cabeza-10" class="clip clip-video" src="assets/clips/lote10-cabeza.mp4" muted playsinline
+             data-start="26.5" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="intro-10" class="placa" data-composition-id="placa-intro-10" data-composition-src="compositions/placa-intro-10.html"
+           data-start="26.5" data-duration="2.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"10","nombre":"Abril Tifo","sangre":"Abril Ofire × Alnok Z × Allegretto"}'></div>
+
+      <!-- Lote 11 · Abril Tubai -->
+      <video id="v-cabeza-11" class="clip clip-video" src="assets/clips/lote11-cabeza.mp4" muted playsinline
+             data-start="29" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="intro-11" class="placa" data-composition-id="placa-intro-11" data-composition-src="compositions/placa-intro-11.html"
+           data-start="29" data-duration="2.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"11","nombre":"Abril Tubai","sangre":"Conthargos × Douglas × Corvado"}'></div>
+
+      <!-- Lote 12 · Abril Virroco Blue -->
+      <video id="v-cabeza-12" class="clip clip-video" src="assets/clips/lote12-cabeza.mp4" muted playsinline
+             data-start="31.5" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="intro-12" class="placa" data-composition-id="placa-intro-12" data-composition-src="compositions/placa-intro-12.html"
+           data-start="31.5" data-duration="2.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"12","nombre":"Abril Virroco Blue","sangre":"Zirocco Blue VDL × Darco × Cento"}'></div>
+
+      <!-- Lote 13 · Abril Viconthon -->
+      <video id="v-cabeza-13" class="clip clip-video" src="assets/clips/lote13-cabeza.mp4" muted playsinline
+             data-start="34" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="intro-13" class="placa" data-composition-id="placa-intro-13" data-composition-src="compositions/placa-intro-13.html"
+           data-start="34" data-duration="2.5" data-track-index="1" data-width="1920" data-height="1080"
+           data-variable-values='{"lote":"13","nombre":"Abril Viconthon","sangre":"Conthargos × Clinton × Kojak"}'></div>
+
+      <div id="fin"></div>
+      <audio id="musica" src="assets/musica/battleborn-symphony.mp3"
+             data-start="0" data-duration="36.5" data-track-index="10" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.6,"v":1},{"t":34,"v":1},{"t":36.4,"v":0}]}]}'></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      // Salida a negro sobre el último lote, con su placa ya completa
+      tl.fromTo("#fin", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.in" }, 35.8);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

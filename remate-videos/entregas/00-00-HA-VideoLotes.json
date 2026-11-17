@@ -1,0 +1,208 @@
+{
+  "slug": "video-lotes",
+  "titulo": "Videos por lote · Remate 2026",
+  "tipo": "video",
+  "descripcion": "Todos los videos por lote juntos, para revisar · YouTube 16:9 · 42 s",
+  "base": "../salida",
+  "formatos": [
+    "16x9"
+  ],
+  "slides": [
+    {
+      "id": "00",
+      "titulo": "Presentación · Los 13 lotes",
+      "video": "00-00-HA-PresentacionLotes-16x9.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-ListaRemate2026.jpg",
+      "subtitulo": "Remate 2026 · sábado 28 de noviembre"
+    },
+    {
+      "id": "00-v",
+      "titulo": "Presentación · Los 13 lotes · Vertical",
+      "video": "00-00-HA-PresentacionLotes-9x16.mp4",
+      "captura": "capturas/previa/00-00-HA-PresentacionLotes-9x16.jpg",
+      "subtitulo": "Remate 2026 · sábado 28 de noviembre"
+    },
+    {
+      "id": "01",
+      "titulo": "Lote 01 · Abril Top Fire I",
+      "subtitulo": "Abril Ofire × Larino × Quality Touch",
+      "video": "00-00-HA-VideoLote-{formato}-01.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-Lote01-A-Salto.jpg"
+    },
+    {
+      "id": "02",
+      "titulo": "Lote 02 · Abril Tap Blue",
+      "subtitulo": "Chacco Blue II × Conthargos × Baloubet du Rouet",
+      "video": "00-00-HA-VideoLote-{formato}-02.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-Lote02-A-Salto.jpg"
+    },
+    {
+      "id": "03",
+      "titulo": "Lote 03 · Abril Talabet",
+      "subtitulo": "Cornet du Lys × Conthargos × Baloubet du Rouet",
+      "video": "00-00-HA-VideoLote-{formato}-03.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-Lote03-A-Salto.jpg"
+    },
+    {
+      "id": "04",
+      "titulo": "Lote 04 · Abril Taleta",
+      "subtitulo": "Cornet du Lys × Conthargos × Baloubet du Rouet",
+      "video": "00-00-HA-VideoLote-{formato}-04.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-Lote04-A-Salto.jpg"
+    },
+    {
+      "id": "05",
+      "titulo": "Lote 05 · Abril Tilsa",
+      "subtitulo": "Cornet du Lys × Stakkato × Douglas",
+      "video": "00-00-HA-VideoLote-{formato}-05.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-Lote05-A-Salto.jpg"
+    },
+    {
+      "id": "06",
+      "titulo": "Lote 06 · Abril Tilcha",
+      "subtitulo": "Cornet du Lys × Conthargos × Chacco-Blue",
+      "video": "00-00-HA-VideoLote-{formato}-06.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-Lote06-A-Salto.jpg"
+    },
+    {
+      "id": "07",
+      "titulo": "Lote 07 · Abril Tecna",
+      "subtitulo": "Chacco Blue II × Connor × Calando I",
+      "video": "00-00-HA-VideoLote-{formato}-07.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-Lote07-A-Salto.jpg"
+    },
+    {
+      "id": "08",
+      "titulo": "Lote 08 · Abril Tarbet",
+      "subtitulo": "Abril Ofire × Conthargos × Baloubet du Rouet",
+      "video": "00-00-HA-VideoLote-{formato}-08.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-Lote08-A-Salto.jpg"
+    },
+    {
+      "id": "09",
+      "titulo": "Lote 09 · Abril Tarin",
+      "subtitulo": "Conthargos × Crown Z × Caretano Z",
+      "video": "00-00-HA-VideoLote-{formato}-09.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-Lote09-A-Salto.jpg"
+    },
+    {
+      "id": "10",
+      "titulo": "Lote 10 · Abril Tifo",
+      "subtitulo": "Abril Ofire × Alnok Z × Allegretto",
+      "video": "00-00-HA-VideoLote-{formato}-10.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-Lote10-A-Salto.jpg"
+    },
+    {
+      "id": "11",
+      "titulo": "Lote 11 · Abril Tubai",
+      "subtitulo": "Conthargos × Douglas × Corvado",
+      "video": "00-00-HA-VideoLote-{formato}-11.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-Lote11-A-Salto.jpg"
+    },
+    {
+      "id": "12",
+      "titulo": "Lote 12 · Abril Virroco Blue",
+      "subtitulo": "Zirocco Blue VDL × Darco × Cento",
+      "video": "00-00-HA-VideoLote-{formato}-12.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-Lote12-A-Salto.jpg"
+    },
+    {
+      "id": "13",
+      "titulo": "Lote 13 · Abril Viconthon",
+      "subtitulo": "Conthargos × Clinton × Kojak",
+      "video": "00-00-HA-VideoLote-{formato}-13.mp4",
+      "captura": "portadas-yt/00-00-HA-PortadaYT-Lote13-A-Salto.jpg"
+    },
+    {
+      "id": "01-v",
+      "titulo": "Lote 01 · Abril Top Fire I · Vertical",
+      "subtitulo": "Abril Ofire × Larino × Quality Touch",
+      "video": "00-00-HA-VideoLote-9x16-01.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-9x16-01.jpg"
+    },
+    {
+      "id": "02-v",
+      "titulo": "Lote 02 · Abril Tap Blue · Vertical",
+      "subtitulo": "Chacco Blue II × Conthargos × Baloubet du Rouet",
+      "video": "00-00-HA-VideoLote-9x16-02.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-9x16-02.jpg"
+    },
+    {
+      "id": "03-v",
+      "titulo": "Lote 03 · Abril Talabet · Vertical",
+      "subtitulo": "Cornet du Lys × Conthargos × Baloubet du Rouet",
+      "video": "00-00-HA-VideoLote-9x16-03.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-9x16-03.jpg"
+    },
+    {
+      "id": "04-v",
+      "titulo": "Lote 04 · Abril Taleta · Vertical",
+      "subtitulo": "Cornet du Lys × Conthargos × Baloubet du Rouet",
+      "video": "00-00-HA-VideoLote-9x16-04.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-9x16-04.jpg"
+    },
+    {
+      "id": "05-v",
+      "titulo": "Lote 05 · Abril Tilsa · Vertical",
+      "subtitulo": "Cornet du Lys × Stakkato × Douglas",
+      "video": "00-00-HA-VideoLote-9x16-05.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-9x16-05.jpg"
+    },
+    {
+      "id": "06-v",
+      "titulo": "Lote 06 · Abril Tilcha · Vertical",
+      "subtitulo": "Cornet du Lys × Conthargos × Chacco-Blue",
+      "video": "00-00-HA-VideoLote-9x16-06.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-9x16-06.jpg"
+    },
+    {
+      "id": "07-v",
+      "titulo": "Lote 07 · Abril Tecna · Vertical",
+      "subtitulo": "Chacco Blue II × Connor × Calando I",
+      "video": "00-00-HA-VideoLote-9x16-07.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-9x16-07.jpg"
+    },
+    {
+      "id": "08-v",
+      "titulo": "Lote 08 · Abril Tarbet · Vertical",
+      "subtitulo": "Abril Ofire × Conthargos × Baloubet du Rouet",
+      "video": "00-00-HA-VideoLote-9x16-08.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-9x16-08.jpg"
+    },
+    {
+      "id": "09-v",
+      "titulo": "Lote 09 · Abril Tarin · Vertical",
+      "subtitulo": "Conthargos × Crown Z × Caretano Z",
+      "video": "00-00-HA-VideoLote-9x16-09.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-9x16-09.jpg"
+    },
+    {
+      "id": "10-v",
+      "titulo": "Lote 10 · Abril Tifo · Vertical",
+      "subtitulo": "Abril Ofire × Alnok Z × Allegretto",
+      "video": "00-00-HA-VideoLote-9x16-10.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-9x16-10.jpg"
+    },
+    {
+      "id": "11-v",
+      "titulo": "Lote 11 · Abril Tubai · Vertical",
+      "subtitulo": "Conthargos × Douglas × Corvado",
+      "video": "00-00-HA-VideoLote-9x16-11.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-9x16-11.jpg"
+    },
+    {
+      "id": "12-v",
+      "titulo": "Lote 12 · Abril Virroco Blue · Vertical",
+      "subtitulo": "Zirocco Blue VDL × Darco × Cento",
+      "video": "00-00-HA-VideoLote-9x16-12.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-9x16-12.jpg"
+    },
+    {
+      "id": "13-v",
+      "titulo": "Lote 13 · Abril Viconthon · Vertical",
+      "subtitulo": "Conthargos × Clinton × Kojak",
+      "video": "00-00-HA-VideoLote-9x16-13.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-9x16-13.jpg"
+    }
+  ]
+}

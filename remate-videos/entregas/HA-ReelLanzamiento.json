@@ -1,0 +1,12 @@
+{
+  "slug": "reel-lanzamiento",
+  "titulo": "Reel de lanzamiento",
+  "tipo": "reel",
+  "descripcion": "Reel de lanzamiento · Stories 9:16",
+  "base": "..",
+  "formatos": ["9x16"],
+  "slides": [
+    { "id": "01", "titulo": "Reel de lanzamiento",
+      "video": "HA_LAUNCH_9-16.mp4" }
+  ]
+}

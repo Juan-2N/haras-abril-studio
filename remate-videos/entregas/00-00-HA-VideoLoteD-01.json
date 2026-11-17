@@ -1,0 +1,12 @@
+{
+  "slug": "video-lote-01-d",
+  "titulo": "Video Lote 01 · Abril Top Fire I · Opción D",
+  "tipo": "video",
+  "descripcion": "Muestra del template de video por lote, opción D (estilo v2) · YouTube 16:9 · 42 s",
+  "base": "../salida",
+  "formatos": ["16x9"],
+  "slides": [
+    { "id": "01", "titulo": "Lote 01", "subtitulo": "Abril Top Fire I · Abril Ofire × Larino × Quality Touch",
+      "video": "00-00-HA-VideoLoteD-{formato}-01.mp4", "captura": "capturas/00-00-HA-VideoLoteD-{formato}-01.jpg" }
+  ]
+}

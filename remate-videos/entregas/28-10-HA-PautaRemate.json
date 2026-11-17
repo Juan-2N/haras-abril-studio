@@ -1,0 +1,58 @@
+{
+  "slug": "pauta-remate-fechas",
+  "titulo": "Pauta Remate 2026 · 28 de noviembre",
+  "tipo": "reel",
+  "fecha_publicacion": "2026-10-28",
+  "descripcion": "Video de 15 s para pauta, con música · Feed 4:5 y Stories 9:16",
+  "base": "../salida",
+  "formatos": [
+    "4x5",
+    "9x16"
+  ],
+  "copy": [
+    {
+      "titulo": "A · Conversión",
+      "comentario": "Recomendada para pauta. Lleva el dato concreto (fecha y lugar) y un CTA claro hacia las pre-ofertas. Confirmar: pre-ofertas desde el lunes 23/11 y Lezama (salen de la guía de diseño).",
+      "texto": [
+        "REMATE 2026 💫",
+        "Sábado 28 de noviembre · Lezama.",
+        "Pre-ofertas desde el lunes 23 en remateharasabril.com",
+        "Tu próxima estrella cada vez más cerca.",
+        "",
+        "#harasabril #simplementelamejorsangre #losmejoresresultados"
+      ]
+    },
+    {
+      "titulo": "B · Anuncio corto",
+      "comentario": "Para awareness: tono emocional y mínimo, como los posts de evento de @harasabril. Sin CTA; funciona mejor en orgánico o como primer impacto.",
+      "texto": [
+        "💫 La fecha que esperábamos.",
+        "REMATE 2026 · Sábado 28 de noviembre.",
+        "Tu próxima estrella cada vez más cerca.",
+        "",
+        "#harasabril #simplementelamejorsangre #losmejoresresultados"
+      ]
+    },
+    {
+      "titulo": "C · Catálogo",
+      "comentario": "Suma un argumento de valor (pilar «Tu próxima estrella»). Confirmar que este año cada lote del catálogo tenga video en pista.",
+      "texto": [
+        "REMATE 2026 💫",
+        "Sábado 28 de noviembre.",
+        "Productos seleccionados, con pedigree verificable y video en pista.",
+        "Tu próxima estrella cada vez más cerca.",
+        "",
+        "#harasabril #simplementelamejorsangre #losmejoresresultados"
+      ]
+    }
+  ],
+  "slides": [
+    {
+      "id": "01",
+      "titulo": "Pauta Remate",
+      "subtitulo": "Apertura con emblema · tomas del remate · cierre con la fecha",
+      "video": "28-10-HA-PautaRemate-{formato}-01.mp4",
+      "captura": "capturas/28-10-HA-PautaRemate-{formato}-01.jpg"
+    }
+  ]
+}

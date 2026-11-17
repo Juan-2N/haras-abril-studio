@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>00-00-HA-PresentacionLotes-9x16</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; overflow: hidden; background: var(--ha-black); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ha-black); font-family: var(--ha-font-sans); color: var(--ha-white); }
+      .placa, .capa, .vid { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      .vid { object-fit: cover; }
+      .abs { position: absolute; }
+      .pleno { position: absolute; inset: 0; background: var(--ha-veil-dark); }
+      .velo { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, transparent 0%, color-mix(in srgb, var(--ha-black) 62%, transparent) 42%, color-mix(in srgb, var(--ha-black) 78%, transparent) 100%); }
+      .col { position: absolute; left: 0; width: 1080px; display: flex; flex-direction: column; align-items: center; text-transform: uppercase; }
+      .nombre { white-space: nowrap; line-height: 1.05; font-weight: var(--ha-t-lot-weight); letter-spacing: var(--ha-t-lot-track); font-size: calc(var(--ha-t-lot-size) * 1.333); text-shadow: 0 1px 3px color-mix(in srgb, var(--ha-black) 80%, transparent), 0 0 16px color-mix(in srgb, var(--ha-black) 60%, transparent); }
+      .mask { display: inline-block; overflow: hidden; vertical-align: top; }
+      .pal { display: inline-block; }
+      .linea { width: 620px; height: 6px; margin: 18px 0; background: var(--ha-gold); transform-origin: 0% 50%; clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 50% 100%); }
+      .sangre { white-space: nowrap; line-height: 1.25; font-weight: var(--ha-t-data-weight); letter-spacing: var(--ha-t-data-track); text-shadow: 0 1px 3px color-mix(in srgb, var(--ha-black) 80%, transparent), 0 0 12px color-mix(in srgb, var(--ha-black) 55%, transparent); }
+      .lote { display: flex; align-items: center; gap: 16px; margin-top: 16px; color: var(--ha-sand); font-weight: var(--ha-t-num-weight); letter-spacing: var(--ha-t-label-track); font-size: calc(var(--ha-t-label-size) * 1.247); }
+      .diag { width: 37.3px; height: 64px; overflow: visible; }
+      .diag line { stroke: currentColor; stroke-width: var(--ha-border); }
+      .evento { white-space: nowrap; font-weight: var(--ha-t-event-weight); letter-spacing: 0.15em; font-size: calc(var(--ha-t-event-size) * 0.9); line-height: 1.05; }
+      .anio { white-space: nowrap; font-weight: var(--ha-t-year-weight); letter-spacing: 0.173em; font-size: calc(var(--ha-t-year-size) * 0.9); line-height: 1.1; }
+      .fecha { display: flex; align-items: center; gap: 30px; margin-top: 18px; color: var(--ha-sand); white-space: nowrap; font-weight: var(--ha-t-meta-weight); letter-spacing: 0.27em; font-size: calc(var(--ha-t-label-size) * 1.05); }
+      .fecha i { width: 79px; height: var(--ha-border); background: var(--ha-gold); }
+      #sello-ch { position: absolute; left: 60px; top: 270px; width: 176.4px; height: 176.4px; z-index: 3; }
+      #sello-ch img { width: 176.4px; height: 176.4px; transform-origin: 49.95% 51.39%; }
+      /* Placa final */
+      #cierre .velo-c { position: absolute; inset: 0; background: color-mix(in srgb, var(--ha-black) 58%, transparent); }
+      #cierre .bloque { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      .c-sello { width: 300px; height: 300px; transform-origin: 49.95% 51.39%; }
+      .c-evento { margin-top: 26px; white-space: nowrap; text-transform: uppercase; font-weight: var(--ha-t-event-weight); letter-spacing: 0.15em; font-size: calc(var(--ha-t-event-size) * 0.780); line-height: 1.05; }
+      .corte { display: inline; }
+      .c-evento span { font-weight: var(--ha-t-year-weight); }
+      .c-claim { margin-top: 22px; color: var(--ha-sand); font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-claim-weight); font-size: calc(var(--ha-t-claim-size) * 1.350); max-width: 900px; line-height: 1.2; }
+      .c-linea { width: 560px; height: 6px; margin: 30px 0 26px; background: var(--ha-gold); transform-origin: 0% 50%; clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 50% 100%); }
+      .c-dato { margin-top: 10px; white-space: nowrap; text-transform: uppercase; font-weight: var(--ha-t-data-weight); letter-spacing: var(--ha-t-data-track); font-size: calc(var(--ha-t-data-size) * 1.350); display: flex; flex-direction: column; align-items: center; gap: 2px; margin-top: 18px; }
+      .c-dato b { color: var(--ha-sand); font-weight: var(--ha-t-lot-weight); margin-right: 0.35em; }
+      #fin { position: absolute; inset: 0; background: var(--ha-black); opacity: 0; pointer-events: none; z-index: 9; }
+    </style>
+  </head>
+  <body>
+    <!-- Presentación de los lotes: REMATE 0 → 4, un lote cada 2.5 s con corte seco y placa final 36.5 → 41.5. Generado por armar-presentacion-lotes.mjs -->
+    <div id="root" data-composition-id="main" data-start="0" data-duration="41.5" data-width="1080" data-height="1920">
+      <video id="v-remate" class="clip vid" src="assets/clips/ig-dron-remate.mp4" muted playsinline data-start="0" data-duration="4" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-remate" class="clip capa" data-start="0" data-duration="4" data-track-index="1">
+        <div class="pleno"></div>
+        <img id="r-sello" class="abs" src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" style="left:353px;top:470px;width:374px;height:374px" alt="" />
+        <div class="col" style="top:850px"><div class="evento r-t">Remate</div><div class="anio r-t">2026</div><div class="fecha r-t"><i></i><span>28 de noviembre</span><i></i></div></div>
+      </div>
+
+      <video id="v-cabeza-01" class="clip vid" src="assets/clips/lote01-ig-cabeza.mp4" muted playsinline data-start="4" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-01" class="clip capa cabeza" data-start="4" data-duration="2.5" data-track-index="1">
+        <div class="velo" style="height:640px"></div>
+        <div class="col" style="top:1290px"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Top</span></span> <span class="mask"><span class="pal">Fire</span></span> <span class="mask"><span class="pal">I</span></span></div><div class="linea"></div><div class="sangre" style="font-size:calc(var(--ha-t-data-size) * 1.450)">Abril Ofire × Larino × Quality Touch</div><div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>01</span></div></div>
+      </div>
+
+      <video id="v-cabeza-02" class="clip vid" src="assets/clips/lote02-ig-cabeza.mp4" muted playsinline data-start="6.5" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-02" class="clip capa cabeza" data-start="6.5" data-duration="2.5" data-track-index="1">
+        <div class="velo" style="height:640px"></div>
+        <div class="col" style="top:1290px"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Tap</span></span> <span class="mask"><span class="pal">Blue</span></span></div><div class="linea"></div><div class="sangre" style="font-size:calc(var(--ha-t-data-size) * 1.357)">Chacco Blue II × Conthargos × Baloubet du Rouet</div><div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>02</span></div></div>
+      </div>
+
+      <video id="v-cabeza-03" class="clip vid" src="assets/clips/lote03-ig-cabeza.mp4" muted playsinline data-start="9" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-03" class="clip capa cabeza" data-start="9" data-duration="2.5" data-track-index="1">
+        <div class="velo" style="height:640px"></div>
+        <div class="col" style="top:1290px"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Talabet</span></span></div><div class="linea"></div><div class="sangre" style="font-size:calc(var(--ha-t-data-size) * 1.387)">Cornet du Lys × Conthargos × Baloubet du Rouet</div><div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>03</span></div></div>
+      </div>
+
+      <video id="v-cabeza-04" class="clip vid" src="assets/clips/lote04-ig-cabeza.mp4" muted playsinline data-start="11.5" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-04" class="clip capa cabeza" data-start="11.5" data-duration="2.5" data-track-index="1">
+        <div class="velo" style="height:640px"></div>
+        <div class="col" style="top:1290px"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Taleta</span></span></div><div class="linea"></div><div class="sangre" style="font-size:calc(var(--ha-t-data-size) * 1.387)">Cornet du Lys × Conthargos × Baloubet du Rouet</div><div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>04</span></div></div>
+      </div>
+
+      <video id="v-cabeza-05" class="clip vid" src="assets/clips/lote05-ig-cabeza.mp4" muted playsinline data-start="14" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-05" class="clip capa cabeza" data-start="14" data-duration="2.5" data-track-index="1">
+        <div class="velo" style="height:640px"></div>
+        <div class="col" style="top:1290px"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Tilsa</span></span></div><div class="linea"></div><div class="sangre" style="font-size:calc(var(--ha-t-data-size) * 1.450)">Cornet du Lys × Stakkato × Douglas</div><div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>05</span></div></div>
+      </div>
+
+      <video id="v-cabeza-06" class="clip vid" src="assets/clips/lote06-ig-cabeza.mp4" muted playsinline data-start="16.5" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-06" class="clip capa cabeza" data-start="16.5" data-duration="2.5" data-track-index="1">
+        <div class="velo" style="height:640px"></div>
+        <div class="col" style="top:1290px"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Tilcha</span></span></div><div class="linea"></div><div class="sangre" style="font-size:calc(var(--ha-t-data-size) * 1.450)">Cornet du Lys × Conthargos × Chacco-Blue</div><div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>06</span></div></div>
+      </div>
+
+      <video id="v-cabeza-07" class="clip vid" src="assets/clips/lote07-ig-cabeza.mp4" muted playsinline data-start="19" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-07" class="clip capa cabeza" data-start="19" data-duration="2.5" data-track-index="1">
+        <div class="velo" style="height:640px"></div>
+        <div class="col" style="top:1290px"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Tecna</span></span></div><div class="linea"></div><div class="sangre" style="font-size:calc(var(--ha-t-data-size) * 1.450)">Chacco Blue II × Connor × Calando I</div><div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>07</span></div></div>
+      </div>
+
+      <video id="v-cabeza-08" class="clip vid" src="assets/clips/lote08-ig-cabeza.mp4" muted playsinline data-start="21.5" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-08" class="clip capa cabeza" data-start="21.5" data-duration="2.5" data-track-index="1">
+        <div class="velo" style="height:640px"></div>
+        <div class="col" style="top:1290px"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Tarbet</span></span></div><div class="linea"></div><div class="sangre" style="font-size:calc(var(--ha-t-data-size) * 1.450)">Abril Ofire × Conthargos × Baloubet du Rouet</div><div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>08</span></div></div>
+      </div>
+
+      <video id="v-cabeza-09" class="clip vid" src="assets/clips/lote09-ig-cabeza.mp4" muted playsinline data-start="24" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-09" class="clip capa cabeza" data-start="24" data-duration="2.5" data-track-index="1">
+        <div class="velo" style="height:640px"></div>
+        <div class="col" style="top:1290px"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Tarin</span></span></div><div class="linea"></div><div class="sangre" style="font-size:calc(var(--ha-t-data-size) * 1.450)">Conthargos × Crown Z × Caretano Z</div><div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>09</span></div></div>
+      </div>
+
+      <video id="v-cabeza-10" class="clip vid" src="assets/clips/lote10-ig-cabeza.mp4" muted playsinline data-start="26.5" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-10" class="clip capa cabeza" data-start="26.5" data-duration="2.5" data-track-index="1">
+        <div class="velo" style="height:640px"></div>
+        <div class="col" style="top:1290px"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Tifo</span></span></div><div class="linea"></div><div class="sangre" style="font-size:calc(var(--ha-t-data-size) * 1.450)">Abril Ofire × Alnok Z × Allegretto</div><div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>10</span></div></div>
+      </div>
+
+      <video id="v-cabeza-11" class="clip vid" src="assets/clips/lote11-ig-cabeza.mp4" muted playsinline data-start="29" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-11" class="clip capa cabeza" data-start="29" data-duration="2.5" data-track-index="1">
+        <div class="velo" style="height:640px"></div>
+        <div class="col" style="top:1290px"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Tubai</span></span></div><div class="linea"></div><div class="sangre" style="font-size:calc(var(--ha-t-data-size) * 1.450)">Conthargos × Douglas × Corvado</div><div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>11</span></div></div>
+      </div>
+
+      <video id="v-cabeza-12" class="clip vid" src="assets/clips/lote12-ig-cabeza.mp4" muted playsinline data-start="31.5" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-12" class="clip capa cabeza" data-start="31.5" data-duration="2.5" data-track-index="1">
+        <div class="velo" style="height:640px"></div>
+        <div class="col" style="top:1290px"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Virroco</span></span> <span class="mask"><span class="pal">Blue</span></span></div><div class="linea"></div><div class="sangre" style="font-size:calc(var(--ha-t-data-size) * 1.450)">Zirocco Blue VDL × Darco × Cento</div><div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>12</span></div></div>
+      </div>
+
+      <video id="v-cabeza-13" class="clip vid" src="assets/clips/lote13-ig-cabeza.mp4" muted playsinline data-start="34" data-duration="2.5" data-media-start="0" data-track-index="0"></video>
+      <div id="esc-13" class="clip capa cabeza" data-start="34" data-duration="2.5" data-track-index="1">
+        <div class="velo" style="height:640px"></div>
+        <div class="col" style="top:1290px"><div class="nombre"><span class="mask"><span class="pal">Abril</span></span> <span class="mask"><span class="pal">Viconthon</span></span></div><div class="linea"></div><div class="sangre" style="font-size:calc(var(--ha-t-data-size) * 1.450)">Conthargos × Clinton × Kojak</div><div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 37.3 64"><line x1="0" y1="64" x2="37.3" y2="0" /></svg><span>13</span></div></div>
+      </div>
+
+      <div id="sello-ch" class="clip" data-start="4" data-duration="32.5" data-track-index="4"><img src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="" /></div>
+
+      <video id="v-cierre" class="clip vid" src="assets/clips/ig-dron-pedigri.mp4" muted playsinline data-start="36.5" data-duration="5" data-media-start="0" data-track-index="0"></video>
+      <div id="cierre" class="capa" style="opacity:0;z-index:5">
+        <div class="velo-c"></div>
+        <div class="bloque">
+        <img class="c-sello" src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+        <div class="c-evento">Remate <span>2026</span></div>
+        <div class="c-claim">Tu próxima estrella<br class="corte" /> cada vez más cerca.</div>
+        <div class="c-linea"></div>
+        <div class="c-dato"><b>Pre-ofertas</b><span>desde el 23 de noviembre · remateharasabril.com</span></div>
+        <div class="c-dato"><b>Remate en vivo</b><span>sábado 28 de noviembre · Lezama</span></div>
+        </div>
+      </div>
+
+      <div id="fin"></div>
+      <audio id="musica" src="assets/musica/battleborn-symphony.mp3" data-start="0" data-duration="41.5" data-track-index="10" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.6,"v":1},{"t":39,"v":1},{"t":41.4,"v":0}]}]}'></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const anim = gsap.timeline({ paused: true });
+      const F = 1 / 30, D = 41.5, C = 36.5;
+      // Cada texto entra una sola vez: los tweens fijan su estado inicial (oculto) al crearse, sin mostrarlo antes
+      const v = {};
+      const crece = (sel, t) => anim.fromTo(sel, { opacity: 0, scale: 0.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out", ...v }, t);
+      const desenfoque = (sel, t, d = 0.5) => anim.fromTo(sel, { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: d, ease: "power2.out", ...v }, t);
+
+      // Remate
+      crece("#r-sello", 0.15);
+      anim.fromTo(".r-t", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.15, ...v }, 0.5);
+      // Placa de cada lote: nombre por palabras, línea, sangre y lote
+      anim.fromTo("#sello-ch img", { opacity: 0, scale: 0.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out", ...v }, 4 + 0.1);
+      ["01","02","03","04","05","06","07","08","09","10","11","12","13"].forEach((nn, i) => {
+        const t = 4 + i * 2.5, s = "#esc-" + nn;
+        anim.fromTo(s + " .pal", { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "expo.out", stagger: 0.12, ...v }, t + 0.1);
+        anim.fromTo(s + " .linea", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out", ...v }, t + 0.25);
+        desenfoque(s + " .sangre", t + 0.45);
+        desenfoque(s + " .lote", t + 0.65, 0.45);
+      });
+      // Placa final
+      anim.set("#esc-remate", { autoAlpha: 0 }, C - 0.02);
+      anim.set("#cierre", { opacity: 1 }, C);
+      crece("#cierre .c-sello", C + 0.15);
+      desenfoque("#cierre .c-evento", C + 0.45);
+      desenfoque("#cierre .c-claim", C + 0.75, 0.6);
+      anim.fromTo("#cierre .c-linea", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out", ...v }, C + 1.0);
+      anim.fromTo("#cierre .c-dato", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.15, ...v }, C + 1.25);
+      anim.fromTo("#fin", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.in", ...v }, D - 0.7);
+      anim.to({}, { duration: 0.001 }, D);
+
+      // Tapa en el frame 0 (regla de IG): la placa final completa; desde el frame 1, la animación
+      const TAPA = C + 2.5;
+      tl.add(anim.tweenFromTo(TAPA, TAPA, { duration: F, ease: "none" }), 0);
+      tl.add(anim.tweenFromTo(0, D - F, { duration: D - F, ease: "none" }), F);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

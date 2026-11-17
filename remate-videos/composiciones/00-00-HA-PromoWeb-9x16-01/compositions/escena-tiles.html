@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; perspective: 1400px; perspective-origin: 540px 960px; }
+        .et-camara { position: absolute; inset: 0; transform-style: preserve-3d; }
+        /* Tarjeta: recorte del sitio en un marco de vidrio con filete dorado */
+        .et-tile { position: absolute; padding: 10px; opacity: 0;
+          background: color-mix(in srgb, var(--ha-ink) 45%, transparent);
+          border: var(--ha-hairline) solid var(--ha-line-gold);
+          box-shadow: 0 30px 80px color-mix(in srgb, var(--ha-black) 70%, transparent), 0 0 60px color-mix(in srgb, var(--ha-gold) 18%, transparent); }
+        .et-tile img { display: block; }
+        .et-tile::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+          background: linear-gradient(150deg, color-mix(in srgb, var(--ha-white) 12%, transparent) 0%, transparent 40%); }
+      </style>
+
+      <div data-hf-id="hf-8f7a" id="root" data-composition-id="escena-tiles" data-width="1080" data-height="1920">
+        <div data-hf-id="hf-3y91" class="et-camara"></div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.querySelector('[data-composition-id="escena-tiles"]');
+          const camara = root.querySelector(".et-camara");
+          // [archivo, ancho, alto (proporción del recorte), x, y, z]
+          const TILES = [
+            ["tile-saltando.png", 330, 465, -60, 560, -520],
+            ["tile-mapa.png", 560, 438, 470, 780, -380],
+            ["tile-cifras.png", 380, 653, 70, 290, -180],
+            ["tile-pilares.png", 340, 599, 700, 1200, -160],
+            ["tile-productos.png", 600, 307, 240, 1600, -60],
+            ["tile-iconthon.png", 360, 522, 660, 250, 90],
+            ["tile-proximo-remate.png", 420, 476, 80, 1010, 160],
+          ];
+          const els = TILES.map(([f, w, h, x, y, z]) => {
+            const t = document.createElement("div");
+            t.className = "et-tile";
+            Object.assign(t.style, { left: x + "px", top: y + "px" });
+            const img = document.createElement("img");
+            img.src = "../assets/web/" + f;
+            Object.assign(img.style, { width: w + "px", height: h + "px" });
+            t.appendChild(img);
+            camara.appendChild(t);
+            return { t, img, w: w + 20, h: h + 20, x, y, z };
+          });
+
+          Promise.all(els.map((e) => e.img.decode())).then(() => {
+            const tl = gsap.timeline({ paused: true });
+            // Cámara inclinada que avanza hacia la grilla (parte tranquila de la pista, la tensión sube)
+            tl.fromTo(camara, { rotationX: 16, rotationY: -12, z: -520 }, { rotationX: 8, rotationY: -4, z: 60, duration: 3.0, ease: "power1.inOut" }, 0);
+            els.forEach((e, i) => {
+              // Profundidad de campo: las tarjetas lejanas quedan desenfocadas
+              const dof = Math.min(10, Math.abs(e.z) / 50);
+              tl.fromTo(e.t, { opacity: 0, z: e.z - 300, filter: "blur(24px)" },
+                { opacity: 1, z: e.z, filter: `blur(${dof}px)`, duration: 0.9, ease: "power3.out" }, 0.1 + i * 0.16);
+              // Colapso hacia el centro antes del drop: el celular nace de acá
+              tl.to(e.t, { x: 540 - e.w / 2 - e.x, y: 960 - e.h / 2 - e.y, z: 0, scale: 0.3, opacity: 0, filter: "blur(8px)",
+                duration: 0.6, ease: "power3.in" }, 3.0 + (els.length - 1 - i) * 0.02);
+            });
+            window.__timelines["escena-tiles"] = tl;
+          });
+        })();
+      </script>
+    </template>
+  </body>
+</html>

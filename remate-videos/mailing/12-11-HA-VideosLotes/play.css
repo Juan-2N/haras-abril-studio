@@ -1,0 +1,77 @@
+/* Portada de la lista de YouTube + botón de play. Se exporta a 1200×675 (se usa a 600 en el mail). */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1200px; height: 675px; overflow: hidden; background: var(--ha-charcoal); }
+body { -webkit-font-smoothing: antialiased; }
+.cuadro { position: relative; width: 1200px; height: 675px; overflow: hidden; }
+.foto { position: absolute; inset: 0; width: 1200px; height: 675px; }
+/* Variante A: pill dorada con play, abajo al centro */
+.pill {
+  position: absolute; left: 50%; bottom: var(--ha-s-3); transform: translateX(-50%) scale(0.86); transform-origin: 50% 100%;
+  height: var(--ha-btn-h); padding: 0 var(--ha-s-6) 0 var(--ha-s-2);
+  border-radius: var(--ha-btn-radius); background: var(--ha-gold-grad);
+  display: flex; align-items: center; gap: var(--ha-s-2); white-space: nowrap;
+  font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight); font-size: var(--ha-t-label-size);
+  letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-white); line-height: 1;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+}
+.pill .circ { width: 56px; height: 56px; border-radius: 50%; background: var(--ha-charcoal-elev); display: grid; place-items: center; }
+.tri { width: 0; height: 0; border-style: solid; }
+.pill .tri { border-width: 12px 0 12px 20px; border-color: transparent transparent transparent var(--ha-gold); margin-left: 5px; }
+/* Variante B: cromo de reproductor */
+.sombra { position: absolute; left: 0; right: 0; bottom: 0; height: 160px; background: linear-gradient(180deg, transparent, rgba(31,31,31,0.92)); }
+.barra { position: absolute; left: var(--ha-s-4); right: var(--ha-s-4); bottom: var(--ha-s-3); display: grid; gap: var(--ha-s-2); }
+.prog { position: relative; height: 6px; border-radius: 3px; background: var(--ha-line-gold-soft); }
+.prog i { position: absolute; left: 0; top: 0; bottom: 0; width: 7%; border-radius: 3px; background: var(--ha-gold-grad); }
+.prog b { position: absolute; left: 7%; top: 50%; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: var(--ha-sand); }
+.ctrl { display: flex; align-items: center; gap: var(--ha-s-3);
+  font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 0.8);
+  letter-spacing: var(--ha-t-data-track); text-transform: uppercase; color: var(--ha-white); line-height: 1; }
+.ctrl .tri { border-width: 14px 0 14px 22px; border-color: transparent transparent transparent var(--ha-white); }
+.ctrl .dor { color: var(--ha-gold); margin-left: auto; }
+.grande {
+  position: absolute; right: var(--ha-s-6); top: 50%; width: 132px; height: 132px; margin-top: -66px;
+  border-radius: 50%; border: 3px solid var(--ha-gold); background: rgba(31,31,31,0.55);
+  display: grid; place-items: center;
+}
+.grande .tri { border-width: 26px 0 26px 42px; border-color: transparent transparent transparent var(--ha-sand); margin-left: 10px; }
+.pill.libre { position: static; transform: scale(0.86); transform-origin: 0 50%; }
+.marca { display: flex; align-items: center; gap: var(--ha-s-2); }
+.marca .sello { width: 92px; height: 92px; }
+.titulo { font-family: var(--ha-font-sans); color: var(--ha-white); text-transform: uppercase; line-height: var(--ha-lh-tight); }
+.titulo .ev { display: block; font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-event-size) * 0.9); letter-spacing: var(--ha-t-label-track); }
+.titulo .an { display: block; font-weight: var(--ha-t-year-weight); font-size: calc(var(--ha-t-event-size) * 0.9); letter-spacing: var(--ha-t-year-track); margin-top: 4px; }
+.bajada { font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 0.85);
+  letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-gold); line-height: 1; }
+
+/* Variante C: 4 cabezas en franjas */
+.franjas { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; background: var(--ha-gold); }
+.franja { position: relative; overflow: hidden; }
+.franja img { width: 100%; height: 675px; object-fit: cover; display: block; }
+.franja .n { position: absolute; left: var(--ha-s-2); top: var(--ha-s-2); font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight);
+  font-size: calc(var(--ha-t-label-size) * 0.7); letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-white);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.6); }
+.pie { position: absolute; left: 0; right: 0; bottom: 0; height: 200px; background: linear-gradient(180deg, transparent, rgba(31,31,31,0.94) 55%); }
+.pie .fila { position: absolute; left: var(--ha-s-4); right: var(--ha-s-4); bottom: var(--ha-s-3); display: flex; align-items: center; justify-content: space-between; }
+.pie .izq { display: flex; align-items: center; gap: var(--ha-s-3); }
+.pie .izq .txt { display: grid; gap: var(--ha-s-1); }
+.pie .ev2 { font-family: var(--ha-font-sans); font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-event-size) * 0.6);
+  letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-white); line-height: 1; }
+.pie .pill.libre { transform-origin: 100% 50%; }
+
+/* Variante D: salto de TECNA, panel a la izquierda */
+.salto { position: absolute; inset: 0; width: 1200px; height: 675px; object-fit: cover; object-position: 60% 50%; }
+.panel { position: absolute; left: 0; top: 0; bottom: 0; width: 560px;
+  background: linear-gradient(90deg, rgba(31,31,31,0.92) 0%, rgba(31,31,31,0.82) 55%, transparent 100%); }
+.panel .cont { position: absolute; left: var(--ha-s-6); top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; gap: var(--ha-s-3); }
+.panel .rule { width: 96px; height: 2px; background: var(--ha-gold); }
+.lote-tag { position: absolute; right: var(--ha-s-4); bottom: var(--ha-s-3); font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight);
+  font-size: calc(var(--ha-t-label-size) * 0.65); letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-white);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.7); }
+
+/* Variante E: cabeza de TECNA de perfil, texto a la derecha sobre el portón oscuro */
+.perfil { position: absolute; inset: 0; width: 1200px; height: 675px; object-fit: cover; object-position: 30% 50%; }
+.velo-der { position: absolute; top: 0; bottom: 0; right: 0; width: 560px;
+  background: linear-gradient(270deg, rgba(31,31,31,0.85) 0%, rgba(31,31,31,0.6) 60%, transparent 100%); }
+.bloque-der { position: absolute; left: 744px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; gap: var(--ha-s-3); }
+.bloque-der .rule { width: 96px; height: 2px; background: var(--ha-gold); }
+.lote-tag.izq { left: var(--ha-s-4); right: auto; }

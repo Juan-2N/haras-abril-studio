@@ -1,0 +1,23 @@
+@import url("../colors_and_type.css");
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--ha-charcoal);
+  color: var(--ha-white);
+  font-family: var(--ha-font-body);
+}
+.card {
+  width: 700px;
+  box-sizing: border-box;
+  padding: 24px;
+  background: var(--ha-charcoal);
+  color: var(--ha-white);
+}
+.row { display: flex; gap: 12px; }
+.col { display: flex; flex-direction: column; gap: 12px; }
+.muted { color: var(--ha-fg-muted); }
+.gold { color: var(--ha-gold-dark); }
+.red { color: var(--ha-red); }
+.tiny { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ha-fg-muted); font-family: var(--ha-font-display); font-stretch: 75%; }
+.mono { font-family: var(--ha-font-mono); font-size: 12px; }

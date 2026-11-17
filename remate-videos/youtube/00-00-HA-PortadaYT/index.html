@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>00-00-HA-PortadaYT</title>
+  <!-- Portadas de YouTube por lote (16:9), prueba para el cliente: A con la foto de Salto, B con la de Perfil.
+       Los datos salen de herramientas/lotes-datos.js y las fotos de assets/fotos/.
+       Exportar: node herramientas/exportar-slides.mjs youtube/00-00-HA-PortadaYT/index.html salida/portadas-yt -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: var(--ha-charcoal-elev); }
+    body { -webkit-font-smoothing: antialiased; font-family: var(--ha-font-sans); color: var(--ha-white); }
+    .slide { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--ha-ink); margin-bottom: 40px; }
+    .foto { position: absolute; top: 0; height: 1080px; }
+    .salto .foto { left: 0; width: 1920px; }
+    /* Potrillos (12 y 13): la franja va a la derecha, para diferenciarlos. Sus fotos salen de herramientas/recortar-portadas.mjs */
+    .salto.derecha .panel { left: 1160px; }
+    .perfil .foto { left: 0; width: 729px; }
+    .panel { position: absolute; top: 0; height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; text-transform: uppercase; }
+    .salto .panel { left: 0; width: 760px; background: var(--ha-panel-dark); padding: 0 50px; }
+    .perfil .panel { left: 729px; width: 1191px; background: var(--ha-ink); padding: 0 90px; }
+
+    /* Medidas de la placa intro del video (sello 236,7; nombre 79,2; sangre 40,5; línea 709,6). --k las escala:
+       en la B van tal cual; en la A, al 80 % para que la sangre entre en una línea dentro del panel */
+    .salto { --k: 0.8; }
+    .perfil { --k: 1; }
+    .sello { flex: none; width: calc(236.7px * var(--k)); height: calc(236.7px * var(--k)); }
+    .evento { margin-top: calc(14px * var(--k)); white-space: nowrap; color: var(--ha-white); font-weight: var(--ha-t-lot-weight); letter-spacing: 0.15em; font-size: calc(var(--ha-t-label-size) * 1.5 * var(--k)); }
+    .evento span { font-weight: var(--ha-t-year-weight); }
+
+    .lote { display: flex; align-items: center; justify-content: center; gap: calc(14px * var(--k)); margin-top: calc(40px * var(--k)); color: var(--ha-sand); font-weight: var(--ha-t-num-weight); letter-spacing: var(--ha-t-label-track); font-size: calc(var(--ha-t-label-size) * 1.247 * var(--k)); }
+    .diag { width: calc(37.3px * var(--k)); height: calc(64px * var(--k)); }
+    .diag line { stroke: var(--ha-sand); stroke-width: var(--ha-border); }
+
+    .nombre { white-space: nowrap; margin-top: calc(24px * var(--k)); font-weight: var(--ha-t-lot-weight); letter-spacing: var(--ha-t-lot-track); line-height: 1.05; font-size: calc(var(--ha-t-lot-size) * 1.333 * 0.9 * var(--k)); }
+    .linea { height: var(--ha-border); background: var(--ha-gold); width: calc(709.6px * var(--k)); margin: calc(22px * var(--k)) 0; }
+    .sangre { white-space: nowrap; font-weight: var(--ha-t-data-weight); letter-spacing: var(--ha-t-data-track); line-height: 1.25; font-size: calc(var(--ha-t-data-size) * 1.607 * 0.9 * var(--k)); }
+    /* A: la línea del video, más gruesa en el centro y finita en las puntas (--ha-gold) */
+    .salto .linea { height: calc(6px * var(--k)); clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 50% 100%); }
+  </style>
+</head>
+<body>
+  <script src="../../herramientas/lotes-datos.js"></script>
+  <script>
+    // Lotes con sus fotos definitivas
+    const LOTES = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"];
+    const CON_RECORTE_PROPIO = (n) => n > "02";
+    const FRANJA_DERECHA = ["12", "13"];
+    const placa = (l, tipo, foto) => {
+      return `<section class="slide ${tipo}${FRANJA_DERECHA.includes(l.lote) ? " derecha" : ""}" data-nombre="00-00-HA-PortadaYT-Lote${l.lote}-${tipo === "salto" ? "A-Salto" : "B-Perfil"}">
+        <img class="foto" src="../../assets/fotos/${foto}" alt="" />
+        <div class="panel">
+          <img class="sello" src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+          <div class="evento">Remate <span>2026</span></div>
+          <div class="lote"><span>Lote</span><svg class="diag" viewBox="0 0 34 72"><line x1="0" y1="72" x2="34" y2="0" /></svg><span>${l.lote}</span></div>
+          <div class="nombre">${l.nombre}</div>
+          <div class="linea"></div>
+          <div class="sangre">${l.pedigri}</div>
+        </div>
+      </section>`;
+    };
+    document.body.insertAdjacentHTML("beforeend", LOTES.map((n) => {
+      const l = window.LOTES_DATOS.lotes.find((x) => x.lote === n);
+      if (CON_RECORTE_PROPIO(n)) return placa(l, "salto", `lote${n}-portada.jpg`);
+      return placa(l, "salto", `lote${n}-salto.jpg`) + placa(l, "perfil", `lote${n}-pedigri.jpg`);
+    }).join(""));
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "slug": "video-lote-12",
+  "titulo": "Video Lote 12 · Abril Virroco Blue",
+  "tipo": "video",
+  "descripcion": "Video del lote para YouTube · 16:9 · 32 s",
+  "base": "../salida",
+  "formatos": [
+    "16x9",
+    "9x16"
+  ],
+  "slides": [
+    {
+      "id": "12",
+      "titulo": "Lote 12",
+      "subtitulo": "Abril Virroco Blue · Zirocco Blue VDL × Darco × Cento",
+      "video": "00-00-HA-VideoLote-{formato}-12.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-{formato}-12.jpg"
+    }
+  ]
+}

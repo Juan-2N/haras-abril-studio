@@ -1,0 +1,177 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"nombre","type":"string","label":"Nombre","default":"Abril Top Fire I"},
+    {"id":"sangre","type":"string","label":"Sangre (padre × abuelo materno × bisabuelo)","default":"Abril Ofire × Larino × Quality Touch"},
+    {"id":"sexo","type":"string","label":"Sexo (H/M)","default":"M"},
+    {"id":"pelo","type":"string","label":"Pelo","default":"Tordillo"},
+    {"id":"aafe","type":"string","label":"N.º AAFE","default":"562994"},
+    {"id":"nac","type":"string","label":"Nacimiento (DD.MM.AAAA)","default":"07.10.2024"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        /* PDF HA_Video_Lote_2026_D, página 5, medido con PyMuPDF a 1920 px. Todo el bloque centrado en x = 1456. */
+        #root { position: absolute; inset: 0; overflow: hidden; background: var(--ha-black); }
+
+        /* Foto a sangre (2675 × 1505 escalada a 1920 × 1080) con zoom lento y viñeta: 50 % de negro en los bordes */
+        .pc-foto { position: absolute; inset: 0; }
+        .pc-foto img { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; visibility: hidden; }
+        .pc-foto canvas { position: absolute; left: 0; top: 0; }
+        .pc-vineta { position: absolute; inset: 0; background: radial-gradient(ellipse 75% 85% at 52% 30%, transparent 0%, color-mix(in srgb, var(--ha-black) 50%, transparent) 100%); }
+
+        /* Sello de 247 px de círculo centrado en (1458,5, 346,5) */
+        .pc-seal { position: absolute; left: 1318.1px; top: 202.1px; width: 281.1px; height: 281.1px; transform-origin: 49.95% 51.39%; }
+
+        .pc-fila { position: absolute; left: 496px; width: 1920px; display: flex; justify-content: center; white-space: nowrap; line-height: normal; text-transform: uppercase; }
+        /* El PDF tiene acá el nombre en serif por error: va en Barlow Bold, del ancho de la línea */
+        .pc-nombre {
+          top: 523px; color: var(--ha-white);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-lot-weight);
+          font-size: calc(var(--ha-t-lot-size) * 1.08); letter-spacing: var(--ha-t-lot-track);
+        }
+        .pc-sangre {
+          top: 629px; color: var(--ha-white);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-data-weight);
+          font-size: calc(var(--ha-t-data-size) * 1.464); letter-spacing: var(--ha-t-data-track);
+        }
+        .pc-centro { display: inline-block; }
+        .pc-pal-mask { display: inline-block; overflow: hidden; vertical-align: top; }
+        .pc-pal { display: inline-block; }
+        /* Línea dorada (1167–1740 × 616–622): más gruesa en el centro y finita en las puntas. Se dibuja de izquierda a derecha */
+        .pc-linea { position: absolute; left: 1167.4px; top: 615.6px; width: 572.9px; height: 6px; background: var(--ha-gold); transform-origin: 0% 50%; clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 50% 100%); }
+        /* Brillo en la punta de la línea, como en la C: centrado en el arranque y viaja hasta el final */
+        .pc-brillo { position: absolute; left: 1017.4px; top: 574.6px; width: 300px; height: 88px; mix-blend-mode: screen; opacity: 0; }
+
+        /* Cajas de datos 2 × 2: 327 × 64 en x = 1122 y 1463, y = 714 y 790 */
+        .pc-caja {
+          position: absolute; width: 327.3px; height: 64.1px; display: flex; align-items: center; justify-content: center;
+          background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-line-gold);
+          white-space: nowrap; line-height: normal; text-transform: uppercase; color: var(--ha-white);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-data-weight);
+          font-size: calc(var(--ha-t-data-size) * 1.607); letter-spacing: var(--ha-t-data-track);
+        }
+      </style>
+
+      <div id="root" data-composition-id="placa-body" data-width="1920" data-height="1080">
+        <div class="pc-foto"><img src="../assets/fotos/lote01b-cuerpo.jpg" alt="" /></div>
+        <div class="pc-vineta"></div>
+        <img class="pc-seal" src="../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+        <div class="pc-fila pc-nombre"><span class="pc-centro" data-var-text="nombre">Abril Top Fire I</span></div>
+        <div class="pc-linea"></div>
+        <img class="pc-brillo" src="../assets/logos/shine-linea.png" alt="" />
+        <div class="pc-fila pc-sangre"><span class="pc-centro" data-var-text="sangre">Abril Ofire × Larino × Quality Touch</span></div>
+        <div class="pc-cajas"></div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.querySelector('[data-composition-id="placa-body"]');
+          const vars = window.__hyperframes.getVariables();
+          const txt = (k) => String(vars[k] || "").trim();
+
+          // Datos con el formato v2: sexo en palabras, AAFE con su número y fecha DD.MM.AAAA
+          const datos = [
+            txt("sexo").toUpperCase() === "H" ? "Hembra" : "Macho",
+            txt("pelo"),
+            "AAFE " + txt("aafe"),
+            txt("nac"),
+          ];
+          const cont = root.querySelector(".pc-cajas");
+          const cajas = datos.map((d, i) => {
+            const el = document.createElement("div");
+            el.className = "pc-caja";
+            el.style.left = (i % 2 ? 1463 : 1122) + "px";
+            el.style.top = (i < 2 ? 713.9 : 789.9) + "px";
+            el.textContent = d;
+            cont.appendChild(el);
+            return el;
+          });
+
+          // Nombre palabra por palabra, cada una con su máscara
+          const partirPalabras = (el) => {
+            const palabras = el.textContent.trim().split(/\s+/);
+            el.textContent = "";
+            return palabras.map((p, i) => {
+              const mask = document.createElement("span");
+              mask.className = "pc-pal-mask";
+              const s = document.createElement("span");
+              s.className = "pc-pal";
+              s.textContent = p;
+              mask.appendChild(s);
+              el.appendChild(mask);
+              if (i < palabras.length - 1) el.appendChild(document.createTextNode(" "));
+              return s;
+            });
+          };
+          const fit = (el, max) => {
+            let s = parseFloat(getComputedStyle(el).fontSize);
+            while (el.offsetWidth > max && s > 12) { s -= 1; el.style.fontSize = s + "px"; }
+          };
+
+          // Zoom lento dibujado en canvas con coordenadas decimales: con transform, Chrome redondea la posición
+          // subpíxel y un zoom tan lento avanza a saltos
+          const zoomFoto = (caja, img, r, origen) => {
+            const cv = document.createElement("canvas");
+            cv.width = caja.clientWidth;
+            cv.height = caja.clientHeight;
+            caja.appendChild(cv);
+            const ctx = cv.getContext("2d");
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+            const ox = r.x + r.w * origen[0], oy = r.y + r.h * origen[1];
+            const estado = { s: 1 };
+            const dibujar = () => {
+              const s = estado.s;
+              ctx.clearRect(0, 0, cv.width, cv.height);
+              ctx.drawImage(img, ox + (r.x - ox) * s, oy + (r.y - oy) * s, r.w * s, r.h * s);
+            };
+            return { estado, dibujar };
+          };
+          const fotoImg = root.querySelector(".pc-foto img");
+
+          Promise.all([
+            fotoImg.decode(),
+            document.fonts.load('700 71px "Barlow Condensed"'),
+            document.fonts.load('400 45px "Barlow Condensed"'),
+          ]).then(() => {
+            const nombre = root.querySelector(".pc-nombre .pc-centro");
+            fit(nombre, 660);
+            fit(root.querySelector(".pc-sangre .pc-centro"), 690);
+            cajas.forEach((c) => fit(c, 327));
+            const palabras = partirPalabras(nombre);
+
+            const tl = gsap.timeline({ paused: true });
+            const zoom = zoomFoto(root.querySelector(".pc-foto"), fotoImg, { x: 0, y: 0, w: 1920, h: 1080 }, [0.25, 0.5]);
+            zoom.dibujar();
+            tl.fromTo(zoom.estado, { s: 1 }, { s: 1.05, duration: 4.5, ease: "none", onUpdate: zoom.dibujar }, 0);
+            tl.fromTo(".pc-seal", { opacity: 0, scale: 0.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, 0.2);
+            tl.fromTo(palabras, { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "expo.out", stagger: 0.12 }, 0.45);
+            // La línea se dibuja de izquierda a derecha con el brillo en la punta, a la velocidad de la C:
+            // allá el brillo recorría 967 px (de x = 953 al borde del cuadro) y salía de cuadro sin frenarse.
+            // Acá hace el mismo recorrido, la línea lo sigue hasta su largo y el brillo se apaga al llegar a la punta
+            const linea = root.querySelector(".pc-linea"), brillo = root.querySelector(".pc-brillo");
+            const LARGO = 572.9, RECORRIDO_C = 967;
+            const trazo = { x: 0, a: 0 };
+            const pintarTrazo = () => {
+              gsap.set(linea, { scaleX: Math.min(trazo.x / LARGO, 1) });
+              gsap.set(brillo, { x: Math.min(trazo.x, LARGO), opacity: trazo.a * Math.max(0, Math.min(1, (LARGO - trazo.x) / 40)) });
+            };
+            pintarTrazo();
+            tl.fromTo(trazo, { x: 0 }, { x: RECORRIDO_C, duration: 0.6, ease: "power3.out", onUpdate: pintarTrazo }, 0.6);
+            tl.fromTo(trazo, { a: 0 }, { a: 1, duration: 0.1, ease: "none", onUpdate: pintarTrazo }, 0.6);
+            tl.fromTo(".pc-sangre .pc-centro", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power2.out" }, 0.75);
+            tl.fromTo(cajas, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.12 }, 0.95);
+            window.__timelines["placa-body"] = tl;
+          });
+        })();
+      </script>
+    </template>
+  </body>
+</html>

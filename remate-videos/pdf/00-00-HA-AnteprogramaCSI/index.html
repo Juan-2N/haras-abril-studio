@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>00-00-HA-AnteprogramaCSI</title>
+  <!-- PDF A4 del Anteprograma CSI 1* 2026, 3 páginas: programa (03 de videosreferencias/anteprograma), observaciones (02) e información general (01).
+       Diseño y plantillas acá; los datos, en datos.js (es lo único que hay que tocar para actualizar).
+       Exportar: node herramientas/exportar-pdf.mjs pdf/00-00-HA-AnteprogramaCSI/index.html salida/pdf/01-HA-AnteprogramaCSI.pdf -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <style>
+    @page { size: A4; margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: var(--ha-white); }
+    body {
+      -webkit-font-smoothing: antialiased; color: var(--ha-ink); font-weight: 500;
+      /* Tokens pensados para 1080 px; la hoja A4 mide 794 px */
+      --k: 0.43;
+      --fs: calc(var(--ha-t-data-size) * var(--k));
+      --pad-x: calc(var(--ha-s-4) * 1.1);
+      font-family: var(--ha-font-sans); font-size: var(--fs); line-height: var(--ha-lh-text);
+    }
+    b { font-weight: 700; }
+    /* Cuerpo de letra por página: cada una usa el lugar que tiene */
+    .pag-programa { --k: 0.48; }
+    .pag-obs { --k: 0.43; }
+    .pag-info { --k: 0.46; }
+    .pagina { --fs: calc(var(--ha-t-data-size) * var(--k)); font-size: var(--fs); }
+
+    .pagina {
+      position: relative; width: 210mm; height: 297mm; overflow: hidden; break-after: page;
+      display: flex; flex-direction: column;
+    }
+    .pagina:last-child { break-after: auto; }
+
+    /* ── Encabezado: diseño del usuario (HA_head.jpg, 3000 × 400) ── */
+    .encabezado { display: block; width: 210mm; height: 28mm; flex: none; }
+    .subencabezado {
+      flex: none; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      padding: var(--ha-s-1) var(--pad-x) 0;
+    }
+    .fea { width: 42px; height: 43px; } /* 675 × 688 */
+    .fei { justify-self: end; width: 90px; height: 27px; } /* 893 × 267 */
+    .titulo {
+      font-family: var(--ha-font-sans); font-weight: var(--ha-t-event-weight);
+      font-size: calc(var(--ha-t-label-size) * 0.75); letter-spacing: var(--ha-t-label-track);
+      text-transform: uppercase; white-space: nowrap;
+    }
+    .titulo .estrella { color: var(--ha-red); }
+
+    .cuerpo { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 0 var(--pad-x); }
+    .pie {
+      flex: none; margin: var(--ha-s-1) var(--pad-x) var(--ha-s-2); padding-top: var(--ha-s-1);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: calc(var(--fs) * 0.85); letter-spacing: var(--ha-t-meta-track); text-transform: uppercase; color: var(--ha-gray);
+      background: var(--ha-gold-flare) top / 100% var(--ha-hairline) no-repeat;
+    }
+    .pie img { width: 100px; height: 11px; } /* logotipo 849 × 97 */
+
+    /* ── Barra de sección ── */
+    .barra {
+      background: var(--ha-black); color: var(--ha-white); text-align: center;
+      font-weight: var(--ha-t-event-weight); font-size: calc(var(--fs) * 1.1);
+      letter-spacing: var(--ha-t-event-track); text-transform: uppercase;
+      padding: 2px 0 2px var(--ha-t-event-track); margin-top: 4px;
+      border-bottom: 2px solid var(--ha-gold);
+    }
+    .bloque p + p { margin-top: 3px; }
+    .centro { text-align: center; }
+    .monto { font-weight: 700; white-space: nowrap; }
+
+    /* ── Autoridades ── */
+    .autoridades { text-align: left; }
+    .autoridades .item { white-space: nowrap; }
+    .autoridades .sep { color: var(--ha-gold); margin: 0 4px; }
+    .autoridades .cargo { font-weight: 700; }
+
+    /* ── Premios ── */
+    .premios { width: 100%; border-collapse: collapse; }
+    .premios td { padding: 2px 4px; vertical-align: top; border-bottom: var(--ha-hairline) solid var(--ha-line-gold-soft); }
+    .premios .pr { font-weight: 700; white-space: nowrap; text-transform: uppercase; width: 1%; }
+    .premios .pr small { display: block; font-size: 1em; font-weight: 500; text-transform: none; }
+    .premios .bolsa { text-align: right; width: 1%; white-space: nowrap; }
+    .premios .bolsa-et { color: var(--ha-gold-text); font-weight: 700; }
+    .premios tr.destacada td { background: color-mix(in srgb, var(--ha-gold) 16%, var(--ha-white)); }
+    .escala { display: grid; grid-template-columns: auto 1fr; column-gap: var(--ha-s-1); }
+    .escala .cat { color: var(--ha-gold-text); font-weight: 700; }
+    .escala .puestos { display: flex; flex-wrap: wrap; column-gap: var(--ha-s-2); }
+    .reparto { display: flex; flex-wrap: wrap; column-gap: var(--ha-s-2); }
+    .reparto .cat { color: var(--ha-gold-text); font-weight: 700; }
+    .nota {
+      text-align: center; font-weight: 700; padding: 4px;
+      background: color-mix(in srgb, var(--ha-gold) 16%, var(--ha-white)); border: var(--ha-hairline) solid var(--ha-line-gold);
+    }
+
+    /* ── Alojamiento ── */
+    .hoteles { display: grid; grid-template-columns: auto auto auto; justify-content: center; column-gap: var(--ha-s-3); row-gap: 1px; margin: 4px 0; }
+    .hoteles .nombre { font-weight: 700; text-transform: uppercase; }
+    .hoteles .nombre em { font-family: var(--ha-font-serif); font-style: italic; text-transform: none; font-weight: 400; color: var(--ha-gold-text); }
+    .aviso-chico { text-align: center; text-transform: uppercase; color: var(--ha-taupe); letter-spacing: 0.04em; }
+
+    .ubicacion { display: flex; align-items: center; justify-content: center; gap: var(--ha-s-2); font-size: calc(var(--fs) * 1.15); }
+    .ubicacion img { width: 44px; height: 44px; } /* emblema 1081 × 1080 */
+    .ubicacion .maps { font-size: calc(var(--fs) * 0.9); font-weight: 700; color: var(--ha-gold-text); text-decoration: none; }
+
+    /* ── Página 2 ── */
+    .aviso { text-align: center; font-family: var(--ha-font-serif); font-style: italic; font-size: calc(var(--fs) * 1.2); color: var(--ha-taupe); }
+    .aviso::before, .aviso::after { content: " ✦ "; color: var(--ha-gold); font-style: normal; }
+    h2 {
+      font-family: var(--ha-font-serif); font-weight: var(--ha-t-lot-weight); text-transform: uppercase;
+      font-size: calc(var(--ha-t-lot-size) * var(--k) * 0.5); letter-spacing: var(--ha-t-lot-track); line-height: 1.1;
+      border-bottom: var(--ha-hairline) solid var(--ha-gold); padding-bottom: 2px; margin: 4px 0 2px;
+    }
+    .edades { margin-top: 4px; }
+    .edades .tit { font-weight: 700; color: var(--ha-gold-text); text-transform: uppercase; letter-spacing: 0.04em; }
+    .edades table { border-collapse: collapse; }
+    .edades td { padding: 0 var(--ha-s-2) 0 0; }
+    .edades td:first-child { font-weight: 700; text-transform: uppercase; }
+    .vinetas { margin: 3px 0 3px var(--ha-s-3); font-weight: 700; }
+    .vinetas li::marker { color: var(--ha-gold); }
+    .campeonatos { width: 100%; border-collapse: collapse; margin-top: 3px; }
+    .campeonatos td { padding: 2px 4px; border-bottom: var(--ha-hairline) solid var(--ha-line-gold-soft); white-space: nowrap; }
+    .campeonatos .letra { font-weight: 700; text-transform: uppercase; }
+    .campeonatos .copa { font-weight: 700; text-transform: uppercase; }
+    .obs-final { background: color-mix(in srgb, var(--ha-gold) 16%, var(--ha-white)); border-left: 3px solid var(--ha-gold); padding: 6px var(--ha-s-2); }
+    .obs-final ul { margin-left: var(--ha-s-2); }
+    .obs-final li::marker { content: "– "; color: var(--ha-gold-text); }
+
+    /* ── Página 3: programa ── */
+    .programa { font-size: calc(var(--fs) * 1.1); }
+    .dia { width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: var(--ha-s-3); }
+    .dia caption {
+      background: var(--ha-black); color: var(--ha-white); padding: 4px 0 4px var(--ha-t-label-track);
+      font-weight: var(--ha-t-event-weight); font-size: calc(var(--fs) * 1.2); letter-spacing: var(--ha-t-label-track); text-transform: uppercase;
+    }
+    .dia th {
+      background: var(--ha-gold-grad); color: var(--ha-ink); font-weight: 700; text-transform: uppercase;
+      font-size: calc(var(--fs) * 0.9); letter-spacing: 0.06em; padding: 3px 4px;
+    }
+    .dia td { padding: 6px 4px; border-bottom: var(--ha-hairline) solid var(--ha-line-gold); text-align: center; vertical-align: middle; }
+    .dia .c-n { width: 4%; font-weight: 700; }
+    .dia .c-cat { width: 39%; text-align: left; text-transform: uppercase; }
+    .dia .c-alt { width: 6%; }
+    .dia .c-def { width: 5%; }
+    .dia .c-art { width: 12%; }
+    /* Copas (pruebas 4 a 6): etiqueta dorada chica y nombre grande */
+    .obs-copa { display: block; font-weight: 700; font-size: calc(var(--fs) * 1.2); line-height: 1.1; text-transform: uppercase; }
+    .obs-copa-et { display: block; font-size: 0.6em; letter-spacing: var(--ha-t-label-track); color: var(--ha-gold-text); margin-bottom: 1px; }
+    .dia td.c-art { white-space: nowrap; font-size: calc(var(--fs) * 0.92); }
+    .dia .c-ins { width: 10%; }
+    .dia .c-pre { width: 11%; }
+    .dia .c-obs { width: 13%; font-size: calc(var(--fs) * 0.85); }
+    .dia td.c-ins, .dia td.c-pre { font-weight: 700; white-space: nowrap; }
+    .dia tr.destacada td { background: color-mix(in srgb, var(--ha-gold) 16%, var(--ha-white)); }
+    .dia tr.destacada .c-cat { font-weight: 700; font-size: calc(var(--fs) * 1.1); }
+    .hito {
+      display: flex; justify-content: center; align-items: center; gap: var(--ha-s-1);
+      padding: 8px 0; font-weight: 700; text-transform: uppercase; letter-spacing: var(--ha-t-label-track);
+      font-size: calc(var(--fs) * 1.1);
+    }
+    .hito svg { width: 14px; height: 14px; fill: none; stroke: var(--ha-gold-text); stroke-width: 2; stroke-linecap: round; }
+    .hito .hora { color: var(--ha-gold-text); }
+    /* Hito resaltado (remate): banda negra con filete dorado */
+    .hito.destacado {
+      background: var(--ha-black); color: var(--ha-white); border-bottom: 2px solid var(--ha-gold);
+      font-size: calc(var(--fs) * 1.35); padding: 8px 0; margin-top: var(--ha-s-1);
+    }
+    .hito.destacado .hora { color: var(--ha-sand); }
+    .hito.destacado svg { width: 18px; height: 18px; stroke: var(--ha-sand); }
+  </style>
+</head>
+<body>
+  <main id="doc"></main>
+
+  <script src="datos.js"></script>
+  <script>
+    const D = window.ANTEPROGRAMA;
+    // **negrita** → <b>
+    const md = (t) => String(t).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+    const parrafos = (lista) => lista.map((t) => `<p>${md(t)}</p>`).join("");
+    const barra = (t) => `<div class="barra">${t}</div>`;
+    const reloj = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>';
+
+    const pagina = (n, clase, contenido) => `
+      <section class="pagina ${clase}">
+        <img class="encabezado" src="../../assets/logos/csi-encabezado.jpg" alt="Haras Abril · Concurso Internacional de Salto 2026 · 27, 28 y 29 de noviembre" />
+        <div class="subencabezado">
+          <img class="fea" src="../../assets/logos/fea.png" alt="Federación Ecuestre Argentina" />
+          <div class="titulo">${D.titulo.replace("*", '<span class="estrella">*</span>')}</div>
+          <img class="fei" src="../../assets/logos/fei.png" alt="FEI" />
+        </div>
+        <div class="cuerpo">${contenido}</div>
+        <footer class="pie">
+          <img src="../../assets/logos/ha-logotipo-positivo.png" alt="Haras Abril" />
+          <span>Página ${n} de 3</span>
+        </footer>
+      </section>`;
+
+    // ── Página 3: información general ──
+    const premio = (p) => {
+      let derecha = p.bolsa ? `<span class="bolsa-et">Bolsa</span> <span class="monto">${p.bolsa}</span>` : "";
+      let pr = p.pruebas, detalle = p.detalle.join("<br>");
+      if (p.reparto) {
+        detalle = `<div class="reparto"><span>${detalle}</span>${p.reparto.map(([puesto, m]) => `<span><span class="cat">${puesto}</span> <span class="monto">${m}</span></span>`).join("")}</div>`;
+      }
+      if (p.escala) {
+        pr += `<small>${detalle}</small>`;
+        detalle = `<div class="escala">${p.escala.map(([cat, v]) => `
+          <span class="cat">${cat}</span>
+          <span class="puestos">${Array.isArray(v) ? v.map((m, i) => `<span>${i + 1}.° <span class="monto">${m}</span></span>`).join("") : v}</span>`).join("")}
+        </div>`;
+      }
+      return `<tr class="${p.destacada ? "destacada" : ""}"><td class="pr">${pr}</td><td>${detalle}</td><td class="bolsa">${derecha}</td></tr>`;
+    };
+    const A = D.alojamiento;
+    const info = pagina(3, "pag-info", `
+      ${barra("Vestimenta")}<div class="bloque">${parrafos(D.vestimenta)}</div>
+      ${barra("Requisitos veterinarios")}<div class="bloque">${parrafos(D.veterinaria)}</div>
+      ${barra("Autoridades")}
+      <div class="autoridades">${D.autoridades.map(([c, n]) => `<span class="item"><span class="cargo">${c}:</span> ${n}</span>`).join('<span class="sep">|</span> ')}</div>
+      ${barra("Premios")}
+      <table class="premios">${D.premios.map(premio).join("")}</table>
+      <p class="centro">${md(D.campeonatosPremio)}</p>
+      <div class="nota">${D.notaPremios}</div>
+      ${barra("Alojamiento")}
+      <p class="centro">${A.intro}</p>
+      <div class="hoteles">${A.hoteles.map((h) => `
+        <span class="nombre">${h.nombre}${h.nota ? ` <em>${h.nota}</em>` : ""}</span><span>${h.tel}</span><span>${h.web}</span>`).join("")}
+      </div>
+      <p class="aviso-chico">${A.aviso}</p>
+      ${barra("Ubicación")}
+      <div class="ubicacion">
+        <img src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="" />
+        <div>
+          <p>${D.ubicacion.direccion}</p>
+          <a class="maps" href="${D.ubicacion.maps}">${D.ubicacion.maps}</a>
+        </div>
+      </div>`);
+
+    // ── Página 2: estabulación y observaciones ──
+    const J = D.jovenes, S = D.serie, C = D.campeonatos;
+    const obs = pagina(2, "pag-obs", `
+      ${barra("Estabulación")}<div class="bloque">${parrafos(D.estabulacion)}</div>
+      ${barra("Observaciones")}
+      <p class="aviso">${D.aviso}</p>
+      <h2>${J.titulo}</h2>
+      <div class="bloque">${parrafos(J.texto)}</div>
+      <div class="edades">
+        <p class="tit">${J.edadesTitulo}</p>
+        <table>${J.edades.map(([c, d, h]) => `<tr><td>${c}:</td><td>nacidos entre el ${d} y el ${h}</td></tr>`).join("")}</table>
+      </div>
+      <h2>${S.titulo}</h2>
+      <div class="bloque">${parrafos(S.texto)}</div>
+      <ul class="vinetas">${S.vinetas.map((v) => `<li>${md(v)}</li>`).join("")}</ul>
+      <p>${md(S.importante)}</p>
+      <h2>${C.titulo}</h2>
+      <p>${C.texto}</p>
+      <table class="campeonatos">${C.lista.map(([l, alt, copa, pr, cat]) => `
+        <tr><td class="letra">${l} · Campeonato ${alt}</td><td class="copa">${copa}</td><td>Pruebas <b>${pr}</b></td><td>Categorías: ${cat}</td></tr>`).join("")}
+      </table>
+      <h2>Observaciones</h2>
+      <div class="obs-final"><ul>${D.observaciones.map((o) => `<li>${md(o)}</li>`).join("")}</ul></div>`);
+
+    // ── Página 1: programa ──
+    const fila = (p) => `
+      <tr class="${p.destacada ? "destacada" : ""}">
+        <td class="c-n">${p.n}</td><td class="c-cat">${p.categoria}</td><td>${p.altura}</td><td>${p.def}</td><td class="c-art">${p.art}</td>
+        <td class="c-ins">${p.inscripcion}</td><td class="c-pre">${p.premio}</td><td class="c-obs">${p.copa ? `<span class="obs-copa"><span class="obs-copa-et">Copa</span>${p.obs.replace(/^Copa\s+/, "")}</span>` : p.obs}</td>
+      </tr>`;
+    const dia = (d) => `
+      <table class="dia">
+        <caption>${d.fecha}</caption>
+        <colgroup><col class="c-n"><col class="c-cat"><col class="c-alt"><col class="c-def"><col class="c-art"><col class="c-ins"><col class="c-pre"><col class="c-obs"></colgroup>
+        <thead><tr><th>Pba.</th><th>Categoría</th><th>Altura</th><th>Def.</th><th>Art.</th><th>Inscrip.</th><th>Premios</th><th>Observ.</th></tr></thead>
+        <tbody>${d.pruebas.map(fila).join("")}</tbody>
+      </table>
+      ${d.hito ? `<div class="hito${d.hito.destacado ? " destacado" : ""}">${reloj}<span class="hora">${d.hito.hora}</span><span>·</span><span>${d.hito.texto}</span></div>` : ""}`;
+    const programa = pagina(1, "pag-programa", `
+      <div class="programa">${D.dias.map(dia).join("")}</div>
+      <p class="centro">${md(D.piePrograma)}</p>`);
+
+    document.getElementById("doc").outerHTML = programa + obs + info;
+  </script>
+</body>
+</html>

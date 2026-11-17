@@ -1,0 +1,20 @@
+{
+  "slug": "video-lote-04",
+  "titulo": "Video Lote 04 · Abril Taleta",
+  "tipo": "video",
+  "descripcion": "Video del lote para YouTube · 16:9 · 42 s",
+  "base": "../salida",
+  "formatos": [
+    "16x9",
+    "9x16"
+  ],
+  "slides": [
+    {
+      "id": "04",
+      "titulo": "Lote 04",
+      "subtitulo": "Abril Taleta · Cornet du Lys × Conthargos × Baloubet du Rouet",
+      "video": "00-00-HA-VideoLote-{formato}-04.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-{formato}-04.jpg"
+    }
+  ]
+}

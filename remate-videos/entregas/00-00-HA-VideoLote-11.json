@@ -1,0 +1,20 @@
+{
+  "slug": "video-lote-11",
+  "titulo": "Video Lote 11 · Abril Tubai",
+  "tipo": "video",
+  "descripcion": "Video del lote para YouTube · 16:9 · 42 s",
+  "base": "../salida",
+  "formatos": [
+    "16x9",
+    "9x16"
+  ],
+  "slides": [
+    {
+      "id": "11",
+      "titulo": "Lote 11",
+      "subtitulo": "Abril Tubai · Conthargos × Douglas × Corvado",
+      "video": "00-00-HA-VideoLote-{formato}-11.mp4",
+      "captura": "capturas/previa/00-00-HA-VideoLote-{formato}-11.jpg"
+    }
+  ]
+}

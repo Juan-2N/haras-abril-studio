@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>22-10-HA-ListaRemate-9x16-04</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; overflow: hidden; background: var(--ha-black); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ha-black); }
+
+      /* Fondo: foto del lote a toda altura (más ancha que el lienzo) con paneo lateral */
+      #bg { position: absolute; left: 0; top: 0; height: 100%; width: auto; max-width: none; }
+      /* Velo multiply al 90 % (pedido: #2D2722 ≈ --ha-ink #2C2723) */
+      #tint { position: absolute; inset: 0; background: var(--ha-ink); mix-blend-mode: multiply; opacity: 0.9; }
+      #veil { position: absolute; inset: 0; background: var(--ha-black); }
+
+      /* Encabezado y tarjetas (sub-composiciones) */
+      #encabezado { position: absolute; left: 0; top: 326px; width: 1080px; height: 200px; }
+      /* Tarjetas más anchas que el margen de marca (108 px) a pedido: 1016 px centradas, 232 de alto */
+      .lote { position: absolute; left: 32px; width: 1016px; height: calc(var(--ha-lot-card-h) + 14px); }
+      #lote-1 { top: 572px; }
+
+
+
+
+      /* Bloque de info del remate (solo en el slide 04): panel v2 debajo de la última tarjeta */
+      #info {
+        position: absolute; left: 32px; width: 1016px; top: 860px; height: 688px;
+        background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-line-gold);
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--ha-s-5);
+        padding: var(--ha-s-5) var(--ha-s-8); text-align: center;
+      }
+      #info .fila { display: flex; flex-direction: column; align-items: center; gap: var(--ha-s-1); }
+      /* Más aire entre PREOFERTAS, REMATE y MÁS INFO: 40 px de gap + 24 = 64 px */
+      #info .fila + .fila { margin-top: var(--ha-s-3); }
+      #info .etiqueta {
+        font-family: var(--ha-font-sans); font-weight: 600; font-size: calc(var(--ha-t-label-size) * 1.18);
+        letter-spacing: var(--ha-t-label-track); text-indent: var(--ha-t-label-track); text-transform: uppercase;
+        line-height: var(--ha-lh-tight); color: var(--ha-gold);
+      }
+      #info .valor {
+        font-family: var(--ha-font-sans); font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 1.47);
+        letter-spacing: var(--ha-t-data-track); text-transform: uppercase; line-height: var(--ha-lh-tight); color: var(--ha-white);
+      }
+      #info .valor .min { text-transform: none; }
+      #info .destello { width: 520px; height: var(--ha-flare-h); background: var(--ha-gold-flare); }
+      #info .cierre {
+        font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-claim-weight);
+        font-size: var(--ha-t-claim-size); line-height: 1.2; color: var(--ha-sand);
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-gr2s" id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1080" data-height="1920">
+      <img data-hf-id="hf-6yex" id="bg" class="clip" data-start="0" data-duration="8" data-track-index="0"
+           src="assets/fotos/qassiana-cuerpo.jpg" alt="" />
+      <div data-hf-id="hf-k7ti" id="tint" class="clip" data-start="0" data-duration="8" data-track-index="1"></div>
+
+      <div data-hf-id="hf-9ajv" id="encabezado" data-composition-id="encabezado-remate" data-composition-src="compositions/encabezado-remate.html"
+           data-start="0.2" data-duration="7.8" data-track-index="2" data-width="1080" data-height="200"
+           data-variable-values='{"evento":"Remate","fecha":"28.11.2026"}'></div>
+
+      <div data-hf-id="hf-7t3g" id="lote-1" class="lote" data-composition-id="tarjeta-lote" data-composition-src="compositions/tarjeta-lote.html"
+           data-start="0.6" data-duration="7.4" data-track-index="3" data-width="1016" data-height="232"
+           data-variable-values='{"lote":"13","nombre":"Abril Viconthon","pedigri":"Conthargos × Clinton × Kojak","sexo":"Macho","registro":"—","nac":"25.09.2026"}'></div>
+
+      <div id="info" class="clip" data-start="0" data-duration="8" data-track-index="7">
+        <div class="fila"><span class="etiqueta">Preofertas</span><span class="valor">22 al 27.11.2026 · Online en la web</span></div>
+        <div class="fila"><span class="etiqueta">Remate</span><span class="valor">28.11.2026 · Lezama, Bs. As.</span></div>
+        <div class="fila"><span class="etiqueta">Más info</span><span class="valor"><span class="min">harasabril.com.ar</span></span></div>
+        <div class="destello"></div>
+        <span class="cierre">Tu próxima estrella cada vez más cerca.</span>
+      </div>
+
+
+
+
+      <!-- Música de fondo de los slides de lista (la portada lleva otra). -->
+      <audio data-hf-id="hf-nlto" id="musica-ambient" src="assets/musica/ambient.mp3" data-start="0" data-duration="8" data-track-index="10" data-volume="1"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":7.2,"v":1},{"t":7.95,"v":0}]}]}'></audio>
+
+      <div data-hf-id="hf-6528" id="veil" class="clip" data-start="0" data-duration="8" data-track-index="8"></div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      // Paneo lateral continuo: la cámara recorre la foto de la grupa a la cabeza
+      tl.fromTo("#bg", { x: 0 }, { x: -840, duration: 8, ease: "none" }, 0);
+      // Entrada: fundido corto desde negro (el primer frame es la miniatura del carrusel)
+      tl.fromTo("#veil", { opacity: 1 }, { opacity: 0, duration: 0.6, ease: "power1.out" }, 0);
+      // Salida: fundido a negro
+      tl.to("#veil", { opacity: 1, duration: 0.8, ease: "power1.in" }, 7.2);
+      // Bloque de info: entra después de la tarjeta, filas en cascada, línea desde el centro y la frase al final
+      gsap.set("#info, #info .fila, #info .cierre", { opacity: 0 });
+      tl.fromTo("#info", { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, 1.0);
+      tl.fromTo("#info .fila", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, ease: "expo.out", stagger: 0.12 }, 1.25);
+      tl.fromTo("#info .destello", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, 1.7);
+      tl.fromTo("#info .cierre", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" }, 1.9);
+      // Sale junto con la tarjeta (6,0 s)
+      tl.to("#info", { opacity: 0, y: -24, duration: 0.55, ease: "power2.in" }, 6.0);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

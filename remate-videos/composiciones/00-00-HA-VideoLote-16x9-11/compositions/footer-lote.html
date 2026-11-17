@@ -1,0 +1,108 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"lote","type":"string","label":"N.º de lote","default":"01"},
+    {"id":"nombre","type":"string","label":"Nombre","default":"Abril Top Fire I"},
+    {"id":"sangre","type":"string","label":"Sangre (padre × abuelo materno × bisabuelo)","default":"Abril Ofire × Larino × Quality Touch"},
+    {"id":"oculto_desde","type":"number","label":"Segundo (dentro del footer) en que se oculta","default":3.93},
+    {"id":"oculto_hasta","type":"number","label":"Segundo (dentro del footer) en que vuelve a entrar","default":16.5}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        /* PDF HA_Video_Lote_2026_D, páginas 3, 6 y 7, medido con PyMuPDF a 1920 px.
+           Barra 145–1731 × 866,5–973 con diagonal dorada de (227, 973) a (301, 866). */
+        #root { position: absolute; inset: 0; }
+        .ft-barra { position: absolute; left: 145px; top: 866.5px; width: 1586px; height: 106.5px; background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-line-gold); }
+        .ft-diag { position: absolute; left: 227px; top: 866.5px; width: 73.8px; height: 106.5px; overflow: visible; }
+        .ft-diag line { stroke: var(--ha-gold); stroke-width: var(--ha-border); }
+
+        .ft-txt { position: absolute; white-space: nowrap; line-height: normal; text-transform: uppercase; }
+        .ft-num {
+          left: 172.5px; top: 879.5px; color: var(--ha-sand);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-num-weight);
+          font-size: calc(var(--ha-t-num-size) * 0.944); letter-spacing: var(--ha-t-num-track);
+        }
+        .ft-nombre {
+          left: 319.8px; top: 878px; color: var(--ha-white);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-lot-weight);
+          font-size: calc(var(--ha-t-lot-size) * 0.939); letter-spacing: var(--ha-t-lot-track);
+        }
+        .ft-pal-mask { display: inline-block; overflow: hidden; vertical-align: top; }
+        .ft-pal { display: inline-block; }
+        /* Sangre alineada a la derecha en x = 1640 */
+        .ft-sangre {
+          right: 280px; top: 893px; color: var(--ha-white);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-data-weight);
+          font-size: calc(var(--ha-t-data-size) * 1.607); letter-spacing: var(--ha-t-data-track);
+        }
+      </style>
+
+      <div id="root" data-composition-id="footer-lote" data-width="1920" data-height="1080">
+        <div class="ft-barra"></div>
+        <svg class="ft-diag" viewBox="0 0 73.8 106.5"><line x1="0" y1="106.5" x2="73.8" y2="0" /></svg>
+        <div class="ft-txt ft-num" data-var-text="lote">01</div>
+        <div class="ft-txt ft-nombre"></div>
+        <div class="ft-txt ft-sangre" data-var-text="sangre">Abril Ofire × Larino × Quality Touch</div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.querySelector('[data-composition-id="footer-lote"]');
+          const vars = window.__hyperframes.getVariables();
+          const txt = (k) => String(vars[k] || "").trim();
+
+          const nombre = root.querySelector(".ft-nombre");
+          const pals = txt("nombre").split(/\s+/).map((p, i, arr) => {
+            const mask = document.createElement("span");
+            mask.className = "ft-pal-mask";
+            const s = document.createElement("span");
+            s.className = "ft-pal";
+            s.textContent = p;
+            mask.appendChild(s);
+            nombre.appendChild(mask);
+            if (i < arr.length - 1) nombre.appendChild(document.createTextNode(" "));
+            return s;
+          });
+
+          const fit = (el, max) => {
+            let s = parseFloat(getComputedStyle(el).fontSize);
+            while (el.offsetWidth > max && s > 12) { s -= 1; el.style.fontSize = s + "px"; }
+          };
+
+          Promise.all([
+            document.fonts.load('700 62px "Barlow Condensed"'),
+            document.fonts.load('500 60px "Barlow Condensed"'),
+            document.fonts.load('400 45px "Barlow Condensed"'),
+          ]).then(() => {
+            fit(nombre, 560);
+            fit(root.querySelector(".ft-sangre"), 740);
+
+            // Entrada: barra que se despliega a la derecha, diagonal, número, nombre palabra por palabra y sangre desenfocada → nítida
+            const anim = gsap.timeline({ paused: true });
+            anim.fromTo(".ft-barra", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power3.out" }, 0.1);
+            anim.fromTo(".ft-diag line", { attr: { x2: 0, y2: 106.5 } }, { attr: { x2: 73.8, y2: 0 }, duration: 0.4, ease: "power2.out" }, 0.3);
+            anim.fromTo(".ft-num", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "power2.out" }, 0.35);
+            anim.fromTo(pals, { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "expo.out", stagger: 0.12 }, 0.45);
+            anim.fromTo(".ft-sangre", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power2.out" }, 0.75);
+
+            // Una sola instancia para el Slow y los trotes: en el medio vuelve al estado inicial (todo oculto)
+            const F = 1 / 30, D = anim.duration();
+            const desde = Number(vars.oculto_desde), hasta = Number(vars.oculto_hasta);
+            const tl = gsap.timeline({ paused: true });
+            tl.add(anim.tweenFromTo(0, D, { duration: D, ease: "none" }), 0);
+            tl.add(anim.tweenFromTo(0, 0, { duration: F, ease: "none" }), desde);
+            tl.add(anim.tweenFromTo(0, D, { duration: D, ease: "none" }), hasta);
+            window.__timelines["footer-lote"] = tl;
+          });
+        })();
+      </script>
+    </template>
+  </body>
+</html>

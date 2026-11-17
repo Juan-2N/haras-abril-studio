@@ -1,0 +1,108 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"lote","type":"string","label":"N.º de lote","default":"01"},
+    {"id":"nombre","type":"string","label":"Nombre","default":"Abril Top Fire I"},
+    {"id":"pedigri","type":"string","label":"Sangre (padre × abuelo materno × bisabuelo)","default":"Abril Ofire × Larino × Quality Touch"},
+    {"id":"sexo","type":"string","label":"Sexo (Macho/Hembra)","default":"Macho"},
+    {"id":"registro","type":"string","label":"N.º AAFE","default":"562994"},
+    {"id":"nac","type":"string","label":"Nacimiento (DD.MM.AAAA)","default":"07.10.2024"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        /* Estilo v2 (videosreferencias/lista/28_10_HA_Listas.png): tarjeta oscura,
+           todo en Barlow y franja de datos clara. */
+        #root { position: absolute; inset: 0; }
+        /* Escala de la tipografía de la tarjeta (nombre, sangre y banda). 1 = diseño del PNG */
+        .lot { --k: 1.2; }
+        .lot {
+          position: absolute; inset: 0;
+          background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-line-gold);
+          display: flex; flex-direction: column;
+        }
+        .lot-top { position: relative; height: 170px; }
+        .lot-diag { position: absolute; left: 0; top: 0; width: 115px; height: 100%; overflow: visible; }
+        .lot-diag line { stroke: var(--ha-gold); stroke-width: 2; }
+        .lot-num {
+          position: absolute; left: 18px; top: 14px;
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-num-weight);
+          font-size: calc(var(--ha-t-num-size) * 0.8); letter-spacing: var(--ha-t-num-track);
+          line-height: 1; color: var(--ha-gold);
+        }
+        .lot-text {
+          position: absolute; left: 56px; right: 24px; top: 0; bottom: 0;
+          display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+        }
+        .lot-name {
+          display: block; white-space: nowrap;
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-lot-weight);
+          font-size: calc(var(--ha-t-lot-size) * var(--k)); letter-spacing: var(--ha-t-lot-track);
+          line-height: 1; color: var(--ha-white); text-transform: uppercase;
+        }
+        .lot-ped {
+          display: block; white-space: nowrap;
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-data-weight);
+          font-size: calc(var(--ha-t-label-size) * var(--k)); letter-spacing: var(--ha-t-data-track);
+          line-height: 1; color: var(--ha-white); text-transform: uppercase;
+        }
+        /* Franja de datos: sexo | AAFE | nacimiento, oscuro sobre franja clara */
+        .lot-meta {
+          flex: 1; display: flex; align-items: center; justify-content: center; gap: var(--ha-s-3);
+          background: var(--ha-strip-light);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-meta-weight);
+          font-size: calc(var(--ha-t-meta-size) * 1.15 * var(--k)); letter-spacing: var(--ha-t-meta-track);
+          color: var(--ha-strip-text); text-transform: uppercase; line-height: 1;
+        }
+        .meta-item { display: flex; align-items: center; gap: var(--ha-s-1); white-space: nowrap; }
+        .meta-sep { display: block; width: 2px; height: calc(30px * var(--k)); background: currentColor; opacity: 0.6; }
+      </style>
+
+      <div data-hf-id="hf-soxh" id="root" data-composition-id="tarjeta-lote" data-width="1016" data-height="232">
+        <div data-hf-id="hf-6y6t" class="lot">
+          <div data-hf-id="hf-t4qz" class="lot-top">
+            <svg data-hf-id="hf-wruq" class="lot-diag" viewBox="0 0 115 170" preserveAspectRatio="none"><line data-hf-id="hf-4rz2" x1="115" y1="0" x2="16" y2="170" /></svg>
+            <span data-hf-id="hf-ct3r" class="lot-num" data-var-text="lote">01</span>
+            <div data-hf-id="hf-bn27" class="lot-text">
+              <span data-hf-id="hf-yzic" class="lot-name" data-var-text="nombre">Abril Top Fire I</span>
+              <span data-hf-id="hf-ccbf" class="lot-ped" data-var-text="pedigri">Abril Ofire × Larino × Quality Touch</span>
+            </div>
+          </div>
+          <div data-hf-id="hf-383d" class="lot-meta">
+            <span data-hf-id="hf-y8sy" class="meta-item">
+              <span data-hf-id="hf-7rip" data-var-text="sexo">Macho</span>
+            </span>
+            <span data-hf-id="hf-66zp" class="meta-sep"></span>
+            <span data-hf-id="hf-jl1y" class="meta-item">
+              <span data-hf-id="hf-eu0c">AAFE:</span>
+              <span data-hf-id="hf-uk6p" data-var-text="registro">562994</span>
+            </span>
+            <span data-hf-id="hf-nnll" class="meta-sep"></span>
+            <span data-hf-id="hf-jzcz" class="meta-item">
+              <span data-hf-id="hf-dmus" data-var-text="nac">07.10.2024</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // Tiempos locales: entra en 0 s, sale a los 5.4 s del inicio de la tarjeta.
+        const tl = gsap.timeline({ paused: true });
+        tl.fromTo(".lot", { opacity: 0, y: 48 }, { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" }, 0);
+        tl.fromTo(".lot-diag line", { attr: { x2: 115, y2: 0 } }, { attr: { x2: 16, y2: 170 }, duration: 0.6, ease: "power2.out" }, 0.25);
+        tl.fromTo(".lot-num", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.6, ease: "power2.out" }, 0.3);
+        tl.fromTo(".lot-name", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" }, 0.2);
+        tl.fromTo(".lot-ped", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, 0.45);
+        tl.fromTo(".meta-item, .meta-sep", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.05 }, 0.55);
+        tl.to(".lot", { opacity: 0, y: -24, duration: 0.55, ease: "power2.in" }, 5.4);
+        window.__timelines["tarjeta-lote"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

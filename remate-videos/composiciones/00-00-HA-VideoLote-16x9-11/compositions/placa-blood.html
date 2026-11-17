@@ -1,0 +1,129 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"pedigri","type":"string","label":"Pedigrí (14 nombres separados por |: padre, madre, sus 4 padres y los 8 de la tercera generación)","default":"Abril Ofire|Abril Hilarina|Emerald van.T Ruytershof|Abril Icontha de Fire|Larino|Elogiada Touch|Diamant de Semilly|Carthina Z|Conthargos|Abril Fire de Semilly|Concorde (KWPN)|Erina|Quality Touch|Remonta Heredada II"},
+    {"id":"destacados","type":"string","label":"Nombres destacados (índices de pedigri separados por |)","default":"0|4|12"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        /* PDF HA_Video_Lote_2026_D, página 4, medido con PyMuPDF a 1920 px.
+           Fondo transparente: debajo corre el dron al atardecer con velo del index. */
+        #root { position: absolute; inset: 0; }
+
+        /* Panel de la foto (88–671,5 × 133,8–994), sin borde; la foto llega hasta x = 668 */
+        .pb-marco { position: absolute; left: 88px; top: 133.8px; width: 583.5px; height: 860.2px; background: var(--ha-ink); }
+        .pb-foto { position: absolute; left: 0; top: 1.2px; width: 580px; height: 859px; overflow: hidden; }
+        .pb-foto img { position: absolute; left: 0; top: 0; width: 580px; height: 859px; visibility: hidden; }
+        .pb-foto canvas { position: absolute; left: 0; top: 0; }
+
+        /* Tabla: 3 columnas (2, 4 y 8 celdas) entre y = 133,8 e y = 994, con 3,8 px entre celdas */
+        .pb-celda {
+          position: absolute; display: flex; align-items: center; white-space: nowrap;
+          background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-line-gold);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-data-weight);
+          font-size: calc(var(--ha-t-data-size) * 1.036); line-height: normal;
+          color: var(--ha-sand); text-transform: uppercase;
+        }
+        .pb-celda span { display: inline-block; }
+        /* Destacados (los de la sangre): blanco Bold */
+        .pb-celda.pb-dest { color: var(--ha-white); font-weight: var(--ha-t-lot-weight); letter-spacing: 0.045em; }
+      </style>
+
+      <div id="root" data-composition-id="placa-blood" data-width="1920" data-height="1080">
+        <div class="pb-marco">
+          <div class="pb-foto"><img src="../assets/fotos/lote11-pedigri.jpg" alt="" /></div>
+        </div>
+        <div class="pb-tabla"></div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.querySelector('[data-composition-id="placa-blood"]');
+          const vars = window.__hyperframes.getVariables();
+          const nombres = String(vars.pedigri || "").split("|").map((s) => s.trim());
+          const destacados = String(vars.destacados || "").split("|").map((s) => parseInt(s, 10)).filter((n) => !isNaN(n));
+
+          // x, ancho y sangría del texto de cada columna, medidos en el PDF
+          const COLS = [
+            { x: 677, w: 379.5, pad: 59, n: 2, desde: 0 },
+            { x: 1060.9, w: 379.6, pad: 51, n: 4, desde: 2 },
+            { x: 1444.9, w: 379.6, pad: 64, n: 8, desde: 6 },
+          ];
+          const TOP = 133.8, ALTO = 860.2, GAP = 3.8;
+          const tabla = root.querySelector(".pb-tabla");
+          const porColumna = COLS.map((c, ci) => {
+            const h = (ALTO - (c.n - 1) * GAP) / c.n;
+            const celdas = [];
+            for (let i = 0; i < c.n; i++) {
+              const idx = c.desde + i;
+              const el = document.createElement("div");
+              el.className = "pb-celda" + (destacados.includes(idx) ? " pb-dest" : "");
+              Object.assign(el.style, { left: c.x + "px", top: TOP + i * (h + GAP) + "px", width: c.w + "px", height: h + "px", paddingLeft: c.pad + "px" });
+              const s = document.createElement("span");
+              s.textContent = nombres[idx] || "";
+              el.appendChild(s);
+              tabla.appendChild(el);
+              celdas.push(el);
+            }
+            return celdas;
+          });
+
+          // Zoom lento dibujado en canvas con coordenadas decimales: con transform, Chrome redondea la posición
+          // subpíxel y un zoom tan lento avanza a saltos
+          const zoomFoto = (caja, img, r, origen) => {
+            const cv = document.createElement("canvas");
+            cv.width = caja.clientWidth;
+            cv.height = caja.clientHeight;
+            caja.appendChild(cv);
+            const ctx = cv.getContext("2d");
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+            const ox = r.x + r.w * origen[0], oy = r.y + r.h * origen[1];
+            const estado = { s: 1 };
+            const dibujar = () => {
+              const s = estado.s;
+              ctx.clearRect(0, 0, cv.width, cv.height);
+              ctx.drawImage(img, ox + (r.x - ox) * s, oy + (r.y - oy) * s, r.w * s, r.h * s);
+            };
+            return { estado, dibujar };
+          };
+          const fotoImg = root.querySelector(".pb-foto img");
+
+          Promise.all([
+            fotoImg.decode(),
+            document.fonts.load('400 29px "Barlow Condensed"'),
+            document.fonts.load('700 29px "Barlow Condensed"'),
+          ]).then(() => {
+            // Si un nombre no entra en su celda, se achica
+            root.querySelectorAll(".pb-celda span").forEach((s) => {
+              const max = s.parentElement.clientWidth - parseFloat(s.parentElement.style.paddingLeft) - 16;
+              let f = parseFloat(getComputedStyle(s).fontSize);
+              while (s.offsetWidth > max && f > 14) { f -= 1; s.style.fontSize = f + "px"; }
+            });
+
+            const tl = gsap.timeline({ paused: true });
+            // La tabla entra desenfocada y se aclara, con leve cascada por columna
+            porColumna.forEach((celdas, ci) => {
+              tl.fromTo(celdas, { opacity: 0, filter: "blur(12px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.6, ease: "power2.out", stagger: 0.02 }, 0.05 + ci * 0.08);
+            });
+            // La foto se revela de izquierda a derecha y después zoom lento hasta el corte.
+            // 07/11: la foto llega ya recortada a la proporción del panel (convertir-material-lote.mjs) y se
+            // muestra entera. Antes se dibujaba a 648 × 864 corrida 68 px, como en el PDF, y se perdía el borde izquierdo
+            tl.fromTo(".pb-marco", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.55, ease: "power3.out" }, 0.25);
+            const zoom = zoomFoto(root.querySelector(".pb-foto"), fotoImg, { x: 0, y: 0, w: 580, h: 859 }, [0.5, 0.4]);
+            zoom.dibujar();
+            tl.fromTo(zoom.estado, { s: 1 }, { s: 1.06, duration: 4.25, ease: "none", onUpdate: zoom.dibujar }, 0.25);
+            window.__timelines["placa-blood"] = tl;
+          });
+        })();
+      </script>
+    </template>
+  </body>
+</html>
