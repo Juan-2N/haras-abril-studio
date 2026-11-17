@@ -13,6 +13,14 @@ Idioma de todas las piezas: **español**.
 **Al cerrar una sesión:** escribir `SESION-AAAA-MM-DD.md` con lo hecho, las decisiones y los pendientes.
 Si ya existe uno de ese día, agregar una sección. Las decisiones que valen para todas las piezas se pasan a este archivo o a `brand/DESIGN.md`.
 
+## Git (desde el 17/11/2026)
+
+`Studio/` es el repo privado **https://github.com/Juan-2N/haras-abril-studio** (rama `main`), compartido con Juan. Puesta en marcha en `Studio/README.md`.
+- **No van a git:** `assets/`, `videosreferencias/`, `salida/`, `AACHEN2026/`, los cachés de HyperFrames ni las copias de `assets/` y `brand/fonts|logos` dentro de cada pieza (ver `Studio/.gitignore`). El material nuevo de `assets/` se pasa aparte (pendrive o Drive): avisar qué se agregó.
+- **Después de clonar o de recibir assets nuevos:** `node herramientas/restaurar-assets.mjs [pieza ...]` vuelve a copiar en cada pieza lo que usa (no pisa nada ni toca su `tokens.css`).
+- **Un archivo que exista solo dentro de una pieza no entra a git.** Ponerlo en `assets/` o agregar una excepción al `.gitignore`, como el molde `lote01b/c/d-*` de `00-00-HA-VideoLoteD-16x9-01`.
+- **Al cerrar cada sesión:** `git pull` antes de empezar, y commit + push al terminar (junto con el `SESION-*.md`).
+
 ## Estructura
 
 | Carpeta | Contenido |
