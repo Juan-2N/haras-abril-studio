@@ -76,15 +76,14 @@ def marcas(page, x0, y0, x1, y1):
             page.draw_line((x, y + sy * sep), (x, y + sy * (sep + largo)), color=reg, width=0.25)
 
 
-MONTSERRAT = os.path.expanduser(r"~\AppData\Local\Microsoft\Windows\Fonts")
+ROTULO_DIR = os.path.join(AQUI, "rotulo")  # fuentes del sistema de Doble Nuez: JetBrains Mono + DM Sans
 LOGO_DN = os.path.join(AQUI, "rotulo", "doble-nuez.svg")
 CUERPOS = {1: "118 | 121 | 121 mm", 2: "121 | 121 | 118 mm"}
 NOMBRE_LADO = {1: "Exterior", 2: "Interior"}
 
 
-def fuente(nombre, respaldo):
-    f = os.path.join(MONTSERRAT, nombre)
-    return f if os.path.exists(f) else os.path.join(FUENTES, respaldo)
+def fuente(nombre):
+    return os.path.join(ROTULO_DIR, nombre)
 
 
 def rotulo(page, x, y, ancho, n, a):
@@ -92,10 +91,12 @@ def rotulo(page, x, y, ancho, n, a):
     linea = (0, 0, 0, 0.2)
     etiqueta = (0, 0, 0, 0.55)
     valor = (0, 0, 0, 0.9)
-    page.insert_font(fontname="mr", fontfile=fuente("Montserrat-Regular.ttf", "BarlowCondensed-Regular.ttf"))
-    page.insert_font(fontname="ms", fontfile=fuente("Montserrat-SemiBold.ttf", "BarlowCondensed-Bold.ttf"))
-    f_mr = fitz.Font(fontfile=fuente("Montserrat-Regular.ttf", "BarlowCondensed-Regular.ttf"))
-    f_ms = fitz.Font(fontfile=fuente("Montserrat-SemiBold.ttf", "BarlowCondensed-Bold.ttf"))
+    # etiquetas: JetBrains Mono Light · valores: DM Sans Regular · nota: DM Sans Light
+    page.insert_font(fontname="jl", fontfile=fuente("JetBrainsMono-Light.ttf"))
+    page.insert_font(fontname="dr", fontfile=fuente("DMSans-Regular.ttf"))
+    page.insert_font(fontname="dl", fontfile=fuente("DMSans-Light.ttf"))
+    f_jl = fitz.Font(fontfile=fuente("JetBrainsMono-Light.ttf"))
+    f_dr = fitz.Font(fontfile=fuente("DMSans-Regular.ttf"))
 
     alto, fila = 26 * MM, 13 * MM
     logo_w = 72 * MM
@@ -114,8 +115,8 @@ def rotulo(page, x, y, ancho, n, a):
     lx, ly = x + (logo_w - lw) / 2, y + 7.2 * MM
     page.show_pdf_page(fitz.Rect(lx, ly, lx + lw, ly + lh), pdf, 0)
     baj = "Smart Design and Development"
-    t = 6.2
-    page.insert_text((x + (logo_w - f_mr.text_length(baj, t)) / 2, ly + lh + 4.6 * MM), baj, fontname="mr", fontsize=t, color=etiqueta)
+    t = 5.6
+    page.insert_text((x + (logo_w - f_jl.text_length(baj, t)) / 2, ly + lh + 4.6 * MM), baj, fontname="jl", fontsize=t, color=etiqueta)
 
     celdas = [
         [("PROYECTO", "Catálogo Remate 2026"), ("CLIENTE", "Haras Abril")],
@@ -128,15 +129,15 @@ def rotulo(page, x, y, ancho, n, a):
         cx = x + logo_w + k * col_w + 3 * MM
         for r, (et, va) in enumerate(col):
             cy = y + r * fila
-            page.insert_text((cx, cy + 4.4 * MM), et, fontname="mr", fontsize=5.6, color=etiqueta)
-            tv = 9.5
-            while f_ms.text_length(va, tv) > col_w - 5 * MM and tv > 6:
+            page.insert_text((cx, cy + 4.4 * MM), et, fontname="jl", fontsize=5.6, color=etiqueta)
+            tv = 10
+            while f_dr.text_length(va, tv) > col_w - 5 * MM and tv > 6:
                 tv -= 0.25
-            page.insert_text((cx, cy + 10 * MM), va, fontname="ms", fontsize=tv, color=valor)
+            page.insert_text((cx, cy + 10 * MM), va, fontname="dr", fontsize=tv, color=valor)
 
     nota = ("Demasía 5 mm por lado · solo marcas de corte · hendido en los pliegues · "
             "frente y dorso con giro lateral · archivo HA26_Catalogo_36x38cm_imprenta.pdf")
-    page.insert_text((x, y + alto + 4.2 * MM), nota, fontname="mr", fontsize=5.8, color=etiqueta)
+    page.insert_text((x, y + alto + 4.2 * MM), nota, fontname="dl", fontsize=6, color=etiqueta)
 
 
 def main():
