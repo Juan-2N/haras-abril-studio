@@ -1,7 +1,7 @@
 """Original para imprenta del catálogo tríptico 36 x 38 cm.
 
 Uso (desde cualquier carpeta):
-    python exportar-imprenta.py --diseno "Nombre" --aprobo "Nombre"
+    python exportar-imprenta.py [--diseno "Martín"] [--aprobo "Román"] [--fecha 18/11/2026] [--version 1]
 
 Arma un PDF de 2 páginas (1 exterior, 2 interior):
 - CMYK (perfil Coated FOGRA39), 300 dpi, tamaño real;
@@ -76,49 +76,74 @@ def marcas(page, x0, y0, x1, y1):
             page.draw_line((x, y + sy * sep), (x, y + sy * (sep + largo)), color=reg, width=0.25)
 
 
-def rotulo(page, x, y, ancho, n, titulo_lado, a):
-    negro = (0, 0, 0, 1)
-    gris = (0, 0, 0, 0.6)
-    fb = os.path.join(FUENTES, "BarlowCondensed-Bold.ttf")
-    fr = os.path.join(FUENTES, "BarlowCondensed-Regular.ttf")
-    page.insert_font(fontname="bb", fontfile=fb)
-    page.insert_font(fontname="br", fontfile=fr)
-    alto = 24 * MM
-    page.draw_rect(fitz.Rect(x, y, x + ancho, y + alto), color=negro, width=0.4)
-    cols = [x, x + ancho * 0.30, x + ancho * 0.58, x + ancho * 0.80]
-    for cx in cols[1:]:
-        page.draw_line((cx, y), (cx, y + alto), color=negro, width=0.3)
+MONTSERRAT = os.path.expanduser(r"~\AppData\Local\Microsoft\Windows\Fonts")
+LOGO_DN = os.path.join(AQUI, "rotulo", "doble-nuez.svg")
+CUERPOS = {1: "118 | 121 | 121 mm", 2: "121 | 121 | 118 mm"}
+NOMBRE_LADO = {1: "Exterior", 2: "Interior"}
 
-    def txt(cx, cy, s, f="br", t=7.2, c=negro):
-        page.insert_text((cx + 2.2 * MM, cy), s, fontname=f, fontsize=t, color=c)
 
-    l = lambda k: y + (4.6 + k * 4.4) * MM
-    txt(cols[0], l(0), "HARAS ABRIL · CATÁLOGO REMATE 2026", "bb", 9.5)
-    txt(cols[0], l(1), "Tríptico envolvente · " + f"página {n}/2", "br", 7.5)
-    txt(cols[0], l(2), titulo_lado, "bb", 7.2)
-    txt(cols[0], l(3), "Archivo: HA26_Catalogo_36x38cm_imprenta.pdf", "br", 6.6, gris)
+def fuente(nombre, respaldo):
+    f = os.path.join(MONTSERRAT, nombre)
+    return f if os.path.exists(f) else os.path.join(FUENTES, respaldo)
 
-    txt(cols[1], l(0), "MEDIDAS", "bb", 7.2)
-    txt(cols[1], l(1), "Abierto: 360 × 380 mm  ·  cerrado: 121 × 380 mm")
-    txt(cols[1], l(2), "Demasía: 5 mm por lado  ·  solo marcas de corte")
-    txt(cols[1], l(3), "Frente/dorso: giro lateral (izquierda-derecha)")
 
-    txt(cols[2], l(0), "IMPRESIÓN Y PAPEL", "bb", 7.2)
-    txt(cols[2], l(1), "4/4 CMYK · Coated FOGRA39 · 300 dpi")
-    txt(cols[2], l(2), f"Papel: ilustración {a.gramaje} g/m²")
-    txt(cols[2], l(3), "Terminación: semimate · hendido en pliegues")
+def rotulo(page, x, y, ancho, n, a):
+    """Rótulo con el formato de Doble Nuez: logo a la izquierda y celdas de etiqueta + valor."""
+    linea = (0, 0, 0, 0.2)
+    etiqueta = (0, 0, 0, 0.55)
+    valor = (0, 0, 0, 0.9)
+    page.insert_font(fontname="mr", fontfile=fuente("Montserrat-Regular.ttf", "BarlowCondensed-Regular.ttf"))
+    page.insert_font(fontname="ms", fontfile=fuente("Montserrat-SemiBold.ttf", "BarlowCondensed-Bold.ttf"))
+    f_mr = fitz.Font(fontfile=fuente("Montserrat-Regular.ttf", "BarlowCondensed-Regular.ttf"))
+    f_ms = fitz.Font(fontfile=fuente("Montserrat-SemiBold.ttf", "BarlowCondensed-Bold.ttf"))
 
-    txt(cols[3], l(0), "CONTROL", "bb", 7.2)
-    txt(cols[3], l(1), f"Fecha: {a.fecha}  ·  v{a.version}")
-    txt(cols[3], l(2), f"Diseñó: {a.diseno or '______________________'}")
-    txt(cols[3], l(3), f"Aprobó: {a.aprobo or '______________________'}")
+    alto, fila = 26 * MM, 13 * MM
+    logo_w = 72 * MM
+    col_w = (ancho - logo_w) / 5
+    page.draw_rect(fitz.Rect(x, y, x + ancho, y + alto), color=linea, width=0.7)
+    page.draw_line((x + logo_w, y + fila), (x + ancho, y + fila), color=linea, width=0.7)
+    for k in range(5):
+        cx = x + logo_w + k * col_w
+        page.draw_line((cx, y), (cx, y + alto), color=linea, width=0.7)
+
+    # Logo Doble Nuez (vectorial) + bajada
+    svg = fitz.open(LOGO_DN)
+    pdf = fitz.open("pdf", svg.convert_to_pdf())
+    lw = 44 * MM
+    lh = lw * pdf[0].rect.height / pdf[0].rect.width
+    lx, ly = x + (logo_w - lw) / 2, y + 7.2 * MM
+    page.show_pdf_page(fitz.Rect(lx, ly, lx + lw, ly + lh), pdf, 0)
+    baj = "Smart Design and Development"
+    t = 6.2
+    page.insert_text((x + (logo_w - f_mr.text_length(baj, t)) / 2, ly + lh + 4.6 * MM), baj, fontname="mr", fontsize=t, color=etiqueta)
+
+    celdas = [
+        [("PROYECTO", "Catálogo Remate 2026"), ("CLIENTE", "Haras Abril")],
+        [("LADO", f"Pág. {n}/2 · {NOMBRE_LADO[n]}"), ("FECHA", f"{a.fecha} · v{a.version}")],
+        [("MEDIDA", "360 × 380 mm (cerrado 121)"), ("PLEGADO", f"Envolvente · {CUERPOS[n]}")],
+        [("IMPRESIÓN", "4/4 CMYK · FOGRA39 · 300 dpi"), ("PAPEL", f"Ilustración {a.gramaje} g · semimate")],
+        [("DISEÑÓ", a.diseno or "—"), ("APROBÓ", a.aprobo or "—")],
+    ]
+    for k, col in enumerate(celdas):
+        cx = x + logo_w + k * col_w + 3 * MM
+        for r, (et, va) in enumerate(col):
+            cy = y + r * fila
+            page.insert_text((cx, cy + 4.4 * MM), et, fontname="mr", fontsize=5.6, color=etiqueta)
+            tv = 9.5
+            while f_ms.text_length(va, tv) > col_w - 5 * MM and tv > 6:
+                tv -= 0.25
+            page.insert_text((cx, cy + 10 * MM), va, fontname="ms", fontsize=tv, color=valor)
+
+    nota = ("Demasía 5 mm por lado · solo marcas de corte · hendido en los pliegues · "
+            "frente y dorso con giro lateral · archivo HA26_Catalogo_36x38cm_imprenta.pdf")
+    page.insert_text((x, y + alto + 4.2 * MM), nota, fontname="mr", fontsize=5.8, color=etiqueta)
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--diseno", default="")
-    ap.add_argument("--aprobo", default="")
-    ap.add_argument("--fecha", default=datetime.date.today().strftime("%d.%m.%Y"))
+    ap.add_argument("--diseno", default="Martín")
+    ap.add_argument("--aprobo", default="Román")
+    ap.add_argument("--fecha", default=datetime.date.today().strftime("%d/%m/%Y"))
     ap.add_argument("--version", default="1")
     ap.add_argument("--gramaje", default="250")
     ap.add_argument("-o", "--salida", default=os.path.join(STUDIO, "remate-videos", "salida", "impresos", "HA26_Catalogo_36x38cm_imprenta.pdf"))
@@ -138,7 +163,7 @@ def main():
             page.set_bleedbox(sangre)
             page.set_trimbox(corte)
             marcas(page, corte.x0, corte.y0, corte.x1, corte.y1)
-            rotulo(page, corte.x0, corte.y1 + (MARGEN - 2) * MM, corte.width, n, titulo, a)
+            rotulo(page, corte.x0, corte.y1 + (MARGEN - 2) * MM, corte.width, n, a)
         doc.set_metadata({"title": "HA26 Catálogo 36x38 cm · original para imprenta", "creator": "Haras Abril Studio"})
         doc.save(a.salida, deflate=True, garbage=3)
     print(a.salida)
