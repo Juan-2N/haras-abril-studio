@@ -37,7 +37,7 @@
   .lote .ped { font: 400 2.25mm/1.25 var(--ha-font-sans); letter-spacing: .06em; text-transform: uppercase; color: var(--ha-gray-light); margin-top: 1.6mm; }
   .lote img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .lote .f1 img { object-position: 50% 30%; }
-  .lote .f2 img { object-position: 74% 50%; }
+  .lote .f2 img { object-position: 50% 50%; } /* saltos ya recortados a la caja con recortar-saltos.py */
   .lote .f2.potrillo img { object-position: 50% 60%; }
   .lote .datos { padding: 3mm 4mm; display: grid; grid-template-columns: 1fr 17mm; gap: 3mm; align-items: center; }
   .lote .qrl { width: 17mm; height: 17mm; background: #fff; padding: 1.3mm; } /* QR a la ficha del lote: oscuro sobre blanco para que lo lean todas las cámaras */
@@ -202,12 +202,12 @@ const LOTES = [
 const tarjeta = ([n,nom,ped,sexo,pelo,aafe,nac]) => `
   <div class="lote">
     <div class="cab"><div class="num">LOTE<i></i>${n}</div><div class="nom">${nom}</div><div class="ped">${ped}</div></div>
-    <div class="f1"><img src="../../assets/fotos/lote${n}-pedigri.jpg" alt=""></div>
+    <div class="f1"><img src="../../assets/fotos/lote${n}-cabeza-catalogo.jpg" onerror="this.onerror=null;this.src='../../assets/fotos/lote${n}-pedigri.jpg'" alt=""></div>
     <div class="datos">
       <div class="filas"><div><b>NAC.</b>${nac}</div>${aafe ? `<div><b>AAFE</b>${aafe}</div>` : ""}<div><b>PELO</b>${pelo}</div><div><b>SEXO</b>${sexo}</div></div>
       <div class="qrl"><img src="qr/lote${n}.svg" alt=""></div>
     </div>
-    <div class="f2${+n >= 12 ? " potrillo" : ""}"><img src="../../assets/fotos/lote${n}-salto.jpg" alt=""></div>
+    <div class="f2${+n >= 12 ? " potrillo" : ""}"><img src="../../assets/fotos/lote${n}-salto${+n >= 12 ? "" : "-catalogo"}.jpg" alt=""></div>
   </div>`;
 document.getElementById("interior").insertAdjacentHTML("beforeend", LOTES.slice(0,12).map(tarjeta).join(""));
 document.getElementById("lote13").outerHTML = tarjeta(LOTES[12]).replace('class="lote"', 'class="lote" style="grid-column:1;grid-row:1"');
