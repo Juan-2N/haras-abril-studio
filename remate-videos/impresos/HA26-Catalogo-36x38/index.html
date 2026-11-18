@@ -31,8 +31,8 @@
   .lote { width: 100%; height: 190mm; display: grid; grid-template-rows: 26mm 80mm 34mm 1fr; overflow: hidden; background: var(--ha-ink);
           border-right: .25mm solid var(--ha-line-gold-soft); border-bottom: 1mm solid var(--ha-taupe); } /* línea marrón claro entre filas */
   .lote .cab { text-align: center; padding: 5mm 3mm 0; } /* 5 mm: margen de seguridad de corte en la fila de arriba */
-  .lote .num { font: 500 3mm var(--ha-font-sans); letter-spacing: .16em; color: var(--ha-sand); display: flex; align-items: center; justify-content: center; gap: 1.6mm; }
-  .lote .num::before { content: ""; width: 4mm; height: .3mm; background: var(--ha-gold); transform: rotate(-45deg); }
+  .lote .num { font: 500 3mm var(--ha-font-sans); letter-spacing: .16em; color: var(--ha-sand); display: flex; align-items: center; justify-content: center; gap: 1.8mm; }
+  .lote .num i { width: .25mm; height: 5.2mm; background: var(--ha-gold); transform: rotate(28deg); margin-left: -.16em; } /* LOTE / 01: la diagonal va entre la palabra y el número */
   .lote .nom { font: 700 4.6mm/1 var(--ha-font-sans); letter-spacing: .06em; text-transform: uppercase; margin-top: 2.2mm; white-space: nowrap; }
   .lote .ped { font: 400 2.25mm/1.25 var(--ha-font-sans); letter-spacing: .06em; text-transform: uppercase; color: var(--ha-gray-light); margin-top: 1.6mm; }
   .lote img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -201,7 +201,7 @@ const LOTES = [
 ];
 const tarjeta = ([n,nom,ped,sexo,pelo,aafe,nac]) => `
   <div class="lote">
-    <div class="cab"><div class="num">LOTE ${n}</div><div class="nom">${nom}</div><div class="ped">${ped}</div></div>
+    <div class="cab"><div class="num">LOTE<i></i>${n}</div><div class="nom">${nom}</div><div class="ped">${ped}</div></div>
     <div class="f1"><img src="../../assets/fotos/lote${n}-pedigri.jpg" alt=""></div>
     <div class="datos">
       <div class="filas"><div><b>NAC.</b>${nac}</div>${aafe ? `<div><b>AAFE</b>${aafe}</div>` : ""}<div><b>PELO</b>${pelo}</div><div><b>SEXO</b>${sexo}</div></div>

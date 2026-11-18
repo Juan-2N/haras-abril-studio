@@ -166,7 +166,14 @@ def main():
             marcas(page, corte.x0, corte.y0, corte.x1, corte.y1)
             rotulo(page, corte.x0, corte.y1 + (MARGEN - 2) * MM, corte.width, n, a)
         doc.set_metadata({"title": "HA26 Catálogo 36x38 cm · original para imprenta", "creator": "Haras Abril Studio"})
-        doc.save(a.salida, deflate=True, garbage=3)
+        try:
+            doc.save(a.salida, deflate=True, garbage=3)
+        except Exception:
+            # el PDF está abierto en otro programa (VS Code lo bloquea): se guarda al lado
+            alt = a.salida.replace(".pdf", "_nuevo.pdf")
+            doc.save(alt, deflate=True, garbage=3)
+            print(f"AVISO: {os.path.basename(a.salida)} está abierto y no se puede reemplazar. Se guardó como {os.path.basename(alt)}.")
+            sys.exit(2)
     print(a.salida)
 
 
