@@ -218,8 +218,10 @@ const B = ["02-b-la-lucrecia","04-b-ruiz-diaz","05-b-madoc","07-b-biofarma","10-
 let h = "";
 for (let r = 0; r < 10; r++) { const par = r % 2 === 0 ? [N[r], B[r]] : [B[r], N[r]];
   h += par.map(s => `<div><img src="../../assets/logos/sponsors/${s}.png" alt=""></div>`).join(""); }
+// Variante para presentar a Volvo Madero: logo horizontal (#volvo-h)
+if (location.hash.includes("volvo-h")) h = h.replace("sponsors/14-n-volvo-madero.png", "sponsors-alt/14-n-volvo-madero-horizontal.png");
 document.getElementById("logos").innerHTML = h;
-if (location.hash === "#imprimir") document.body.className = "";
+if (location.hash.includes("imprimir")) document.body.className = "";
 </script>
 </body>
 </html>
