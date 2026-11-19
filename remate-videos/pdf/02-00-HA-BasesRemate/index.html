@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>02-00-HA-BasesRemate</title>
+  <!-- Bases, términos y condiciones del Remate 2026, v2 (19/11/2026), A4, fondo blanco.
+       Une el contrato de 13 puntos (00-00, videosreferencias/Contrato_Haras_Abril_13_Puntos_Corregido.docx) con las
+       bases de mayo (01-00: pre-ofertas, remate online, registro en la plataforma, husos, privacidad).
+       Donde se contradicen manda el contrato. Pre-ofertas: 2% por participar, 3% por ganar. Comisión 7%.
+       Exportar (desde remate-videos/):
+         node herramientas/exportar-pdf.mjs pdf/02-00-HA-BasesRemate/index.html salida/pdf/02-00-HA-BasesRemate.pdf -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <style>
+    /* Márgenes de hoja y pie con número de página (cajas de margen de Chromium) */
+    @page {
+      size: A4; margin: 18mm 20mm 20mm;
+      @bottom-left { content: "Haras Abril · Remate 2026 · Bases, términos y condiciones"; font-family: "Barlow Condensed", sans-serif; font-size: 8pt; letter-spacing: 0.1em; text-transform: uppercase; color: #717171; }
+      @bottom-right { content: "Página " counter(page) " de " counter(pages); font-family: "Barlow Condensed", sans-serif; font-size: 8pt; letter-spacing: 0.1em; text-transform: uppercase; color: #717171; }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: var(--ha-white); }
+    body {
+      -webkit-font-smoothing: antialiased; color: var(--ha-ink);
+      font-family: var(--ha-font-sans); font-weight: var(--ha-t-data-weight);
+      /* Tokens pensados para 1080 px; el ancho útil de la hoja mide ~643 px */
+      --k: 0.5;
+      --fs: calc(var(--ha-t-data-size) * var(--k));
+      font-size: var(--fs); line-height: var(--ha-lh-text);
+    }
+    b, strong { font-weight: 600; }
+
+    /* ── Portada ── */
+    .portada { text-align: center; padding-bottom: var(--ha-s-1); }
+    .sello { display: block; width: 84px; height: 84px; margin: 0 auto; } /* emblema 1081 × 1080 */
+    .marca { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; }
+    .marca .estrella { width: 22px; height: 22px; } /* 130 × 130 */
+    .filete { height: 2px; width: 70%; margin: 12px auto; background: var(--ha-gold-flare); }
+    .eyebrow {
+      font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * var(--k) * 0.8);
+      letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-gold-text);
+      padding-left: var(--ha-t-label-track);
+    }
+    h1 {
+      font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-event-size) * var(--k) * 0.5);
+      letter-spacing: var(--ha-t-label-track); padding-left: var(--ha-t-label-track);
+      text-transform: uppercase; line-height: var(--ha-lh-tight); margin: 6px 0 4px;
+    }
+    .anio {
+      font-weight: var(--ha-t-year-weight); font-size: calc(var(--ha-t-year-size) * var(--k) * 0.42);
+      letter-spacing: var(--ha-t-year-track); text-transform: uppercase; color: var(--ha-taupe);
+    }
+
+    /* Fechas: grilla 2 × 2 con borde dorado (como la tabla del documento) */
+    .fechas { display: grid; grid-template-columns: 1fr 1fr; border: var(--ha-hairline) solid var(--ha-line-gold); margin-top: var(--ha-s-2); text-align: left; }
+    .fecha { padding: 8px 14px; }
+    .fecha:nth-child(odd) { border-right: var(--ha-hairline) solid var(--ha-line-gold); }
+    .fecha:nth-child(-n+2) { border-bottom: var(--ha-hairline) solid var(--ha-line-gold); }
+    .fecha .et {
+      font-weight: 600; font-size: calc(var(--fs) * 0.82); letter-spacing: var(--ha-t-label-track);
+      text-transform: uppercase; color: var(--ha-gold-text);
+    }
+    .fecha .val { font-weight: 700; font-size: calc(var(--fs) * 1.3); text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.15; }
+    .fecha .sub { color: var(--ha-gray); font-size: calc(var(--fs) * 0.95); }
+    .fecha.vivo { background: var(--ha-ink); color: var(--ha-white); }
+    .fecha.vivo .et { color: var(--ha-sand); }
+    .fecha.vivo .sub { color: var(--ha-gray-light); }
+    .contexto { margin-top: 10px; color: var(--ha-gray); font-size: calc(var(--fs) * 0.95); letter-spacing: 0.04em; }
+
+    /* ── Secciones ── */
+    section { margin-top: 20px; }
+    h2 {
+      display: flex; align-items: baseline; gap: 10px;
+      font-weight: 700; font-size: calc(var(--fs) * 1.3); letter-spacing: 0.12em; text-transform: uppercase;
+      padding-bottom: 4px; margin-bottom: 8px; border-bottom: var(--ha-hairline) solid var(--ha-gold);
+      break-after: avoid;
+    }
+    h2 .n { color: var(--ha-gold-text); font-weight: 500; min-width: 1.4em; }
+    h3 {
+      font-weight: 700; font-size: calc(var(--fs) * 1.05); letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--ha-taupe); margin: 12px 0 4px; break-after: avoid;
+    }
+    h3 .n { color: var(--ha-gold-text); margin-right: 6px; }
+    p + p, p + ul, ul + p, .caja + p, p + .caja, ul + .caja, .caja + .caja { margin-top: 6px; }
+    ul { padding-left: 16px; }
+    li { margin-top: 3px; }
+    li::marker { color: var(--ha-gold); }
+    p, li { orphans: 3; widows: 3; }
+
+    /* Recuadro de aclaración */
+    .caja {
+      border-left: 3px solid var(--ha-gold); padding: 6px 12px;
+      background: color-mix(in srgb, var(--ha-gold) 10%, var(--ha-white));
+      break-inside: avoid;
+    }
+    .caja b:first-child { color: var(--ha-ink); }
+
+    /* Beneficios de las pre-ofertas: dos cajas lado a lado */
+    .beneficios { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; break-inside: avoid; }
+    .beneficio { border: var(--ha-hairline) solid var(--ha-line-gold); padding: 8px 12px; }
+    .beneficio .pct { display: block; font-weight: 700; font-size: calc(var(--fs) * 2.2); line-height: 1; color: var(--ha-ink); }
+    .beneficio .et { display: block; font-weight: 600; font-size: calc(var(--fs) * 0.82); letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-gold-text); margin: 4px 0 2px; }
+
+    /* Husos horarios */
+    .husos { display: grid; grid-template-columns: repeat(4, 1fr); border: var(--ha-hairline) solid var(--ha-line-gold); margin: 8px 0; break-inside: avoid; }
+    .husos div { padding: 6px 10px; text-align: center; }
+    .husos div + div { border-left: var(--ha-hairline) solid var(--ha-line-gold-soft); }
+    .husos .pais { display: block; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+    .husos .utc { color: var(--ha-gray); }
+
+    /* Datos del lote en dos columnas */
+    .lote { columns: 2; column-gap: var(--ha-s-4); }
+    .lote li { margin: 0 0 3px; break-inside: avoid; }
+
+
+    /* ── Cierre ── */
+    .cierre { margin-top: var(--ha-s-2); text-align: center; break-inside: avoid; }
+    .claim {
+      font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-claim-weight);
+      font-size: calc(var(--ha-t-claim-size) * var(--k) * 0.95); color: var(--ha-taupe);
+    }
+    .cierre .marca { margin-top: var(--ha-s-2); }
+    .cierre .logo { width: 180px; height: 20px; } /* 850 × 94 */
+    .cierre .web { margin-top: 6px; font-size: calc(var(--fs) * 0.95); letter-spacing: var(--ha-t-meta-track); text-transform: uppercase; color: var(--ha-gold-text); }
+
+    /* Cronograma de cuotas */
+    .cuotas { width: 100%; border-collapse: collapse; margin: 8px 0; break-inside: avoid; }
+    .cuotas th {
+      background: var(--ha-ink); color: var(--ha-white); text-align: left; padding: 4px 12px;
+      font-weight: 600; font-size: calc(var(--fs) * 0.85); letter-spacing: var(--ha-t-label-track); text-transform: uppercase;
+    }
+    .cuotas th:first-child { color: var(--ha-sand); }
+    .cuotas td { padding: 3px 12px; border-bottom: var(--ha-hairline) solid var(--ha-line-gold-soft); }
+    .cuotas td:first-child { width: 22%; font-weight: 700; }
+    .cuotas tr.contado td { background: color-mix(in srgb, var(--ha-gold) 16%, var(--ha-white)); }
+    .contexto .et-linea { font-weight: 600; font-size: 0.85em; letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-gold-text); }
+  </style>
+</head>
+<body>
+
+<header class="portada">
+  <img class="sello" src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+  <div class="filete"></div>
+  <div class="eyebrow">Remate de potros de salto · online y en vivo</div>
+  <h1>Bases, términos y condiciones</h1>
+  <div class="anio">Remate 2026</div>
+
+  <div class="fechas">
+    <div class="fecha">
+      <div class="et">Apertura de pre-ofertas</div>
+      <div class="val">Lunes 23.11.2026</div>
+      <div class="sub">10:00 h · hora de Argentina</div>
+    </div>
+    <div class="fecha">
+      <div class="et">Cierre de pre-ofertas</div>
+      <div class="val">Viernes 27.11.2026</div>
+      <div class="sub">00:00 h · hora de Argentina</div>
+    </div>
+    <div class="fecha vivo">
+      <div class="et">Remate en vivo</div>
+      <div class="val">Sábado 28.11.2026</div>
+      <div class="sub">17:30 h · hora de Argentina</div>
+    </div>
+    <div class="fecha">
+      <div class="et">Lugar del remate</div>
+      <div class="val">Haras Abril · Lezama</div>
+      <div class="sub">RP 2, km 153, Lezama, Provincia de Buenos Aires</div>
+    </div>
+  </div>
+  <p class="contexto"><span class="et-linea">Firma rematadora:</span> <b>FIN DEL MUNDO REMATES</b> · En el marco del Concurso CSI 1* 2026 · 27, 28 y 29 de noviembre</p>
+</header>
+
+<section>
+  <h2><span class="n">1.</span>Objeto y aceptación</h2>
+  <p>Estas bases regulan la participación, oferta, adjudicación, pago y entrega de los potros identificados en el catálogo oficial. La inscripción, presentación de ofertas o participación en el remate supone conocimiento y aceptación de estas condiciones, que deberán ponerse a disposición antes de ofertar.</p>
+  <p>Los equinos incluidos en el presente listado se venden conforme a las condiciones habituales de venta que corresponden a su tipo. Ante cualquier duda, se ruega consultar con la firma rematadora antes del inicio del remate.</p>
+  <p>La participación en el remate implica la aceptación plena e incondicional de las presentes bases y condiciones en su totalidad.</p>
+</section>
+
+<section>
+  <h2><span class="n">2.</span>Modalidad del remate</h2>
+  <p>El remate se realizará bajo las modalidades virtual, presencial y mixta, permitiendo la participación de compradores tanto de manera presencial como a distancia. Se desarrolla en dos fases sucesivas: la fase de pre-ofertas y el remate en vivo.</p>
+
+  <h3><span class="n">2.1</span>Fase de pre-ofertas</h3>
+  <p>Las pre-ofertas estarán abiertas desde el lunes 23.11.2026 a las 10:00 h hasta el viernes 27.11.2026 a las 00:00 h (hora de Argentina). Los participantes habilitados podrán enviar sus ofertas en cualquier momento dentro de dicho período.</p>
+  <ul>
+    <li>El precio alcanzado al cierre de esta fase constituirá el precio base de largada para el Remate en Vivo.</li>
+  </ul>
+  <div class="beneficios">
+    <div class="beneficio">
+      <span class="pct">2%</span>
+      <span class="et">Beneficio por participar de las pre-ofertas</span>
+      Los participantes que hayan enviado una pre-oferta acceden a un descuento del 2% sobre el precio final de martillo, extensible al día del remate en el lote en que pre-ofertaron.
+    </div>
+    <div class="beneficio">
+      <span class="pct">3%</span>
+      <span class="et">Beneficio por ganar las pre-ofertas</span>
+      El ganador de la pre-oferta (mayor oferta al cierre) accede a un descuento del 3% (no acumulativo con el descuento anterior) en caso de adquirir el producto el día del remate.
+    </div>
+  </div>
+  <div class="caja"><b>Extensión automática por oferta tardía:</b> si se registra una oferta válida dentro de los últimos 30 (treinta) minutos antes del cierre de las pre-ofertas, el cronómetro de ese lote se reiniciará a 30 minutos adicionales. Esta extensión puede repetirse tantas veces como sea necesario.</div>
+
+  <h3><span class="n">2.2</span>Remate en vivo</h3>
+  <p>El remate presencial se realizará el sábado 28.11.2026 a las 17:30 h (hora de Argentina) en Haras Abril, RP 2, km 153, Lezama, Provincia de Buenos Aires, con transmisión simultánea en vivo a través de YouTube, embebida en la plataforma oficial.</p>
+  <ul>
+    <li>El precio de largada de cada lote corresponde al valor alcanzado al cierre de la fase de pre-ofertas.</li>
+    <li>Los participantes podrán enviar sus ofertas en tiempo real a través de la plataforma online, de manera simultánea al desarrollo del remate presencial.</li>
+    <li>Adicionalmente, se recibirán ofertas telefónicas a los números que serán informados el día del remate.</li>
+  </ul>
+  <div class="caja"><b>Delay de transmisión:</b> el participante remoto acepta que existe una diferencia de tiempo entre el evento presencial y la transmisión online. El Organizador adoptará las medidas técnicas disponibles para minimizar este impacto, pero no se responsabiliza por demoras inherentes a la tecnología de streaming.</div>
+
+  <h3><span class="n">2.3</span>Ofertas y adjudicación</h3>
+  <ul>
+    <li>Todas las ofertas y adjudicaciones serán expresadas exclusivamente en dólares estadounidenses (U$S).</li>
+    <li>Los incrementos de las ofertas serán determinados y anunciados por la firma rematadora.</li>
+    <li>Cada lote será adjudicado al mejor postor mediante la bajada de martillo, momento a partir del cual el comprador quedará obligado al cumplimiento de las bases, términos y condiciones establecidos para la subasta.</li>
+    <li>El remate de cada lote se da por finalizado cuando el rematador lo declara oficialmente. Dicha declaración es definitiva e inapelable.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="n">3.</span>Zona horaria y conteo regresivo</h2>
+  <p>Todas las referencias horarias oficiales se expresan en hora de Argentina (ART, UTC-3). La plataforma muestra automáticamente el tiempo restante ajustado al huso horario del dispositivo del participante, pero la hora oficial del remate es siempre la argentina.</p>
+  <div class="husos">
+    <div><span class="pais">Argentina</span><span class="utc">ART · UTC-3</span></div>
+    <div><span class="pais">México</span><span class="utc">CST/CDT · UTC-6 / UTC-5</span></div>
+    <div><span class="pais">Colombia</span><span class="utc">COT · UTC-5</span></div>
+    <div><span class="pais">Uruguay</span><span class="utc">UYT · UTC-3</span></div>
+  </div>
+  <p>Es responsabilidad del participante verificar el horario de cierre en su zona horaria antes de realizar ofertas.</p>
+</section>
+
+<section>
+  <h2><span class="n">4.</span>Identificación de los lotes e inscripción en AAFE</h2>
+  <p>Cada lote se ofrecerá con número, nombre, sexo, fecha de nacimiento, pelaje, genealogía, identificación individual (microchip cuando corresponda), titularidad declarada y demás antecedentes disponibles. Ante discrepancias, deberá aclararse la información antes de la adjudicación y dejarse constancia escrita.</p>
+  <p>La información disponible en la plataforma para cada lote incluye:</p>
+  <ul class="lote">
+    <li>Nombre del ejemplar</li>
+    <li>Galería de fotografías</li>
+    <li>Video en pista (YouTube)</li>
+    <li>Tabla de pedigrí completa</li>
+    <li>Fecha de nacimiento</li>
+    <li>Sexo y raza</li>
+    <li>Número de registro en AAFE u organismo correspondiente</li>
+    <li>Información adicional a criterio del Organizador</li>
+  </ul>
+  <p>Todos los potros ofrecidos en la subasta se encuentran debidamente inscriptos en la Asociación Argentina de Fomento Equino (AAFE), con la única excepción de los dos (2) destetes que, debido a su fecha de nacimiento, serán inscriptos durante la próxima temporada, conforme a la edad que les corresponda.</p>
+  <p>Cualquier corrección de los datos publicados será informada a los participantes registrados antes del inicio del remate.</p>
+</section>
+
+<section>
+  <h2><span class="n">5.</span>Registro y habilitación de compradores</h2>
+  <h3><span class="n">5.1</span>Requisitos de registro</h3>
+  <p>Para participar, el interesado deberá registrarse en la plataforma completando:</p>
+  <ul>
+    <li>Datos personales completos: nombre, apellido, documento de identidad o CUIT/CUIL, país de residencia, domicilio, correo electrónico y número de teléfono celular.</li>
+    <li>Datos de tarjeta de crédito válida, a efectos exclusivos de acreditación de identidad y garantía de compromiso de oferta (ver cláusula 5.3).</li>
+  </ul>
+  <p>Haras Abril podrá requerir, además, acreditación de solvencia o garantía razonable. Los oferentes actuarán por cuenta propia o acreditarán representación suficiente (ver punto 13). Los compradores en comisión e intermediarios deben consultar y registrarse previamente con Haras Abril. Se informarán previamente los requisitos para compradores extranjeros.</p>
+
+  <h3><span class="n">5.2</span>Verificación de identidad</h3>
+  <p>Una vez completado el registro, el participante recibirá:</p>
+  <ul>
+    <li>Un correo electrónico de confirmación al que deberá responder o hacer clic para validar su casilla de correo.</li>
+    <li>Un SMS de verificación al número de teléfono declarado, con un código que deberá ingresarse en la plataforma.</li>
+  </ul>
+  <p>Solo tras completar ambas verificaciones el registro quedará ingresado para revisión del Organizador.</p>
+
+  <h3><span class="n">5.3</span>Tarjeta de crédito: garantía de compromiso</h3>
+  <p>La carga de datos de tarjeta de crédito tiene exclusivamente carácter de garantía de identidad y seriedad de las ofertas. No se realizará ningún débito, cargo ni reserva de fondos sobre la tarjeta en ningún momento del proceso de registro ni de participación en el remate.</p>
+  <p>El Organizador utiliza pasarelas de pago certificadas (PCI-DSS compliant) para la validación de los datos. La información es procesada de forma segura.</p>
+
+  <h3><span class="n">5.4</span>Aprobación del administrador</h3>
+  <p>El Organizador se reserva el derecho de aprobar o rechazar cualquier solicitud de registro sin necesidad de expresar causa. Solo los participantes expresamente habilitados podrán enviar ofertas. La habilitación será notificada por correo electrónico.</p>
+</section>
+
+<section>
+  <h2><span class="n">6.</span>Condiciones de las ofertas</h2>
+  <ul>
+    <li>Solo podrán ofertar los participantes debidamente registrados y habilitados por el Organizador.</li>
+    <li>Cada oferta realizada constituye una declaración de voluntad de compra firme y vinculante. No se admiten retractaciones.</li>
+    <li>Las ofertas deben superar el valor vigente en el incremento mínimo definido para cada lote.</li>
+    <li>La plataforma mostrará en todo momento el valor vigente de la oferta más alta para cada lote.</li>
+    <li>En caso de empate técnico o situaciones no previstas, la decisión del Organizador es soberana.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="n">7.</span>Exhibición y revisión previa</h2>
+  <p>Los interesados podrán inspeccionar los lotes en los días y horarios informados. Podrán solicitar, a su cargo y con autorización de Haras Abril, una revisión por veterinario de su elección, bajo pautas de seguridad y bienestar animal. Toda prueba adicional deberá ser expresamente autorizada.</p>
+</section>
+
+<section>
+  <h2><span class="n">8.</span>Información veterinaria, estudios radiográficos y aceptación del estado sanitario</h2>
+  <p>Cada potro ofrecido en la subasta cuenta con un estudio radiográfico compuesto por veinticuatro (24) placas, las cuales se encuentran a disposición de los interesados para su evaluación previa.</p>
+  <p>Asimismo, todos los interesados tendrán la posibilidad de solicitar y realizar, a su exclusivo cargo, estudios radiográficos adicionales, ampliatorios o complementarios, sin limitación en la cantidad de placas, previa coordinación y autorización de Haras Abril.</p>
+  <p>La adjudicación del lote mediante la bajada de martillo implicará que el comprador ha tenido pleno acceso a las veinticuatro (24) placas radiográficas disponibles y la oportunidad de realizar todos los estudios veterinarios y radiográficos adicionales que haya considerado necesarios, aceptando expresamente el estado sanitario y osteoarticular del animal.</p>
+  <p>En consecuencia, una vez producida la bajada de martillo, el comprador no tendrá derecho a formular reclamos posteriores relacionados con hallazgos, lesiones, alteraciones o condiciones preexistentes que estuvieran identificados o fueran razonablemente detectables mediante los estudios disponibles o las revisiones adicionales que pudo realizar antes de la adjudicación.</p>
+  <p>Esta condición será aplicable independientemente de que el comprador haya ejercido o no su derecho a efectuar estudios complementarios, sin perjuicio de las responsabilidades y derechos que legalmente no puedan excluirse.</p>
+  <p>Los animales se entregan con sus correspondientes certificados de A.I.E. y vacunación contra influenza equina y encefalomielitis.</p>
+</section>
+
+<section>
+  <h2><span class="n">9.</span>Precio, comisiones, impuestos y gastos</h2>
+  <p>Los precios de adjudicación o bajada de martillo serán expresados en dólares estadounidenses (U$S), sin incluir IVA. El IVA, cuando corresponda conforme a la normativa fiscal vigente, será adicional y estará íntegramente a cargo del comprador. Las ventas al exterior no se gravan con IVA y se emitirá la correspondiente factura de exportación.</p>
+  <div class="caja"><b>Precio final del caballo + 7% de comisión de la firma rematadora.</b></div>
+  <p>La firma rematadora percibirá una comisión equivalente al siete por ciento (7%) del valor de bajada de martillo, que será abonada íntegramente por el comprador, de contado y conjuntamente con las cuotas 1 y 2 del precio de adjudicación. La comisión se calculará sobre el precio de martillo, sin incluir el IVA de la compraventa.</p>
+</section>
+
+<section>
+  <h2><span class="n">10.</span>Precio y plan de pago en 12 cuotas</h2>
+  <p>El precio de adjudicación de cada potro será expresado y abonado en dólares estadounidenses (U$S), mediante doce (12) cuotas iguales, conforme al siguiente cronograma:</p>
+  <table class="cuotas">
+    <thead><tr><th>Cuotas</th><th>Vencimiento</th></tr></thead>
+    <tbody>
+      <tr class="contado"><td>1 y 2</td><td>De contado, al momento de la adjudicación</td></tr>
+      <tr><td>3 y 4</td><td>A los 30 días</td></tr>
+      <tr><td>5 y 6</td><td>A los 60 días</td></tr>
+      <tr><td>7 y 8</td><td>A los 90 días</td></tr>
+      <tr><td>9</td><td>A los 120 días</td></tr>
+      <tr><td>10</td><td>A los 150 días</td></tr>
+      <tr><td>11</td><td>A los 180 días</td></tr>
+      <tr><td>12</td><td>A los 210 días</td></tr>
+    </tbody>
+  </table>
+  <p>Todos los plazos se computarán desde la fecha del remate. Las cuotas pendientes se documentarán mediante los correspondientes pagarés, expresados en dólares estadounidenses. La comisión del 7% de la firma rematadora se abonará de contado junto con las cuotas 1 y 2.</p>
+
+  <h3>Condiciones especiales para compradores extranjeros</h3>
+  <p>Los compradores extranjeros que no sean clientes habituales de Haras Abril y que realicen su primera adquisición en la subasta deberán abonar el precio total de adjudicación de contado, en dólares estadounidenses (U$S), para poder retirar el potro de las instalaciones de Haras Abril.</p>
+  <p>Excepcionalmente, Haras Abril podrá autorizar una financiación con el pago del cincuenta por ciento (50%) del precio de adjudicación de contado, al momento de la compra, y el cincuenta por ciento (50%) restante en cuatro (4) cuotas iguales, equivalentes al doce coma cinco por ciento (12,5%) del precio cada una, con vencimientos a los 30, 60, 90 y 120 días corridos desde la fecha del remate.</p>
+  <p>Durante todo el período de financiación, el potro deberá permanecer alojado en las instalaciones de Haras Abril. El comprador abonará la pensión mensual correspondiente, de manera independiente de las cuotas de compraventa.</p>
+  <p>El potro únicamente podrá retirarse una vez cancelado íntegramente el precio de adjudicación y las demás obligaciones económicas pendientes. La transferencia de titularidad ante la AAFE se gestionará después de la cancelación total de la operación. Esta modalidad excepcional requiere autorización expresa de Haras Abril.</p>
+</section>
+
+<section>
+  <h2><span class="n">11.</span>Mora e incumplimiento de pago</h2>
+  <p>Todos los pagos correspondientes a la adquisición de los potros deberán efectuarse en dólares estadounidenses (U$S), conforme a los vencimientos establecidos en los pagarés.</p>
+  <p>La falta de pago total o parcial de cualquiera de los pagarés a su vencimiento producirá la mora automática del comprador, sin necesidad de intimación judicial o extrajudicial.</p>
+  <div class="caja">Los importes vencidos e impagos devengarán un interés moratorio del 1,5% mensual en dólares estadounidenses, equivalente al 18% nominal anual. Los intereses se calcularán proporcionalmente por los días de atraso, desde el día siguiente al vencimiento y hasta la fecha de efectivo pago, exclusivamente sobre el capital vencido e impago, sin capitalización automática.</div>
+  <p>La casa rematadora podrá exigir el cumplimiento de las obligaciones de pago pendientes, los intereses moratorios correspondientes del 1,5% mensual en dólares estadounidenses (U$S) y los gastos de cobranza legalmente procedentes.</p>
+</section>
+
+<section>
+  <h2><span class="n">12.</span>Transferencia, entrega y retiro</h2>
+  <h3><span class="n">12.1</span>Retiro y transporte</h3>
+  <p>El comprador retirará el potro de las instalaciones de Haras Abril mediante un transporte designado, contratado y abonado exclusivamente por él. Los compradores que dejen el o los caballos en el país deberán arbitrar los medios necesarios para su atención, cuidado y transporte al lugar de destino.</p>
+  <h3><span class="n">12.2</span>Estadía</h3>
+  <p>El comprador dispondrá de tres (3) días corridos desde la fecha de adjudicación para retirar el potro sin cargo por estadía. A partir del cuarto día, Haras Abril cobrará <b>U$S 40 diarios</b> por cada potro que permanezca en sus instalaciones.</p>
+  <h3><span class="n">12.3</span>Cuidado y responsabilidad</h3>
+  <p>A partir de la adjudicación del potro mediante la bajada de martillo, todos los riesgos inherentes al animal, incluyendo accidentes, lesiones, enfermedades sobrevinientes, incapacidades o fallecimiento, serán asumidos exclusivamente por el comprador.</p>
+  <p>Haras Abril continuará brindando los cuidados habituales de alimentación, alojamiento, manejo y atención de su equipo veterinario mientras el animal permanezca en sus instalaciones.</p>
+  <p>Haras Abril quedará eximido de responsabilidad por los daños, accidentes o acontecimientos fortuitos que pudieran afectar al animal.</p>
+  <h3><span class="n">12.4</span>Transferencia ante la AAFE</h3>
+  <p>La transferencia de titularidad del potro ante la Asociación Argentina de Fomento Equino (AAFE) se realizará únicamente una vez que el comprador haya abonado íntegramente las doce (12) cuotas del convenio de compraventa y cancelado todas las obligaciones pendientes. Hasta ese momento, el potro permanecerá registrado a nombre del vendedor ante la AAFE. La entrega física y el retiro del potro por parte del comprador no implicarán su transferencia registral anticipada. Una vez acreditada la cancelación total de las obligaciones, Haras Abril gestionará la transferencia correspondiente ante la AAFE.</p>
+  <h3><span class="n">12.5</span>Documentación genealógica y registral</h3>
+  <p>Se entregarán o gestionarán los documentos de identidad, pedigree, inscripción, transferencia y certificados que correspondan a cada lote, indicando el registro emisor, los plazos estimados y los costos a cargo de cada parte. Cualquier trámite pendiente deberá informarse expresamente antes de ofertar.</p>
+</section>
+
+<section>
+  <h2><span class="n">13.</span>Responsabilidad del comprador o su representante</h2>
+  <p>Toda persona que participe en la subasta y resulte adjudicataria de un lote, ya sea actuando en nombre propio como comprador definitivo o en representación de un tercero, quedará obligada, desde el momento de la bajada de martillo, al cumplimiento de la totalidad de las bases, términos y condiciones establecidos para el presente remate.</p>
+  <p>Cuando el adjudicatario actúe en representación de un tercero, deberá identificar al comprador definitivo y acreditar las facultades suficientes para actuar en su nombre.</p>
+  <p>La designación posterior de un comprador definitivo no liberará al adjudicatario de las obligaciones asumidas, salvo aceptación expresa y por escrito de Haras Abril, conforme a la legislación aplicable.</p>
+</section>
+
+<section>
+  <h2><span class="n">14.</span>Responsabilidades de la plataforma</h2>
+  <ul>
+    <li>El Organizador no se responsabiliza por fallas de conectividad, interrupciones del servicio de internet o de la plataforma de streaming que impidan o dificulten la participación de usuarios remotos.</li>
+    <li>Es responsabilidad exclusiva del participante contar con conexión a internet estable durante el Remate en Vivo.</li>
+    <li>El Organizador no se responsabiliza por ofertas no enviadas o no recibidas por causas técnicas ajenas a la plataforma.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="n">15.</span>Privacidad y datos personales</h2>
+  <p>Los datos personales recabados serán utilizados exclusivamente para la gestión del remate y comunicaciones relacionadas, en cumplimiento de la Ley N.° 25.326 de Protección de Datos Personales de la República Argentina y normativas equivalentes aplicables en cada país de residencia del participante.</p>
+  <p>El participante podrá solicitar en cualquier momento el acceso, rectificación o eliminación de sus datos comunicándose con el Organizador.</p>
+</section>
+
+<section>
+  <h2><span class="n">16.</span>Legislación y resolución de controversias</h2>
+  <p>Las operaciones de compraventa realizadas en la subasta de Haras Abril se regirán por las leyes de la República Argentina.</p>
+  <p>Las partes procurarán resolver cualquier diferencia mediante comunicación formal previa, sin perjuicio de recurrir a las autoridades y tribunales competentes conforme a la legislación vigente.</p>
+</section>
+
+<footer class="cierre">
+  <div class="filete"></div>
+  <p class="claim">Tu próxima estrella cada vez más cerca.</p>
+  <div class="marca">
+    <img class="estrella" src="../../assets/logos/ha-estrella-roja.png" alt="" />
+    <img class="logo" src="../../assets/logos/ha-logotipo-positivo.png" alt="Haras Abril" />
+  </div>
+  <div class="web">harasabril.com.ar · remateharasabril.com</div>
+</footer>
+
+</body>
+</html>
