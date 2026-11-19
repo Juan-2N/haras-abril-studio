@@ -145,7 +145,7 @@ def main():
     ap.add_argument("--diseno", default="Martín")
     ap.add_argument("--aprobo", default="Román")
     ap.add_argument("--fecha", default=datetime.date.today().strftime("%d/%m/%Y"))
-    ap.add_argument("--version", default="1")
+    ap.add_argument("--version", default="2")  # v2 (19/11): Volvo Madero horizontal
     ap.add_argument("--gramaje", default="250")
     ap.add_argument("-o", "--salida", default=os.path.join(STUDIO, "remate-videos", "salida", "impresos", "HA26_Catalogo_36x38cm_imprenta.pdf"))
     a = ap.parse_args()
