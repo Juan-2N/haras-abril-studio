@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>00-00-HA-PortadaYT-Clinbalou</title>
+  <!-- Portadas de YouTube (16:9) de los videos de W:\HARAS ABRIL\Video\Logros:
+         10 · Abril I'Clinbalou II con Alexis Trosch, Gran Premio FEA 1.50 m, Club Alemán de Equitación, 22.11.2026 (ganador)
+         19 · el desempate de esa prueba
+       Tres opciones (A panel lateral, B marcador, C festejo), cada una con las dos portadas.
+       Elegida (24/11): C, con la foto del salto en la del Gran Premio → salida/portadas-yt/00-00-HA-PortadaYT-Clinbalou-GP.jpg y -Desempate.jpg
+       (exportar a una carpeta temporal y pasar a JPG calidad 90 solo las dos C).
+       Fotos: cuadros de los videos → assets/fotos/logros-clinbalou-*.jpg
+       Exportar: node herramientas/exportar-slides.mjs youtube/00-00-HA-PortadaYT-Clinbalou/index.html <carpeta> -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: var(--ha-charcoal-elev); }
+    body { -webkit-font-smoothing: antialiased; font-family: var(--ha-font-sans); color: var(--ha-white); padding: var(--ha-s-5); }
+    .rotulo { margin: var(--ha-s-6) 0 var(--ha-s-2); color: var(--ha-sand); font-weight: var(--ha-t-label-weight); font-size: var(--ha-t-label-size); letter-spacing: var(--ha-t-label-track); text-transform: uppercase; }
+    .rotulo span { color: var(--ha-gray-light); font-weight: var(--ha-t-data-weight); letter-spacing: var(--ha-t-data-track); text-transform: none; }
+
+    .slide { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--ha-black); margin-bottom: var(--ha-s-5); text-transform: uppercase; }
+    /* Foto: posición y escala por portada (--fx, --fy, --fs), siempre con ancho y alto fijos */
+    .foto { position: absolute; left: var(--fx, 0px); top: var(--fy, 0px); width: calc(1920px * var(--fs, 1)); height: calc(1080px * var(--fs, 1)); }
+    .t { white-space: nowrap; line-height: var(--ha-lh-tight); }
+    .m { text-transform: none; } /* la unidad "m" va en minúscula */
+
+    /* Marca: estrella roja sobre el logotipo HARAS ABRIL (imagen, nunca texto). Logotipo 849×97 */
+    .marca { display: flex; flex-direction: column; align-items: center; gap: calc(var(--k) * 14px); }
+    .estrella { width: calc(var(--k) * 54px); height: calc(var(--k) * 54px); }
+    .logotipo { width: calc(var(--k) * 380px); height: calc(var(--k) * 380px * 97 / 849); }
+    .flare { width: calc(var(--k) * 520px); height: var(--ha-flare-h); background: var(--ha-gold-flare); }
+
+    /* text-indent = tracking: compensa el espacio que deja letter-spacing después de la última letra, para que el texto quede centrado */
+    .eyebrow { color: var(--ha-sand); font-weight: var(--ha-t-label-weight); letter-spacing: var(--ha-t-label-track); text-indent: var(--ha-t-label-track); }
+    .titulo { color: var(--ha-white); font-weight: var(--ha-t-sub-weight); letter-spacing: 0.04em; }
+    .nombre { color: var(--ha-white); font-weight: var(--ha-t-lot-weight); letter-spacing: var(--ha-t-lot-track); }
+    .jinete { color: var(--ha-sand); font-weight: var(--ha-t-data-weight); letter-spacing: var(--ha-t-data-track); }
+    .meta { color: var(--ha-gray-light); font-weight: var(--ha-t-meta-weight); letter-spacing: var(--ha-t-meta-track); }
+    .pill { display: flex; align-items: center; justify-content: center; height: calc(var(--k) * var(--ha-btn-h)); padding: 0 calc(var(--k) * var(--ha-btn-pad-x)); border-radius: var(--ha-btn-radius);
+            background: var(--ha-gold-grad); color: var(--ha-ink); font-weight: var(--ha-t-lot-weight); letter-spacing: var(--ha-t-label-track); text-indent: var(--ha-t-label-track); font-size: calc(var(--k) * var(--ha-t-label-size) * 1.15); }
+
+    /* ---------- A · Panel lateral negro (serie con las portadas de lote, en negro de deporte) ---------- */
+    .A { --k: 1; }
+    .A .panel { position: absolute; left: 0; top: 0; width: 760px; height: 1080px; background: var(--ha-black); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .A .panel::after { content: ""; position: absolute; right: 0; top: 0; width: var(--ha-border); height: 1080px; background: var(--ha-line-gold); }
+    .A .flare { margin: var(--ha-s-6) 0 var(--ha-s-5); }
+    .A .eyebrow { font-size: calc(var(--ha-t-label-size) * 1.2); }
+    .A .titulo { margin-top: var(--ha-s-2); font-size: 132px; }
+    .A .nombre { margin-top: var(--ha-s-6); font-size: var(--ha-t-lot-size); }
+    .A .jinete { margin-top: var(--ha-s-2); font-size: calc(var(--ha-t-data-size) * 1.45); }
+    .A .pill { margin-top: var(--ha-s-6); }
+    .A .meta { margin-top: var(--ha-s-4); font-size: var(--ha-t-meta-size); }
+
+    /* ---------- B · Marcador: foto arriba, franja negra abajo en tres columnas ---------- */
+    .B { --k: 1; }
+    .B .banda { position: absolute; left: 0; top: 740px; width: 1920px; height: 340px; background: var(--ha-black); }
+    .B .banda::before { content: ""; position: absolute; left: 0; top: 0; width: 1920px; height: var(--ha-flare-h); background: var(--ha-gold-flare); }
+    .B .col { position: absolute; top: 0; height: 340px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .B .izq { left: 0; width: 520px; --k: 0.9; }
+    .B .centro { left: 520px; width: 880px; }
+    .B .der { left: 1400px; width: 520px; }
+    .B .sep { position: absolute; top: 72px; width: var(--ha-hairline); height: 196px; background: var(--ha-line-gold-soft); }
+    .B .eyebrow { font-size: var(--ha-t-label-size); }
+    .B .titulo { margin-top: var(--ha-s-1); font-size: 120px; }
+    .B .nombre { margin-top: var(--ha-s-2); font-size: calc(var(--ha-t-lot-size) * 0.72); }
+    .B .jinete { margin-top: var(--ha-s-3); font-size: calc(var(--ha-t-data-size) * 1.3); color: var(--ha-white); }
+    .B .meta { margin-top: var(--ha-s-1); font-size: var(--ha-t-meta-size); }
+
+    /* ---------- C · Festejo a sangre, texto a la izquierda sobre velo ---------- */
+    .C { --k: 0.9; }
+    /* Velo de marca (--ha-veil-bottom) girado 90°: oscuro a la izquierda, se abre hacia el jinete. Dos capas para la legibilidad sobre la arena */
+    .C .velo { position: absolute; left: 0; top: 0; width: 1080px; height: 1400px; background: var(--ha-veil-bottom); transform-origin: 0 0; transform: translateX(1400px) rotate(90deg); }
+    .C .texto { position: absolute; left: 64px; top: 0; width: 720px; height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .C .flare { margin: var(--ha-s-5) 0 var(--ha-s-4); }
+    .C .eyebrow { font-size: calc(var(--ha-t-label-size) * 1.2); }
+    .C .titulo { margin-top: var(--ha-s-1); font-size: 176px; line-height: 0.92; }
+    .C .nombre { margin-top: var(--ha-s-5); font-size: calc(var(--ha-t-lot-size) * 0.95); }
+    .C .jinete { margin-top: var(--ha-s-2); font-size: calc(var(--ha-t-data-size) * 1.45); }
+    .C .pill { margin-top: var(--ha-s-5); }
+  </style>
+</head>
+<body>
+  <script>
+    // Datos comunes (fuente: post del blog en Dev/scripts/caballos/clinbalou-gp-cae-2026.ts)
+    const CABALLO = "Abril I’Clinbalou II";
+    const JINETE = "Alexis Trosch";
+    const CLUB = "Club Alemán de Equitación";
+    const FECHA = "22.11.2026";
+    const ALTURA = `1.50 <span class="m">m</span>`;
+    const FOTOS = "../../assets/fotos/";
+
+    // Una portada por video. El título cambia; "Ganador" va en las dos.
+    const PORTADAS = [
+      { id: "GP", video: "10 · Gran Premio (recorrido)", eyebrow: `FEA · ${ALTURA}`, titulo: "Gran Premio", tituloC: "Gran<br>Premio",
+        A: { foto: "logros-clinbalou-gp-salto.jpg", fx: "164px", fy: "-60px", fs: 1.2 },
+        B: { foto: "logros-clinbalou-gp-salto.jpg", fx: "-20px", fy: "-110px", fs: 1 },
+        C: { foto: "logros-clinbalou-gp-salto.jpg", fx: "0px", fy: "-40px", fs: 1.3 } },
+      { id: "Desempate", video: "19 · Desempate", eyebrow: `Gran Premio FEA · ${ALTURA}`, titulo: "Desempate", tituloC: "Desempate",
+        A: { foto: "logros-clinbalou-desempate-festejo.jpg", fx: "0px", fy: "0px", fs: 1 },
+        B: { foto: "logros-clinbalou-desempate-festejo.jpg", fx: "0px", fy: "-180px", fs: 1 },
+        C: { foto: "logros-clinbalou-desempate-festejo.jpg", fx: "0px", fy: "-110px", fs: 1.15 } },
+    ];
+
+    const marca = `<div class="marca"><img class="estrella" src="../../assets/logos/ha-estrella-roja.png" alt="" /><img class="logotipo" src="../../assets/logos/ha-logotipo-negativo.png" alt="Haras Abril" /></div>`;
+    const foto = (f) => `<img class="foto" src="${FOTOS}${f.foto}" style="--fx:${f.fx};--fy:${f.fy};--fs:${f.fs}" alt="" />`;
+    const slide = (op, p, cuerpo) => `<section class="slide ${op}" data-nombre="00-00-HA-PortadaYT-Clinbalou-${op}-${p.id}">${foto(p[op])}${cuerpo}</section>`;
+
+    const DISENOS = {
+      A: { nombre: "A · Panel lateral", nota: "La serie de las portadas de lote, con el panel en negro (deporte). Todos los datos.",
+        html: (p) => slide("A", p, `
+          <div class="panel">
+            ${marca}
+            <div class="flare"></div>
+            <div class="t eyebrow">${p.eyebrow}</div>
+            <div class="t titulo">${p.titulo}</div>
+            <div class="t nombre">${CABALLO}</div>
+            <div class="t jinete">${JINETE}</div>
+            <div class="pill">Ganador</div>
+            <div class="t meta">${CLUB} | ${FECHA}</div>
+          </div>`) },
+      B: { nombre: "B · Marcador", nota: "Foto grande arriba y una franja negra abajo, como el zócalo de una transmisión.",
+        html: (p) => slide("B", p, `
+          <div class="banda">
+            <div class="col izq">${marca}</div>
+            <div class="sep" style="left:520px"></div>
+            <div class="col centro">
+              <div class="t eyebrow">${p.eyebrow}</div>
+              <div class="t titulo">${p.titulo}</div>
+              <div class="t nombre">${CABALLO}</div>
+            </div>
+            <div class="sep" style="left:1400px"></div>
+            <div class="col der">
+              <div class="pill">Ganador</div>
+              <div class="t jinete">${JINETE}</div>
+              <div class="t meta">${CLUB}</div>
+              <div class="t meta">${FECHA}</div>
+            </div>
+          </div>`) },
+      C: { nombre: "C · Festejo", nota: "Foto a sangre del jinete festejando, título grande a la izquierda. La más de YouTube.",
+        html: (p) => slide("C", p, `
+          <div class="velo"></div><div class="velo"></div>
+          <div class="texto">
+            ${marca}
+            <div class="flare"></div>
+            <div class="t eyebrow">${p.eyebrow}</div>
+            <div class="t titulo">${p.tituloC}</div>
+            <div class="t nombre">${CABALLO}</div>
+            <div class="t jinete">${JINETE}</div>
+            <div class="pill">Ganador</div>
+          </div>`) },
+    };
+
+    document.body.insertAdjacentHTML("beforeend", Object.values(DISENOS).map((d) =>
+      `<div class="rotulo">${d.nombre} <span>— ${d.nota}</span></div>` +
+      PORTADAS.map((p) => `<div class="rotulo"><span>Video ${p.video}</span></div>` + d.html(p)).join("")
+    ).join(""));
+
+    // Achica la letra de los títulos y nombres hasta que entren en su columna
+    const encajar = (sel, max) => document.querySelectorAll(sel).forEach((el) => {
+      let s = parseFloat(getComputedStyle(el).fontSize);
+      while (el.getBoundingClientRect().width > max && s > 12) { s -= 1; el.style.fontSize = `${s}px`; }
+    });
+    document.fonts.ready.then(() => {
+      encajar(".A .titulo, .A .nombre", 640);
+      encajar(".B .titulo", 800);
+      encajar(".B .nombre", 800);
+      encajar(".C .titulo, .C .nombre", 680);
+    });
+  </script>
+</body>
+</html>
