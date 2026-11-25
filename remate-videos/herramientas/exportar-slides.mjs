@@ -39,9 +39,14 @@ try {
   for (const s of slides) {
     const nombre = await s.getAttribute("data-nombre");
     const destino = join(resolve(carpeta), `${nombre}.png`);
-    await s.screenshot({ path: destino });
-    const { width, height } = await s.boundingBox();
-    console.log(`✓ ${nombre}.png (${width}×${height})`);
+    // Recorte de la página completa: la captura por elemento (s.screenshot) dejaba en negro
+    // la parte de una placa que caía fuera de la ventana (pasó el 25/11 con el 9:16 debajo del 4:5).
+    const caja = await s.evaluate((el) => {
+      const b = el.getBoundingClientRect();
+      return { x: b.left + window.scrollX, y: b.top + window.scrollY, width: b.width, height: b.height };
+    });
+    await page.screenshot({ path: destino, fullPage: true, clip: caja });
+    console.log(`✓ ${nombre}.png (${caja.width}×${caja.height})`);
   }
 } finally {
   await browser.close();

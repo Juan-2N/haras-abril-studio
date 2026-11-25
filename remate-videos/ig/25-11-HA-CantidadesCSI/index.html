@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>25-11-HA-CantidadesCSI (IG)</title>
+  <!-- Flyer del viernes 27.11 del CSI 1* 2026: cantidad de inscriptos por prueba y horario de inicio.
+       Rediseño de videosreferencias/csi/flyer-csi.jpeg con el estilo v2. Nivel CSI: negro, con el fondo del sello que mandó el usuario.
+       Una placa fija en 4:5 (feed) y otra en 9:16 (stories). Los datos están en DIA y PRUEBAS, en el script.
+       Encabezado: logotipo HARAS ABRIL · sello · logo CSI, con las medidas del video de sponsors (27-11-HA-Sponsors-9x16-01).
+       Exportar: node herramientas/exportar-slides.mjs ig/25-11-HA-CantidadesCSI/index.html salida -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: var(--ha-charcoal-elev); }
+    body { -webkit-font-smoothing: antialiased; font-family: var(--ha-font-sans); color: var(--ha-white); }
+    .slide { position: relative; width: 1080px; overflow: hidden; background: var(--ha-black); margin-bottom: 40px; }
+    /* --m: escala del encabezado · --aire: alto de las filas de la tabla */
+    .f-4x5 { height: 1350px; --m: 0.8; --aire: 1; }
+    .f-9x16 { height: 1920px; --m: 1; --aire: 1.8; }
+    /* Fondo del usuario (videosreferencias/csi/back.png → assets/fotos/csi-fondo-sello.jpg, 1080 × 1920).
+       En 4:5 va recortado al centro. */
+    .fondo { position: absolute; left: 0; top: 0; width: 1080px; height: 100%; object-fit: cover; object-position: 50% 50%; }
+    /* Zona de contenido: márgenes de 96 px y zonas seguras de cada formato. --e la ajusta el script. */
+    .zona { --e: 1; position: absolute; left: 96px; right: 96px; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+    .f-4x5 .zona { top: var(--ha-safe-top-4x5); bottom: var(--ha-safe-bot-4x5); }
+    .f-9x16 .zona { top: var(--ha-safe-top-9x16); bottom: var(--ha-safe-bot-9x16); }
+
+    /* ── Encabezado: logotipo HARAS ABRIL · sello · logo CSI ── */
+    .encabezado { flex: none; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+    /* Logotipo 849 × 97 a 253,1 px, estrella 130 px a 37,7 px y línea con destello, como en sponsors */
+    .marca-ha { justify-self: center; position: relative; width: calc(278.4px * var(--m)); height: calc(89.5px * var(--m)); }
+    .marca-ha .star { position: absolute; left: calc(123.7px * var(--m)); top: 0; width: calc(37.7px * var(--m)); height: calc(37.7px * var(--m)); }
+    .marca-ha .logotipo { position: absolute; left: calc(7.2px * var(--m)); top: calc(45.3px * var(--m)); width: calc(253.1px * var(--m)); height: calc(28.9px * var(--m)); }
+    .marca-ha .linea { position: absolute; left: 0; top: calc(87.5px * var(--m)); width: 100%; height: var(--ha-border); background: var(--ha-gold-flare); }
+    .sello { display: block; width: calc(194.5px * var(--m)); height: calc(194.3px * var(--m)); } /* emblema 1081 × 1080 */
+    .csi { justify-self: center; display: block; width: calc(187.7px * var(--m)); height: calc(93.4px * var(--m)); } /* SVG 187,7 × 93,4 */
+
+    /* ── Título ── */
+    .eyebrow {
+      flex: none; margin-top: calc(var(--ha-s-6) * var(--e)); text-align: center; text-transform: uppercase; white-space: nowrap;
+      font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 0.85 * var(--e));
+      letter-spacing: var(--ha-t-label-track); padding-left: var(--ha-t-label-track); color: var(--ha-gray-light); line-height: var(--ha-lh-tight);
+    }
+    .titulo {
+      flex: none; margin-top: calc(var(--ha-s-2) * var(--e)); text-align: center; text-transform: uppercase; white-space: nowrap;
+      font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-lot-size) * 0.9 * var(--e));
+      letter-spacing: var(--ha-t-label-track); padding-left: var(--ha-t-label-track); line-height: var(--ha-lh-tight);
+    }
+    .titulo .fecha { font-weight: var(--ha-t-year-weight); color: var(--ha-sand); }
+    .destello { flex: none; height: var(--ha-flare-h); background: var(--ha-gold-flare); margin: calc(var(--ha-s-4) * var(--e)) 0; }
+
+    /* ── Horario de inicio ── */
+    .inicio {
+      flex: none; align-self: center; display: flex; align-items: center; gap: calc(var(--ha-s-2) * var(--e));
+      background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-gold);
+      padding: calc(var(--ha-s-2) * var(--e)) calc(var(--ha-s-5) * var(--e));
+      text-transform: uppercase; white-space: nowrap; line-height: var(--ha-lh-tight);
+      font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-label-size) * 1.2 * var(--e)); letter-spacing: var(--ha-t-label-track);
+    }
+    .inicio svg { width: 1.1em; height: 1.1em; fill: none; stroke: var(--ha-sand); stroke-width: 1.8; stroke-linecap: round; }
+    .inicio .hora { color: var(--ha-sand); margin-right: calc(var(--ha-t-label-track) * -1); }
+
+    /* ── Tabla de pruebas ── */
+    .tabla { flex: none; margin-top: calc(var(--ha-s-5) * var(--e)); }
+    .fila, .cabecera {
+      display: grid; align-items: center; column-gap: calc(var(--ha-s-2) * var(--e));
+      grid-template-columns: calc(56px * var(--e)) minmax(0, 1fr) calc(118px * var(--e)) calc(84px * var(--e)) calc(112px * var(--e));
+      padding-left: var(--ha-s-2); padding-right: var(--ha-s-2);
+    }
+    .cabecera {
+      padding-bottom: calc(var(--ha-s-1) * var(--e)); border-bottom: var(--ha-hairline) solid var(--ha-line-gold);
+      text-transform: uppercase; white-space: nowrap; line-height: var(--ha-lh-tight); color: var(--ha-gray-light);
+      font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 0.66 * var(--e)); letter-spacing: var(--ha-t-label-track);
+    }
+    .cabecera .c-prueba { grid-column: 2; }
+    .cabecera .c-alt { grid-column: 3 / 5; justify-self: center; }
+    .cabecera .c-cant { grid-column: 5; justify-self: center; margin-right: calc(var(--ha-t-label-track) * -1); }
+    .fila {
+      padding-top: calc(10px * var(--aire) * var(--e)); padding-bottom: calc(10px * var(--aire) * var(--e));
+      border-bottom: var(--ha-hairline) solid var(--ha-line-gold); line-height: var(--ha-lh-tight);
+    }
+    .fila .num { font-weight: var(--ha-t-num-weight); font-size: calc(var(--ha-t-num-size) * 0.66 * var(--e)); letter-spacing: var(--ha-t-num-track); color: var(--ha-sand); }
+    .fila .cat {
+      overflow: hidden; white-space: nowrap; text-transform: uppercase;
+      font-weight: var(--ha-t-lot-weight); font-size: calc(var(--ha-t-lot-size) * 0.56 * var(--e)); letter-spacing: 0.04em;
+    }
+    .fila .alt {
+      justify-self: end; white-space: nowrap;
+      font-weight: var(--ha-t-year-weight); font-size: calc(var(--ha-t-lot-size) * 0.56 * var(--e)); letter-spacing: var(--ha-t-meta-track);
+    }
+    .fila .alt small { font-size: 0.7em; color: var(--ha-gray-light); margin-left: 2px; }
+    .fila .mod {
+      white-space: nowrap; border-left: var(--ha-hairline) solid var(--ha-line-gold); padding: 0.15em 0 0.15em calc(var(--ha-s-2) * var(--e));
+      font-weight: var(--ha-t-year-weight); font-size: calc(var(--ha-t-lot-size) * 0.46 * var(--e)); letter-spacing: var(--ha-t-meta-track); color: var(--ha-gray-light);
+    }
+    .fila .cant {
+      height: calc(56px * var(--e)); display: flex; align-items: center; justify-content: center;
+      background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-gold);
+      font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-lot-size) * 0.62 * var(--e)); letter-spacing: var(--ha-t-num-track);
+      padding-left: var(--ha-t-num-track);
+    }
+    /* Serie Internacional: panel con borde dorado, como en el anteprograma */
+    .fila.destacada { background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-gold); margin-top: var(--ha-s-1); }
+  </style>
+</head>
+<body>
+  <main id="doc"></main>
+
+  <script>
+    // ── Datos ──
+    // Pruebas, alturas y modalidad del flyer original. Cantidades corregidas por el usuario el 25/11.
+    const DIA = { nombre: "Viernes", fecha: "27.11.2026", inicio: "9:00 h" };
+    const PRUEBAS = [
+      { n: 1, prueba: "Caballos Jóvenes 4 años", altura: "1,00", mod: "TO",  cant: 24 },
+      { n: 2, prueba: "Caballos Jóvenes 5 años", altura: "1,15", mod: "TD",  cant: 31 },
+      { n: 3, prueba: "Caballos Jóvenes 6 años", altura: "1,25", mod: "TD",  cant: 23 },
+      { n: 4, prueba: "Caballos Jóvenes 4 años", altura: "1,10", mod: "TO",  cant: 24 },
+      { n: 5, prueba: "Caballos Jóvenes 5 años", altura: "1,20", mod: "2FE", cant: 31 },
+      { n: 6, prueba: "Caballos Jóvenes 6 años", altura: "1,30", mod: "2FE", cant: 23 },
+      { n: 7, prueba: "Serie Internacional",     altura: "1,40", mod: "TD",  cant: 24, destacada: true },
+    ];
+
+    const BASE = "25-11-HA-CantidadesCSI";
+    const SELLO = "../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png";
+    const reloj = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>';
+
+    const placa = () => `
+      <div class="encabezado">
+        <div class="marca-ha">
+          <img class="star" src="../../assets/logos/ha-estrella-roja.png" alt="" />
+          <img class="logotipo" src="../../assets/logos/ha-logotipo-negativo.png" alt="Haras Abril" />
+          <div class="linea"></div>
+        </div>
+        <img class="sello" src="${SELLO}" alt="Haras Abril" />
+        <img class="csi" src="../../assets/logos/csi-logo-negativo.svg" alt="CSI" />
+      </div>
+      <div class="eyebrow">Cantidades y horario de inicio</div>
+      <div class="titulo">${DIA.nombre} <span class="fecha">${DIA.fecha}</span></div>
+      <div class="destello"></div>
+      <div class="inicio">${reloj}<span>Inicio</span><span class="hora">${DIA.inicio}</span></div>
+      <div class="tabla">
+        <div class="cabecera"><span class="c-prueba">Prueba</span><span class="c-alt">Altura</span><span class="c-cant">Cantidad</span></div>
+        ${PRUEBAS.map((p) => `
+        <div class="fila${p.destacada ? " destacada" : ""}">
+          <span class="num">${String(p.n).padStart(2, "0")}</span>
+          <span class="cat">${p.prueba}</span>
+          <span class="alt">${p.altura}<small>m</small></span>
+          <span class="mod">${p.mod}</span>
+          <span class="cant">${p.cant}</span>
+        </div>`).join("")}
+      </div>`;
+
+    document.getElementById("doc").outerHTML = ["4x5", "9x16"]
+      .map((f) => `<section class="slide f-${f}" data-nombre="${BASE}-${f}-01"><img class="fondo" src="../../assets/fotos/csi-fondo-sello.jpg" alt="" /><div class="zona">${placa()}</div></section>`)
+      .join("");
+
+    // Agranda el texto (--e) hasta donde entre: alto de la zona y ancho del nombre de cada prueba. Corre antes de exportar.
+    document.fonts.ready.then(() => {
+      for (const z of document.querySelectorAll(".zona")) {
+        const entra = () => z.scrollHeight <= z.clientHeight &&
+          [...z.querySelectorAll(".cat")].every((el) => el.scrollWidth <= el.clientWidth + 1);
+        let e = 0.8;
+        for (let prueba = 1.3; prueba >= 0.8; prueba -= 0.02) {
+          z.style.setProperty("--e", prueba.toFixed(2));
+          if (entra()) { e = prueba; break; }
+        }
+        z.style.setProperty("--e", e.toFixed(2));
+        z.closest(".slide").dataset.escala = e.toFixed(2);
+      }
+    });
+  </script>
+</body>
+</html>

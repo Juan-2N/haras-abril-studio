@@ -1,0 +1,18 @@
+{
+  "slug": "cantidades-csi-viernes",
+  "titulo": "CSI 1* · Cantidades y horario de inicio del viernes 27.11",
+  "tipo": "post",
+  "fecha_publicacion": "2026-11-25",
+  "descripcion": "Flyer estático · Feed 4:5 y Stories 9:16",
+  "base": "../salida",
+  "formatos": ["4x5", "9x16"],
+  "slides": [
+    {
+      "id": "01",
+      "titulo": "Viernes 27.11 · Inicio 9:00 h",
+      "subtitulo": "Caballos Jóvenes 4, 5 y 6 años · Serie Internacional 1,40 m",
+      "video": "25-11-HA-CantidadesCSI-{formato}-01.png",
+      "captura": "capturas/25-11-HA-CantidadesCSI-{formato}-01.jpg"
+    }
+  ]
+}
