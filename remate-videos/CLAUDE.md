@@ -147,6 +147,7 @@ Si ya existe uno de ese día, agregar una sección. Las decisiones que valen par
 - **`letterSpacing` no se puede animar** (`check` lo rechaza): animar solo opacidad y transformaciones.
 - **Corte tapa → animación:** entre el frame 0 y el 1 hay un salto a propósito. `verificar-video.mjs` no lo cuenta como salto brusco.
 - **Una `tl.set()` en 0 no aplica en el frame 0.** El estado inicial va en el CSS o con `gsap.set()`.
+- **Nada de `?` en los `src`** (`logo.svg?copia=b`): HyperFrames no encuentra el archivo y la imagen sale rota. Si `check` avisa `duplicate_media_discovery_risk` por imágenes repetidas a propósito (una cinta de logos en loop), el aviso se puede dejar: no afecta el render.
 - **Terminal del usuario:** VS Code puede abrir CMD en lugar de PowerShell. Al darle comandos, indicar cuál es; si la ruta tiene espacios, va entre comillas.
 - **Tokens copiados por pieza:** cada pieza tiene su propia copia de `brand/tokens.css`, que se actualiza al correr `sync-brand.mjs`. Las piezas hechas antes del 28/10 todavía tienen los tokens v1. Si se corre `sync-brand` en una de ellas, toma los pesos v2: pasarla entera a v2 (como `22-10-HA-ListaRemate-9x16-01`), no a medias.
 - **Deploys:** los pushes desde esta máquina **no** deployan el sitio ni el CRM (Vercel solo deploya desde la cuenta de Juan). El hub sí se deploya solo.

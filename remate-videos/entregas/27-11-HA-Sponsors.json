@@ -1,0 +1,18 @@
+{
+  "slug": "video-sponsors",
+  "titulo": "Video Sponsors · Remate y Concurso CSI 1★",
+  "tipo": "video",
+  "fecha_publicacion": "2026-11-27",
+  "descripcion": "30 s · 16:9 (1920×1080) y 9:16 (1080×1920) · Dron al atardecer, REMATE 2026 y CONCURSO CSI 1★, cinta con los 21 sponsors del sitio · música Battleborn",
+  "base": "../salida",
+  "formatos": ["16x9", "9x16"],
+  "slides": [
+    {
+      "id": "01",
+      "titulo": "Sponsors",
+      "subtitulo": "REMATE 2026 → CONCURSO CSI 1★ · 21 sponsors · 30 s",
+      "video": "27-11-HA-Sponsors-{formato}-01.mp4",
+      "captura": "capturas/27-11-HA-Sponsors-{formato}-01.jpg"
+    }
+  ]
+}
