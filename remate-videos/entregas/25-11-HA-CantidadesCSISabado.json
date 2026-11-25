@@ -1,0 +1,18 @@
+{
+  "slug": "cantidades-csi-sabado",
+  "titulo": "CSI 1* · Cantidades y horario del remate del sábado 28.11",
+  "tipo": "post",
+  "fecha_publicacion": "2026-11-25",
+  "descripcion": "Flyer estático · Feed 4:5 y Stories 9:16",
+  "base": "../salida",
+  "formatos": ["4x5", "9x16"],
+  "slides": [
+    {
+      "id": "01",
+      "titulo": "Sábado 28.11 · Remate 17:30 h",
+      "subtitulo": "Pruebas 8, 9 y 10 · Amateur y Mayores/Menores",
+      "video": "25-11-HA-CantidadesCSISabado-{formato}-01.png",
+      "captura": "capturas/25-11-HA-CantidadesCSISabado-{formato}-01.jpg"
+    }
+  ]
+}
