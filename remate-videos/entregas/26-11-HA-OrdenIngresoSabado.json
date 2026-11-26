@@ -1,0 +1,13 @@
+{
+  "slug": "orden-ingreso-sabado",
+  "titulo": "CSI 1* · Orden de ingreso del sábado 28.11",
+  "tipo": "documento",
+  "fecha_publicacion": "2026-11-26",
+  "descripcion": "PDF A4 · 6 hojas (2 por prueba, cada una se imprime suelta) · pruebas 8, 9 y 10",
+  "base": "../salida",
+  "formatos": ["a4"],
+  "slides": [
+    { "id": "PDF", "titulo": "Orden de ingreso completo", "subtitulo": "Prueba 8 (60 binomios), prueba 9 (62) y prueba 10 (57)",
+      "video": "pdf/26-11-HA-OrdenIngresoSabado.pdf", "captura": "capturas/26-11-HA-OrdenIngresoSabado-p1.jpg" }
+  ]
+}

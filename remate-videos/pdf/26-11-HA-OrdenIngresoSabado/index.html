@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>26-11-HA-OrdenIngresoSabado</title>
+  <!-- PDF A4 del orden de ingreso del sábado 28.11 (pruebas 8, 9 y 10 del CSI 1* 2026).
+       Rediseño de videosreferencias/orden-ingreso/Orden de ingreso SÁBADO 28-11-26 (Haras Abril).pdf con el sistema v2:
+       encabezado negro (nivel Concurso) con logotipo · sello · logo CSI, como los flyers del 25/11, y la lista en blanco,
+       con la tabla del anteprograma (cabecera dorada). Dos hojas por prueba; cada hoja se puede imprimir suelta.
+       Datos: datos.js, generado con herramientas/leer-orden-ingreso.mjs.
+       Exportar: node herramientas/exportar-pdf.mjs pdf/26-11-HA-OrdenIngresoSabado/index.html salida/pdf/26-11-HA-OrdenIngresoSabado.pdf -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <style>
+    @page { size: A4; margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: var(--ha-white); }
+    body {
+      -webkit-font-smoothing: antialiased; color: var(--ha-ink);
+      font-family: var(--ha-font-sans); font-weight: var(--ha-t-data-weight);
+      /* Tokens pensados para 1080 px; la hoja A4 mide 794 px */
+      --pad-x: var(--ha-s-5);
+      --fila: 25px;
+    }
+
+    .pagina {
+      position: relative; width: 210mm; height: 297mm; overflow: hidden; break-after: page;
+      display: flex; flex-direction: column;
+    }
+    .pagina:last-child { break-after: auto; }
+
+    /* ── Encabezado: logotipo HARAS ABRIL · sello · logo CSI, con las medidas de los flyers (--m: escala) ── */
+    .encabezado {
+      --m: 0.42; flex: none; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      background: var(--ha-black); padding: var(--ha-s-2) var(--pad-x); border-bottom: var(--ha-border) solid var(--ha-gold);
+    }
+    .marca-ha { justify-self: center; position: relative; width: calc(278.4px * var(--m)); height: calc(89.5px * var(--m)); }
+    .marca-ha .star { position: absolute; left: calc(123.7px * var(--m)); top: 0; width: calc(37.7px * var(--m)); height: calc(37.7px * var(--m)); }
+    .marca-ha .logotipo { position: absolute; left: calc(7.2px * var(--m)); top: calc(45.3px * var(--m)); width: calc(253.1px * var(--m)); height: calc(28.9px * var(--m)); }
+    .marca-ha .linea { position: absolute; left: 0; top: calc(87.5px * var(--m)); width: 100%; height: var(--ha-hairline); background: var(--ha-gold-flare); }
+    .sello { display: block; width: calc(194.5px * var(--m)); height: calc(194.3px * var(--m)); } /* emblema 1081 × 1080 */
+    .csi { justify-self: center; display: block; width: calc(187.7px * var(--m)); height: calc(93.4px * var(--m)); } /* SVG 187,7 × 93,4 */
+
+    /* ── Título de la hoja ── */
+    .titulo-hoja { flex: none; text-align: center; padding: var(--ha-s-3) var(--pad-x) 0; line-height: var(--ha-lh-tight); text-transform: uppercase; white-space: nowrap; }
+    .eyebrow {
+      font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 0.36);
+      letter-spacing: var(--ha-t-label-track); padding-left: var(--ha-t-label-track); color: var(--ha-gray);
+    }
+    .eyebrow .fecha { color: var(--ha-gold-text); }
+    .prueba {
+      margin-top: var(--ha-s-1); font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-lot-size) * 0.52);
+      letter-spacing: var(--ha-t-label-track); padding-left: var(--ha-t-label-track);
+    }
+    .prueba .num { font-weight: var(--ha-t-num-weight); color: var(--ha-gold-text); }
+    .meta {
+      margin-top: 10px; display: flex; justify-content: center; align-items: center;
+      font-size: calc(var(--ha-t-meta-size) * 0.5); letter-spacing: var(--ha-t-meta-track);
+    }
+    .meta span + span { border-left: var(--ha-hairline) solid var(--ha-gold); margin-left: 12px; padding-left: 12px; }
+    .meta .cat { font-weight: 600; }
+
+    /* ── Campeonato y copa: franja con tinte dorado, como las filas destacadas del anteprograma ── */
+    .campeonato {
+      flex: none; margin: var(--ha-s-2) var(--pad-x) 0; padding: 6px var(--ha-s-2);
+      display: flex; justify-content: space-between; align-items: baseline; gap: var(--ha-s-2);
+      background: color-mix(in srgb, var(--ha-gold) 16%, var(--ha-white));
+      border-top: var(--ha-hairline) solid var(--ha-gold); border-bottom: var(--ha-hairline) solid var(--ha-gold);
+      font-size: calc(var(--ha-t-data-size) * 0.46); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; line-height: var(--ha-lh-tight);
+    }
+    .campeonato b { font-weight: 700; }
+    .campeonato .copa-et { color: var(--ha-gold-text); font-weight: var(--ha-t-label-weight); letter-spacing: var(--ha-t-label-track); font-size: 0.8em; margin-right: 6px; }
+    .campeonato .copa { font-weight: 700; font-size: 1.1em; letter-spacing: 0.06em; }
+
+    /* ── Lista ── */
+    .lista { flex: none; margin: var(--ha-s-2) var(--pad-x) 0; width: calc(100% - var(--pad-x) * 2); border-collapse: collapse; table-layout: fixed; }
+    .lista th {
+      color: var(--ha-white); font-weight: 700; text-transform: uppercase; text-align: left;
+      font-size: calc(var(--ha-t-data-size) * 0.38); letter-spacing: 0.08em; padding: 0 6px var(--ha-border); line-height: var(--ha-lh-tight); white-space: nowrap;
+    }
+    /* Cabecera: color pleno con el texto calado en blanco. El negro y el filete dorado son fondo de la tabla, un solo
+       rectángulo de alto --cab: pintados celda por celda, el PDF dejaba filetes claros entre ellas. */
+    .lista {
+      --cab: 22px;
+      background:
+        linear-gradient(var(--ha-black), var(--ha-black)) 0 0 / 100% var(--cab) no-repeat,
+        linear-gradient(var(--ha-gold), var(--ha-gold)) 0 var(--cab) / 100% var(--ha-border) no-repeat;
+    }
+    .lista thead tr { height: calc(var(--cab) + var(--ha-border)); }
+    .lista td {
+      height: var(--fila); padding: 0 6px; vertical-align: middle; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      border-bottom: var(--ha-hairline) solid var(--ha-line-gold-soft); line-height: var(--ha-lh-tight); text-transform: uppercase;
+      font-size: calc(var(--ha-t-data-size) * 0.48); letter-spacing: 0.02em;
+    }
+    .lista tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--ha-gold) 7%, var(--ha-white)); }
+    .lista .c-n { width: 40px; text-align: center; }
+    .lista td.c-n { font-weight: var(--ha-t-num-weight); color: var(--ha-gold-text); letter-spacing: var(--ha-t-num-track); padding-left: calc(6px + var(--ha-t-num-track)); }
+    .lista .c-jin { width: 30%; }
+    .lista td.c-jin { font-weight: 600; }
+    .lista .c-cab { width: 32%; }
+    .lista .c-cat { width: 48px; text-align: center; }
+    .lista td.c-cat, .lista td.c-club { color: var(--ha-gray); }
+    .lista .c-camp { width: 52px; text-align: center; }
+    .lista td.c-camp { font-weight: 700; color: var(--ha-gold-text); letter-spacing: 0.06em; }
+    .lista td.c-camp.no { font-weight: var(--ha-t-data-weight); color: var(--ha-gray); }
+
+    /* ── Pie ── */
+    .pie {
+      flex: none; margin: auto var(--pad-x) var(--ha-s-2); padding-top: var(--ha-s-1);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: calc(var(--ha-t-meta-size) * 0.42); letter-spacing: var(--ha-t-meta-track); text-transform: uppercase; color: var(--ha-gray);
+      border-top: var(--ha-hairline) solid var(--ha-gold);
+    }
+    .pie img { width: 100px; height: 11.4px; } /* logotipo 849 × 97 */
+    .pie .evento .estrella { color: var(--ha-red); }
+  </style>
+</head>
+<body>
+  <main id="doc"></main>
+
+  <script src="datos.js"></script>
+  <script>
+    const D = window.ORDEN;
+    const SELLO = "../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png";
+    const dos = (n) => String(n).padStart(2, "0");
+    const HOJAS = 2; // hojas por prueba: la lista se reparte en partes iguales
+
+    const encabezado = `
+      <header class="encabezado">
+        <div class="marca-ha">
+          <img class="star" src="../../assets/logos/ha-estrella-roja.png" alt="" />
+          <img class="logotipo" src="../../assets/logos/ha-logotipo-negativo.png" alt="Haras Abril" />
+          <div class="linea"></div>
+        </div>
+        <img class="sello" src="${SELLO}" alt="Haras Abril" />
+        <img class="csi" src="../../assets/logos/csi-logo-negativo.svg" alt="CSI" />
+      </header>`;
+
+    const fila = ([n, jinete, caballo, cat, club, camp]) => `
+      <tr><td class="c-n">${dos(n)}</td><td class="c-jin">${jinete}</td><td class="c-cab">${caballo}</td>
+      <td class="c-cat">${cat}</td><td class="c-club">${club}</td><td class="c-camp${/^[A-Z]$/.test(camp) && camp !== "X" ? "" : " no"}">${camp}</td></tr>`;
+
+    const hoja = (p, filas, h, total) => {
+      const C = p.campeonato;
+      return `
+      <section class="pagina">
+        ${encabezado}
+        <div class="titulo-hoja">
+          <div class="eyebrow">Orden de ingreso · ${D.dia} <span class="fecha">${D.fecha}</span></div>
+          <div class="prueba">Prueba <span class="num">${dos(p.n)}</span></div>
+          <div class="meta"><span class="cat">${p.categoria}</span><span>${p.altura} m</span><span>${p.def}</span><span>${p.binomios.length} binomios</span></div>
+        </div>
+        ${C ? `<div class="campeonato">
+          <span><b>${C.orden} prueba del Campeonato “${C.letra}”</b> · ${C.altura} m · Pruebas ${C.pruebas}</span>
+          <span><span class="copa-et">Copa</span><span class="copa">${C.copa}</span></span>
+        </div>` : ""}
+        <table class="lista">
+          <colgroup><col class="c-n"><col class="c-jin"><col class="c-cab"><col class="c-cat"><col class="c-club"><col class="c-camp"></colgroup>
+          <thead><tr><th class="c-n">N.°</th><th>Jinete</th><th>Caballo</th><th class="c-cat">Cat.</th><th>Club / País</th><th class="c-camp">Camp.</th></tr></thead>
+          <tbody>${filas.map(fila).join("")}</tbody>
+        </table>
+        <footer class="pie">
+          <img src="../../assets/logos/ha-logotipo-positivo.png" alt="Haras Abril" />
+          <span class="evento">Concurso CSI 1<span class="estrella">*</span> 2026</span>
+          <span>Prueba ${dos(p.n)} · Hoja ${h} de ${total}</span>
+        </footer>
+      </section>`;
+    };
+
+    document.getElementById("doc").outerHTML = D.pruebas.flatMap((p) => {
+      const porHoja = Math.ceil(p.binomios.length / HOJAS);
+      const partes = [];
+      for (let i = 0; i < p.binomios.length; i += porHoja) partes.push(p.binomios.slice(i, i + porHoja));
+      return partes.map((filas, i) => hoja(p, filas, i + 1, partes.length));
+    }).join("");
+  </script>
+</body>
+</html>
