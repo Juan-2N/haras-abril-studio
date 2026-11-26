@@ -56,8 +56,15 @@
       margin-top: 10px; display: flex; justify-content: center; align-items: center;
       font-size: calc(var(--ha-t-meta-size) * 0.5); letter-spacing: var(--ha-t-meta-track);
     }
-    .meta span + span { border-left: var(--ha-hairline) solid var(--ha-gold); margin-left: 12px; padding-left: 12px; }
+    .meta > span + span { border-left: var(--ha-hairline) solid var(--ha-gold); margin-left: 12px; padding-left: 12px; }
     .meta .cat { font-weight: 600; }
+    /* Horario de inicio: recuadro negro con el texto calado en blanco, como la caja INICIO del flyer del viernes */
+    .meta > .inicio {
+      display: inline-flex; align-items: center; gap: 6px; border-left: 0; margin-left: var(--ha-s-2); padding: 4px 10px 4px 8px;
+      background: var(--ha-black); color: var(--ha-white); font-weight: 700;
+    }
+    .inicio svg { width: 1.15em; height: 1.15em; fill: none; stroke: var(--ha-sand); stroke-width: 2; stroke-linecap: round; }
+    .inicio .hora { color: var(--ha-sand); }
 
     /* ── Campeonato y copa: franja con tinte dorado, como las filas destacadas del anteprograma ── */
     .campeonato {
@@ -123,6 +130,9 @@
     const SELLO = "../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png";
     const dos = (n) => String(n).padStart(2, "0");
     const HOJAS = 2; // hojas por prueba: la lista se reparte en partes iguales
+    // Horario de inicio por prueba (no viene en el PDF del concurso; lo pasó el usuario el 26/11). La 8 abre el día.
+    const INICIO = { 8: "9:00 h" };
+    const reloj = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>';
 
     const encabezado = `
       <header class="encabezado">
@@ -147,7 +157,7 @@
         <div class="titulo-hoja">
           <div class="eyebrow">Orden de ingreso · ${D.dia} <span class="fecha">${D.fecha}</span></div>
           <div class="prueba">Prueba <span class="num">${dos(p.n)}</span></div>
-          <div class="meta"><span class="cat">${p.categoria}</span><span>${p.altura} m</span><span>${p.def}</span><span>${p.binomios.length} binomios</span></div>
+          <div class="meta"><span class="cat">${p.categoria}</span><span>${p.altura} m</span><span>${p.def}</span><span>${p.binomios.length} binomios</span>${INICIO[p.n] ? `<span class="inicio">${reloj}<span>Inicio</span><span class="hora">${INICIO[p.n]}</span></span>` : ""}</div>
         </div>
         ${C ? `<div class="campeonato">
           <span><b>${C.orden} prueba del Campeonato “${C.letra}”</b> · ${C.altura} m · Pruebas ${C.pruebas}</span>
