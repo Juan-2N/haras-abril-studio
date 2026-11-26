@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1280" />
+    <title>28-11-HA-PrevioRemate-3x2-01</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css" />
+    <style>
+      /* Previo del Remate 2026: pantalla del salón de 3 × 2 m (1920 × 1280). Versión A, 41,5 s.
+         Storyboard: https://claude.ai/artifact/JtkVjz1sb3CUmdurUV4Je4
+         Todo va en la grilla de la música (Battleborn Symphony, 72,5 BPM): 1 tiempo = 0,8275 s, primer golpe en 7,01 s.
+         Escenas de 2 tiempos (1,655 s); cuenta regresiva de un número por tiempo. */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; overflow: hidden; background: var(--ha-black); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ha-black); }
+
+      /* Tamaños para la pantalla del salón, derivados de los tokens */
+      :root {
+        --pr-con: calc(var(--ha-t-label-size) * 1.53);   /* 52 px: conector ("de", "un", "con una") */
+        --pr-main: calc(var(--ha-t-sub-size) * 1.32);    /* 116 px: línea principal */
+        --pr-sub: calc(var(--ha-t-year-size) * 0.63);    /* 65 px: "detrás de cada detalle" */
+        --pr-csi: calc(var(--ha-t-year-size) * 1.04);    /* 108 px: CSI 1★ */
+        --pr-preg: calc(var(--ha-t-event-size) * 1.25);  /* 140 px: la pregunta y REMATE */
+        --pr-num: calc(var(--ha-t-count-size) * 4);      /* 600 px: números de la cuenta */
+        --pr-firma: calc(var(--ha-t-claim-size) * 1.3);  /* 60 px: frase de cierre */
+      }
+
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1280px; }
+      video.full { object-fit: cover; }
+      .foto { overflow: hidden; }
+      .foto img { position: absolute; left: 0; top: 0; width: 1920px; height: 1280px; object-fit: cover; }
+      .velo-intro { background: var(--ha-veil-dark); }
+      .velo-abajo { background: var(--ha-veil-bottom); }
+      /* El mismo velo, dado vuelta, para un texto arriba */
+      .velo-arriba { transform: scaleY(-1); }
+      .txt.arriba { bottom: auto; top: 154px; }
+      /* Velo de la cuenta: negro, con la opacidad de cada toma para que todas queden igual de oscuras */
+      .velo-cuenta { background: var(--ha-black); }
+
+      /* Placa REMATE 2026 de los lotes (1920 × 1080), centrada en el alto de 1280 */
+      .placa { position: absolute; left: 0; top: 100px; width: 1920px; height: 1080px; }
+
+      /* ---------- Textos ---------- */
+      .txt {
+        position: absolute; left: 0; bottom: 154px; width: 1920px;
+        display: flex; flex-direction: column; align-items: center; gap: 18px;
+        text-align: center; white-space: nowrap; line-height: 1; text-transform: uppercase;
+        font-family: var(--ha-font-sans);
+      }
+      .centro { position: absolute; left: 0; top: 0; width: 1920px; height: 1280px; bottom: auto; justify-content: center; }
+      .con, .main, .sub, .csi { font-family: var(--ha-font-sans); text-transform: uppercase; line-height: 1; white-space: nowrap; }
+      .con { font-weight: var(--ha-t-year-weight); font-size: var(--pr-con); letter-spacing: 0.24em; margin-right: -0.24em; color: var(--ha-sand); }
+      .main { font-weight: var(--ha-t-event-weight); font-size: var(--pr-main); letter-spacing: var(--ha-t-lot-track); margin-right: calc(-1 * var(--ha-t-lot-track)); color: var(--ha-white); }
+      .sub { font-weight: var(--ha-t-year-weight); font-size: var(--pr-sub); letter-spacing: 0.16em; margin-right: -0.16em; color: var(--ha-white); }
+      .csi { display: inline-flex; align-items: flex-start; font-weight: var(--ha-t-year-weight); font-size: var(--pr-csi); letter-spacing: var(--ha-t-year-track); color: var(--ha-white); }
+      .csi .uno { letter-spacing: 0; margin-right: 0.08em; }
+      /* La estrella del logo CSI, en rojo: reemplaza al asterisco de "1*" */
+      .estrella-csi { width: 46px; height: 46.5px; margin-top: 15px; fill: var(--ha-red); }
+      .preg { font-size: var(--pr-preg); }
+      .l { display: inline-block; }
+
+      /* "Comienza el / REMATE 2026": centrado y después sube a encabezado de la cuenta */
+      #comienza .bloque { position: absolute; left: 0; top: 0; width: 1920px; height: 1280px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px; transform-origin: 50% 50%; }
+      .titulo { display: flex; gap: 0.32em; font-family: var(--ha-font-sans); font-size: var(--pr-preg); line-height: 1; text-transform: uppercase; color: var(--ha-white); white-space: nowrap; }
+      .titulo .ev { font-weight: var(--ha-t-event-weight); letter-spacing: 0.15em; }
+      .titulo .an { font-weight: var(--ha-t-year-weight); letter-spacing: 0.15em; margin-right: -0.15em; }
+      .flare { width: var(--ha-flare-w); height: var(--ha-flare-h); background: var(--ha-gold-flare); }
+
+      /* Números de la cuenta, en sand, centrados debajo del encabezado */
+      .num {
+        position: absolute; left: 0; top: 230px; width: 1920px; height: 1050px;
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--ha-font-sans); font-weight: var(--ha-t-event-weight); font-size: var(--pr-num); line-height: 1;
+        color: var(--ha-sand); font-variant-numeric: tabular-nums;
+      }
+
+      /* ---------- Fondo animado (10, 11 y 13): negro, textura de 50 a 100 % y sello de agua de 100 a 150 % ---------- */
+      .fondo { background: var(--ha-black); overflow: hidden; }
+      .fondo .over { opacity: 0.5; }
+      /* El sello de agua (1188 px) está centrado en (957, 644) del PNG */
+      .fondo .logo { transform-origin: 49.84% 50.31%; }
+
+      /* ---------- Cierre: sello dorado, REMATE 2026 y frase, sobre el fondo animado ---------- */
+      /* Sello: el PNG mide 1081 × 1080 y el círculo, 950 px, centrado en (540, 555) */
+      #cierre .seal { position: absolute; left: 773px; top: 250px; width: 374px; height: 374px; transform-origin: 49.95% 51.39%; }
+      #cierre .fila { position: absolute; left: 0; width: 1920px; display: flex; justify-content: center; white-space: nowrap; line-height: normal; text-transform: uppercase; color: var(--ha-white); font-family: var(--ha-font-sans); }
+      #cierre .evento { top: 620px; font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-event-size) * 1.059); letter-spacing: 0.15em; }
+      #cierre .anio { top: 740px; font-weight: var(--ha-t-year-weight); font-size: calc(var(--ha-t-year-size) * 0.967); letter-spacing: 0.173em; }
+      #cierre .evento .c { margin-right: -0.15em; }
+      #cierre .anio .c { margin-right: -0.173em; }
+      #cierre .firma { position: absolute; left: 0; top: 905px; width: 1920px; text-align: center; font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-claim-weight); font-size: var(--pr-firma); line-height: 1; color: var(--ha-sand); }
+
+      #fin { position: absolute; inset: 0; background: var(--ha-black); opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <!-- 00 Intro 0–7,01 · 01–08 escenas de 1,655 s desde 7,01 · 09 familia 20,25–25,215 · 10 pregunta 25,215–28,525 ·
+         11 "Comienza el Remate 2026" 28,525–30,18 · 12 cuenta 30,18–38,455 · 13 cierre 38,455–41,5 (golpe final del tema) -->
+    <div data-hf-id="hf-jdem" id="root" data-composition-id="main" data-start="0" data-duration="41.5" data-width="1920" data-height="1280">
+
+      <!-- 00 · Intro de los lotes: dron al atardecer (DJI 0011 desde 2 s, a media velocidad) y la placa REMATE 2026 -->
+      <video data-hf-id="hf-rojy" id="v-intro" class="clip full" src="assets/clips/previo-intro-dron.mp4" muted playsinline
+             data-start="0" data-duration="7.01" data-media-start="0" data-track-index="0"></video>
+      <div data-hf-id="hf-x6c6" id="velo-intro" class="clip full velo-intro" data-start="0" data-duration="7.01" data-track-index="1"></div>
+      <div data-hf-id="hf-cgsu" id="placa-intro" class="placa" data-composition-id="placa-remate" data-composition-src="compositions/placa-remate.html"
+           data-start="0" data-duration="7.01" data-track-index="2" data-width="1920" data-height="1080"
+           data-variable-values='{"evento":"Remate","anio":"2026","fecha_texto":"28 de noviembre"}'></div>
+
+      <!-- 01 a 08 · una toma y una frase cada 2 tiempos -->
+      <div data-hf-id="hf-sqgi" id="e01" class="clip full foto" data-start="7.01" data-duration="1.655" data-track-index="0"><img data-hf-id="hf-5bap" src="assets/fotos/previo-s01-salon.jpg" alt="" /></div>
+      <div data-hf-id="hf-ezao" id="e02" class="clip full foto" data-start="8.665" data-duration="1.655" data-track-index="0"><img data-hf-id="hf-1xhe" src="assets/fotos/previo-s02-pista-noche.jpg" alt="" /></div>
+      <video data-hf-id="hf-ijho" id="e03" class="clip full" src="assets/clips/previo-s03-rematador.mp4" muted playsinline data-start="10.32" data-duration="1.655" data-media-start="0" data-track-index="0"></video>
+      <!-- 04 · Salto del lote 07 (Abril Tecna), salto 2 desde 1,4 s -->
+      <video data-hf-id="hf-6i39" id="e04" class="clip full" src="assets/clips/previo-s04-tecna-salto.mp4" muted playsinline data-start="11.975" data-duration="1.655" data-media-start="0" data-track-index="0"></video>
+      <!-- 05 · Cabeza del lote 12 (Abril Virroco Blue), que gira hacia la cámara (clip de cabeza desde 0,35 s) -->
+      <video id="e05" class="clip full" src="assets/clips/previo-s05-cabeza12.mp4" muted playsinline data-start="13.63" data-duration="1.655" data-media-start="0" data-track-index="0"></video>
+      <video data-hf-id="hf-2si8" id="e06" class="clip full" src="assets/clips/previo-s06-ganador.mp4" muted playsinline data-start="15.285" data-duration="1.655" data-media-start="0" data-track-index="0"></video>
+      <video data-hf-id="hf-cbkq" id="e07" class="clip full" src="assets/clips/previo-s07-salto.mp4" muted playsinline data-start="16.94" data-duration="1.655" data-media-start="0" data-track-index="0"></video>
+      <video data-hf-id="hf-thdg" id="e08" class="clip full" src="assets/clips/previo-s08-boxes.mp4" muted playsinline data-start="18.595" data-duration="1.655" data-media-start="0" data-track-index="0"></video>
+
+      <!-- 09 · Familia: tres fotos con fundido a negro entre una y otra -->
+      <div data-hf-id="hf-df92" id="f1" class="clip full foto" data-start="20.25" data-duration="1.655" data-track-index="0"><img data-hf-id="hf-pjdv" src="assets/fotos/previo-s09-equipo.jpg" alt="" /></div>
+      <div data-hf-id="hf-jbe7" id="f2" class="clip full foto" data-start="21.905" data-duration="1.655" data-track-index="0"><img data-hf-id="hf-jyuf" src="assets/fotos/previo-s09-podio.jpg" alt="" /></div>
+      <div data-hf-id="hf-9k45" id="f3" class="clip full foto" data-start="23.56" data-duration="1.655" data-track-index="0"><img data-hf-id="hf-akvj" src="assets/fotos/previo-s09-familia.jpg" alt="" /></div>
+
+      <!-- Velo de abajo para los textos de 01 a 09. En la 05 el texto va arriba (abajo está el hocico) y el velo también -->
+      <div data-hf-id="hf-kikw" id="velo-abajo" class="clip full velo-abajo" data-start="7.01" data-duration="6.62" data-track-index="1"></div>
+      <div id="velo-arriba" class="clip full velo-abajo velo-arriba" data-start="13.63" data-duration="1.655" data-track-index="1"></div>
+      <div id="velo-abajo2" class="clip full velo-abajo" data-start="15.285" data-duration="9.93" data-track-index="1"></div>
+
+      <div data-hf-id="hf-4j6p" id="t01" class="clip txt" data-start="7.01" data-duration="1.655" data-track-index="3"><span data-hf-id="hf-yms5" class="main">Gracias por ser parte</span></div>
+      <div data-hf-id="hf-h7dl" id="t02" class="clip txt" data-start="8.665" data-duration="1.655" data-track-index="3"><span data-hf-id="hf-kjo4" class="con">de</span><span data-hf-id="hf-2abj" class="main">Tres días únicos</span></div>
+      <div data-hf-id="hf-4hof" id="t03" class="clip txt" data-start="10.32" data-duration="1.655" data-track-index="3"><span data-hf-id="hf-5948" class="con">un</span><span data-hf-id="hf-zbe0" class="main">Remate exclusivo</span></div>
+      <div data-hf-id="hf-pnrb" id="t04" class="clip txt" data-start="11.975" data-duration="1.655" data-track-index="3"><span data-hf-id="hf-5dg3" class="con">productos de</span><span data-hf-id="hf-aq73" class="main">Pedigrí seleccionado</span></div>
+      <div data-hf-id="hf-k1ne" id="t05" class="clip txt arriba" data-start="13.63" data-duration="1.655" data-track-index="3"><span data-hf-id="hf-x3uk" class="main">La mejor sangre.</span></div>
+      <div data-hf-id="hf-ts9b" id="t06" class="clip txt" data-start="15.285" data-duration="1.655" data-track-index="3"><span data-hf-id="hf-dhgt" class="main">Los mejores resultados.</span></div>
+      <div data-hf-id="hf-jach" id="t07" class="clip txt" data-start="16.94" data-duration="1.655" data-track-index="3"><span data-hf-id="hf-rejk" class="con">un</span><span data-hf-id="hf-g83h" class="main">Concurso internacional</span><span data-hf-id="hf-lz30" class="csi"><span data-hf-id="hf-s5av" class="uno">CSI 1</span><svg data-hf-id="hf-mlnw" class="estrella-csi" viewBox="131.686 0 56.02 56.598" aria-label="*"><path data-hf-id="hf-6zg8" d="M159.696 0L151.973 20.497L131.686 28.299L151.973 36.101L159.696 56.598L167.418 36.101L187.706 28.299L167.418 20.497Z"/></svg></span></div>
+      <div data-hf-id="hf-ryrc" id="t08" class="clip txt" data-start="18.595" data-duration="1.655" data-track-index="3"><span data-hf-id="hf-fe7n" class="con">con una</span><span data-hf-id="hf-wrid" class="main">Infraestructura a la altura</span></div>
+      <div data-hf-id="hf-r7xr" id="t09" class="clip txt" data-start="20.25" data-duration="4.965" data-track-index="3"><span data-hf-id="hf-hij8" class="con">y una</span><span data-hf-id="hf-exgl" class="main">Familia</span><span data-hf-id="hf-fda5" class="sub">detrás de cada detalle</span></div>
+
+      <!-- 10 y 11 · Fondo animado, sin corte entre las dos escenas -->
+      <div data-hf-id="hf-2jnz" id="fondo1" class="clip full fondo" data-start="25.215" data-duration="4.965" data-track-index="0">
+        <img data-hf-id="hf-lt3j" class="full over" src="assets/fotos/previo-back-over.png" alt="" />
+        <img data-hf-id="hf-or6r" class="full logo" src="assets/fotos/previo-back-logo.png" alt="" />
+      </div>
+      <div data-hf-id="hf-u13g" id="preg" class="clip txt centro" data-start="25.215" data-duration="3.31" data-track-index="3"><span data-hf-id="hf-9inb" class="main preg">¿Están listos?</span></div>
+
+      <!-- 12 · Cuenta regresiva: una toma por número, cada una con su velo -->
+      <video data-hf-id="hf-2sqt" id="c10" class="clip full" src="assets/clips/previo-c10-atardecer.mp4" muted playsinline data-start="30.18" data-duration="0.8275" data-media-start="0" data-track-index="0"></video>
+      <video data-hf-id="hf-45up" id="c9" class="clip full" src="assets/clips/previo-c09-pista.mp4" muted playsinline data-start="31.0075" data-duration="0.8275" data-media-start="0" data-track-index="0"></video>
+      <div data-hf-id="hf-zoew" id="c8" class="clip full foto" data-start="31.835" data-duration="0.8275" data-track-index="0"><img data-hf-id="hf-j9ng" src="assets/fotos/previo-c08-salto.jpg" alt="" /></div>
+      <video data-hf-id="hf-cg1n" id="c7" class="clip full" src="assets/clips/previo-c07-manta.mp4" muted playsinline data-start="32.6625" data-duration="0.8275" data-media-start="0" data-track-index="0"></video>
+      <video data-hf-id="hf-534i" id="c6" class="clip full" src="assets/clips/previo-c06-arco.mp4" muted playsinline data-start="33.49" data-duration="0.8275" data-media-start="0" data-track-index="0"></video>
+      <div data-hf-id="hf-wegi" id="c5" class="clip full foto" data-start="34.3175" data-duration="0.8275" data-track-index="0"><img data-hf-id="hf-yimj" src="assets/fotos/previo-c05-presentador.jpg" alt="" /></div>
+      <div data-hf-id="hf-bb1g" id="c4" class="clip full foto" data-start="35.145" data-duration="0.8275" data-track-index="0"><img data-hf-id="hf-y6di" src="assets/fotos/previo-c04-potrillo.jpg" alt="" /></div>
+      <video data-hf-id="hf-gqo5" id="c3" class="clip full" src="assets/clips/previo-c03-catalogo.mp4" muted playsinline data-start="35.9725" data-duration="0.8275" data-media-start="0" data-track-index="0"></video>
+      <div data-hf-id="hf-73c3" id="c2" class="clip full foto" data-start="36.8" data-duration="0.8275" data-track-index="0"><img data-hf-id="hf-i0cy" src="assets/fotos/previo-c02-salon.jpg" alt="" /></div>
+      <div data-hf-id="hf-7265" id="c1" class="clip full foto" data-start="37.6275" data-duration="0.8275" data-track-index="0"><img data-hf-id="hf-89c5" src="assets/fotos/previo-c01-rematador.jpg" alt="" /></div>
+
+      <div data-hf-id="hf-wd3k" id="vc10" class="clip full velo-cuenta" style="opacity: 0.66" data-start="30.18" data-duration="0.8275" data-track-index="1"></div>
+      <div data-hf-id="hf-2t52" id="vc9" class="clip full velo-cuenta" style="opacity: 0.80" data-start="31.0075" data-duration="0.8275" data-track-index="1"></div>
+      <div data-hf-id="hf-byfr" id="vc8" class="clip full velo-cuenta" style="opacity: 0.79" data-start="31.835" data-duration="0.8275" data-track-index="1"></div>
+      <div data-hf-id="hf-3fmh" id="vc7" class="clip full velo-cuenta" style="opacity: 0.21" data-start="32.6625" data-duration="0.8275" data-track-index="1"></div>
+      <div data-hf-id="hf-8zqf" id="vc6" class="clip full velo-cuenta" style="opacity: 0.78" data-start="33.49" data-duration="0.8275" data-track-index="1"></div>
+      <div data-hf-id="hf-pd8t" id="vc5" class="clip full velo-cuenta" style="opacity: 0.84" data-start="34.3175" data-duration="0.8275" data-track-index="1"></div>
+      <div data-hf-id="hf-owps" id="vc4" class="clip full velo-cuenta" style="opacity: 0.87" data-start="35.145" data-duration="0.8275" data-track-index="1"></div>
+      <div data-hf-id="hf-28wv" id="vc3" class="clip full velo-cuenta" style="opacity: 0.57" data-start="35.9725" data-duration="0.8275" data-track-index="1"></div>
+      <div data-hf-id="hf-xqvl" id="vc2" class="clip full velo-cuenta" style="opacity: 0.43" data-start="36.8" data-duration="0.8275" data-track-index="1"></div>
+      <div data-hf-id="hf-rpr9" id="vc1" class="clip full velo-cuenta" style="opacity: 0.74" data-start="37.6275" data-duration="0.8275" data-track-index="1"></div>
+
+      <div data-hf-id="hf-8f2y" id="n10" class="clip num" data-start="30.18" data-duration="0.8275" data-track-index="4">10</div>
+      <div data-hf-id="hf-l5is" id="n9" class="clip num" data-start="31.0075" data-duration="0.8275" data-track-index="4">9</div>
+      <div data-hf-id="hf-15o0" id="n8" class="clip num" data-start="31.835" data-duration="0.8275" data-track-index="4">8</div>
+      <div data-hf-id="hf-aqeq" id="n7" class="clip num" data-start="32.6625" data-duration="0.8275" data-track-index="4">7</div>
+      <div data-hf-id="hf-covv" id="n6" class="clip num" data-start="33.49" data-duration="0.8275" data-track-index="4">6</div>
+      <div data-hf-id="hf-m34z" id="n5" class="clip num" data-start="34.3175" data-duration="0.8275" data-track-index="4">5</div>
+      <div data-hf-id="hf-gbns" id="n4" class="clip num" data-start="35.145" data-duration="0.8275" data-track-index="4">4</div>
+      <div data-hf-id="hf-dn7v" id="n3" class="clip num" data-start="35.9725" data-duration="0.8275" data-track-index="4">3</div>
+      <div data-hf-id="hf-yevn" id="n2" class="clip num" data-start="36.8" data-duration="0.8275" data-track-index="4">2</div>
+      <div data-hf-id="hf-ky1i" id="n1" class="clip num" data-start="37.6275" data-duration="0.8275" data-track-index="4">1</div>
+
+      <!-- 11 y 12 · "Comienza el Remate 2026", que sube a encabezado cuando arranca la cuenta.
+           Va después de las tomas de la cuenta para quedar por encima -->
+      <div data-hf-id="hf-k6j1" id="comienza" class="clip full" data-start="28.525" data-duration="9.93" data-track-index="5">
+        <div data-hf-id="hf-9mxw" class="bloque">
+          <span data-hf-id="hf-c5qm" class="con">Comienza el</span>
+          <div data-hf-id="hf-vkfb" class="titulo"><span data-hf-id="hf-kufw" class="ev">Remate</span><span data-hf-id="hf-sc8e" class="an">2026</span></div>
+          <div data-hf-id="hf-asr8" class="flare"></div>
+        </div>
+      </div>
+
+      <!-- 13 · Cierre en el golpe final del tema: el mismo fondo animado, que vuelve a arrancar -->
+      <div data-hf-id="hf-6igg" id="fondo2" class="clip full fondo" data-start="38.455" data-duration="3.045" data-track-index="0">
+        <img data-hf-id="hf-eapb" class="full over" src="assets/fotos/previo-back-over.png" alt="" />
+        <img data-hf-id="hf-1a5f" class="full logo" src="assets/fotos/previo-back-logo.png" alt="" />
+      </div>
+      <div data-hf-id="hf-zpiu" id="cierre" class="clip full" data-start="38.455" data-duration="3.045" data-track-index="2">
+        <img data-hf-id="hf-qkeu" class="seal" src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+        <div data-hf-id="hf-m2wl" class="fila evento"><span data-hf-id="hf-o8o0" class="c">Remate</span></div>
+        <div data-hf-id="hf-fckf" class="fila anio"><span data-hf-id="hf-cb86" class="c">2026</span></div>
+        <div data-hf-id="hf-tx77" class="firma">Tu próxima estrella cada vez más cerca.</div>
+      </div>
+
+      <div data-hf-id="hf-sgeg" id="fin"></div>
+
+      <!-- Música: Battleborn Symphony (la de los lotes) hasta 38,46 s, con el final del tema empalmado en el golpe de cierre.
+           El archivo ya trae los fundidos (assets/musica/previo-remate-battleborn.mp3) -->
+      <audio data-hf-id="hf-bfo3" id="musica" src="assets/musica/previo-remate-battleborn.mp3"
+             data-start="0" data-duration="41.5" data-track-index="10" data-volume="0.8"></audio>
+    </div>
+
+    <script>
+      const B = 0.8275, ESC = 2 * B;
+      const ESCENAS = [7.01, 8.665, 10.32, 11.975, 13.63, 15.285, 16.94, 18.595];
+      const T_FAM = 20.25, T_PREG = 25.215, T_COM = 28.525, T_CUENTA = 30.18, T_CIERRE = 38.455, FIN = 41.5;
+
+      // Letras sueltas, para cerrarlas como en la placa REMATE 2026 (letterSpacing no se puede animar)
+      const partir = (el) => {
+        const t = el.textContent;
+        el.textContent = "";
+        return [...t].map((ch) => {
+          const s = document.createElement("span");
+          s.className = "l";
+          s.textContent = ch === " " ? " " : ch;
+          el.appendChild(s);
+          return s;
+        });
+      };
+      const abrir = (letras, paso) => (i) => (i - (letras.length - 1) / 2) * paso;
+
+      const tl = gsap.timeline({ paused: true });
+      // Entrada de texto: fundido y 32 px hacia arriba, en cascada
+      const entra = (sel, t, d = 0.45) =>
+        tl.fromTo(sel, { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: d, ease: "expo.out", stagger: 0.08 }, t);
+      // Acercamiento lento de las fotos durante su escena
+      const zoom = (sel, t, d, a = 1.06) => tl.fromTo(sel, { scale: 1 }, { scale: a, duration: d, ease: "none" }, t);
+
+      // 01 a 08
+      ESCENAS.forEach((t, i) => entra(`#t0${i + 1} > *`, t + 0.04));
+      zoom("#e01 img", ESCENAS[0], ESC);
+      zoom("#e02 img", ESCENAS[1], ESC);
+      // 08 · Dron a velocidad real con un acercamiento que acentúa el vuelo
+      zoom("#e08", ESCENAS[7], ESC, 1.08);
+
+      // 09 · Familia: el texto queda fijo; las fotos pasan por negro
+      entra("#t09 > *", T_FAM + 0.04, 0.6);
+      zoom("#f1 img", T_FAM, ESC, 1.04);
+      zoom("#f2 img", T_FAM + ESC, ESC, 1.04);
+      zoom("#f3 img", T_FAM + 2 * ESC, ESC, 1.04);
+      tl.to("#f1", { opacity: 0, duration: 0.3, ease: "power1.in" }, T_FAM + ESC - 0.3);
+      tl.fromTo("#f2", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, T_FAM + ESC);
+      tl.to("#f2", { opacity: 0, duration: 0.3, ease: "power1.in" }, T_FAM + 2 * ESC - 0.3);
+      tl.fromTo("#f3", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, T_FAM + 2 * ESC);
+      // Fundido a negro al final de la familia
+      tl.to(["#f3", "#t09"], { opacity: 0, duration: 0.6, ease: "power1.in" }, T_PREG - 0.6);
+
+      // 10 y 11 · Fondo animado de punta a punta de las dos escenas
+      const fondo = (id, t, d) => {
+        tl.fromTo(`${id}`, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, t);
+        tl.fromTo(`${id} .over`, { opacity: 0.5 }, { opacity: 1, duration: d, ease: "none" }, t);
+        tl.fromTo(`${id} .logo`, { scale: 1 }, { scale: 1.5, duration: d, ease: "none" }, t);
+      };
+      fondo("#fondo1", T_PREG, T_CUENTA - T_PREG);
+      // La pregunta entra en el golpe de 26,04 s
+      tl.fromTo("#preg .preg", { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, 7.01 + 23 * B);
+      tl.to("#preg .preg", { opacity: 0, duration: 0.3, ease: "power1.in" }, T_COM - 0.3);
+
+      // 11 · Comienza el Remate 2026: REMATE y 2026 se cierran letra por letra; la línea se dibuja desde el centro
+      const lEv = partir(document.querySelector("#comienza .ev"));
+      const lAn = partir(document.querySelector("#comienza .an"));
+      entra("#comienza .con", T_COM + 0.02);
+      tl.fromTo(lEv, { opacity: 0, x: abrir(lEv, 60) }, { opacity: 1, x: 0, duration: 0.5, ease: "expo.out" }, T_COM + 0.12);
+      tl.fromTo(lAn, { opacity: 0, x: abrir(lAn, 60) }, { opacity: 1, x: 0, duration: 0.5, ease: "expo.out" }, T_COM + 0.3);
+      tl.fromTo("#comienza .flare", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out" }, T_COM + 0.45);
+      // Sube a encabezado cuando arranca la cuenta
+      tl.fromTo("#comienza .bloque", { y: 0, scale: 1 }, { y: -465, scale: 0.62, duration: 0.4, ease: "power3.inOut" }, T_CUENTA - 0.2);
+
+      // 12 · Cuenta: cada número entra en su tiempo; las fotos se acercan apenas
+      [10, 9, 8, 7, 6, 5, 4, 3, 2, 1].forEach((n, k) => {
+        const t = T_CUENTA + k * B;
+        tl.fromTo(`#n${n}`, { opacity: 0, scale: 1.12 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out" }, t);
+      });
+      ["#c8", "#c5", "#c4", "#c2", "#c1"].forEach((id) => {
+        const t = parseFloat(document.querySelector(id).dataset.start);
+        zoom(`${id} img`, t, B, 1.04);
+      });
+
+      // 13 · Cierre en el golpe final: fondo animado otra vez, sello desde un punto, REMATE 2026 y la frase
+      fondo("#fondo2", T_CIERRE, FIN - T_CIERRE);
+      const lCiEv = partir(document.querySelector("#cierre .evento .c"));
+      const lCiAn = partir(document.querySelector("#cierre .anio .c"));
+      tl.fromTo("#cierre .seal", { opacity: 0, scale: 0.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, T_CIERRE);
+      tl.fromTo(lCiEv, { opacity: 0, x: abrir(lCiEv, 70) }, { opacity: 1, x: 0, duration: 0.55, ease: "expo.out" }, T_CIERRE + 0.3);
+      tl.fromTo(lCiAn, { opacity: 0, x: abrir(lCiAn, 70) }, { opacity: 1, x: 0, duration: 0.55, ease: "expo.out" }, T_CIERRE + 0.57);
+      tl.fromTo("#cierre .firma", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, T_CIERRE + 0.9);
+
+      // Salida a negro con la cola de la música; el último medio segundo queda limpio
+      tl.fromTo("#fin", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.in" }, FIN - 1.1);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

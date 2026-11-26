@@ -1,0 +1,18 @@
+{
+  "slug": "video-previo-remate",
+  "titulo": "Video Previo al Remate 2026 · pantalla del salón",
+  "tipo": "video",
+  "fecha_publicacion": "2026-11-28",
+  "descripcion": "41,5 s · 3:2 (1920×1280) para la pantalla de 3 × 2 m · Se pasa antes de que empiece el remate: agradecimiento, el remate, la sangre, el concurso, la familia y cuenta regresiva de 10 a 1 · música Battleborn",
+  "base": "../salida",
+  "formatos": ["3x2"],
+  "slides": [
+    {
+      "id": "01",
+      "titulo": "Previo al Remate",
+      "subtitulo": "Intro REMATE 2026 → 8 escenas → familia → ¿Están listos? → cuenta 10 a 1 → cierre · 41,5 s",
+      "video": "28-11-HA-PrevioRemate-{formato}-01.mp4",
+      "captura": "capturas/28-11-HA-PrevioRemate-{formato}-01.jpg"
+    }
+  ]
+}
