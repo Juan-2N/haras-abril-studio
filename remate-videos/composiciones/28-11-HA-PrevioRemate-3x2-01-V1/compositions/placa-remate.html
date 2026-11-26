@@ -1,0 +1,109 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"evento","type":"string","label":"Evento","default":"Remate"},
+    {"id":"anio","type":"string","label":"Año","default":"2026"},
+    {"id":"fecha_texto","type":"string","label":"Fecha","default":"28 de noviembre"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="../brand/tokens.css" />
+      <style>
+        /* PDF HA_Video_Lote_2026_D, página 1, medido con PyMuPDF a 1920 px.
+           Fondo transparente: debajo corre el dron al atardecer del index. Todo centrado en x = 960. */
+        #root { position: absolute; inset: 0; }
+        /* Sello de 329 px de círculo centrado en (960, 409). El PNG mide 1081 × 1080 y el círculo,
+           950 px, centrado en (540, 555): de ahí el tamaño de la imagen y el transform-origin. */
+        .pi-seal { position: absolute; left: 773px; top: 217px; width: 374px; height: 374px; transform-origin: 49.95% 51.39%; }
+
+        .pi-fila { position: absolute; left: 0; width: 1920px; display: flex; justify-content: center; align-items: center; white-space: nowrap; line-height: normal; text-transform: uppercase; }
+        .pi-evento {
+          top: 588px; color: var(--ha-white);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-event-weight);
+          font-size: calc(var(--ha-t-event-size) * 1.059); letter-spacing: 0.15em;
+        }
+        /* v2: el año va en Regular (el PDF usa Medium) */
+        .pi-anio {
+          top: 708px; color: var(--ha-white);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-year-weight);
+          font-size: calc(var(--ha-t-year-size) * 0.967); letter-spacing: 0.173em;
+        }
+        .pi-fecha {
+          top: 850px; gap: 38px; color: var(--ha-sand);
+          font-family: var(--ha-font-sans); font-weight: var(--ha-t-meta-weight);
+          font-size: calc(var(--ha-t-label-size) * 1.094); letter-spacing: 0.27em;
+        }
+        /* El tracking deja aire después de la última letra: se compensa para que quede centrado */
+        .pi-centro { display: inline-block; margin-right: -0.15em; }
+        .pi-anio .pi-centro { margin-right: -0.173em; }
+        .pi-fecha .pi-centro { margin-right: -0.27em; }
+        .pi-letra { display: inline-block; }
+        .pi-raya { width: 79px; height: var(--ha-border); background: var(--ha-gold); }
+        .pi-raya-izq { transform-origin: 100% 50%; }
+        .pi-raya-der { transform-origin: 0% 50%; }
+      </style>
+
+      <div data-hf-id="hf-dccl" id="root" data-composition-id="placa-remate" data-width="1920" data-height="1080">
+        <img data-hf-id="hf-3ubr" class="pi-seal" src="../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+        <div data-hf-id="hf-zc1l" class="pi-fila pi-evento"><span data-hf-id="hf-v6jk" class="pi-centro" data-var-text="evento">Remate</span></div>
+        <div data-hf-id="hf-dhcz" class="pi-fila pi-anio"><span data-hf-id="hf-5yx8" class="pi-centro" data-var-text="anio">2026</span></div>
+        <div data-hf-id="hf-6uyp" class="pi-fila pi-fecha">
+          <span data-hf-id="hf-m2hq" class="pi-raya pi-raya-izq"></span>
+          <span data-hf-id="hf-78vj" class="pi-centro" data-var-text="fecha_texto">28 de noviembre</span>
+          <span data-hf-id="hf-zhph" class="pi-raya pi-raya-der"></span>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.querySelector('[data-composition-id="placa-remate"]');
+          // Cada letra en su span, para animar el tracking (letterSpacing no se puede animar) y la escritura
+          const partirLetras = (el) => {
+            const texto = el.textContent;
+            el.textContent = "";
+            return [...texto].map((ch) => {
+              const s = document.createElement("span");
+              s.className = "pi-letra";
+              s.textContent = ch === " " ? " " : ch;
+              el.appendChild(s);
+              return s;
+            });
+          };
+
+          Promise.all([
+            document.fonts.load('700 119px "Barlow Condensed"'),
+            document.fonts.load('400 101px "Barlow Condensed"'),
+          ]).then(() => {
+            const [evento, anio, fecha] = root.querySelectorAll(".pi-centro");
+            const lEvento = partirLetras(evento);
+            const lAnio = partirLetras(anio);
+            const lFecha = partirLetras(fecha);
+
+            // Las letras arrancan muy separadas y se cierran hasta su lugar
+            const cerrar = (letras, abre) => {
+              const m = (letras.length - 1) / 2;
+              return letras.map((_, i) => (i - m) * abre);
+            };
+
+            const anim = gsap.timeline({ paused: true });
+            anim.fromTo(".pi-seal", { opacity: 0, scale: 0.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, 0.05);
+            anim.fromTo(lEvento, { opacity: 0, x: (i) => cerrar(lEvento, 70)[i] }, { opacity: 1, x: 0, duration: 0.55, ease: "expo.out" }, 0.35);
+            anim.fromTo(lAnio, { opacity: 0, x: (i) => cerrar(lAnio, 70)[i] }, { opacity: 1, x: 0, duration: 0.55, ease: "expo.out" }, 0.62);
+            // La fecha se escribe letra por letra y las rayas se dibujan hacia afuera
+            anim.fromTo(lFecha, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none", stagger: 0.03 }, 0.95);
+            anim.fromTo(".pi-raya", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 1.25);
+
+            // Copia de la placa de los videos de lote para el previo del remate (pantalla del salón, no va a IG):
+            // sin tapa en el frame 0, la animación arranca directo
+            window.__timelines["placa-remate"] = anim;
+          });
+        })();
+      </script>
+    </template>
+  </body>
+</html>
