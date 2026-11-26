@@ -16,8 +16,8 @@
     body { -webkit-font-smoothing: antialiased; font-family: var(--ha-font-sans); color: var(--ha-white); }
     .slide { position: relative; width: 1080px; overflow: hidden; background: var(--ha-black); margin-bottom: 40px; }
     /* --m: escala del encabezado · --aire: alto de las filas de la tabla */
-    .f-4x5 { height: 1350px; --m: 0.8; --aire: 1.6; }
-    .f-9x16 { height: 1920px; --m: 1; --aire: 2.6; }
+    .f-4x5 { height: 1350px; --m: 0.8; --aire: 1; }
+    .f-9x16 { height: 1920px; --m: 1; --aire: 2; }
     /* Fondo del usuario (videosreferencias/csi/back.png → assets/fotos/csi-fondo-sello.jpg, 1080 × 1920).
        En 4:5 va recortado al centro. */
     .fondo { position: absolute; left: 0; top: 0; width: 1080px; height: 100%; object-fit: cover; object-position: 50% 50%; }
@@ -49,8 +49,19 @@
     .titulo .fecha { font-weight: var(--ha-t-year-weight); color: var(--ha-sand); }
     .destello { flex: none; height: var(--ha-flare-h); background: var(--ha-gold-flare); margin: calc(var(--ha-s-4) * var(--e)) 0; }
 
+    /* ── Horario de inicio (igual que el viernes) ── */
+    .inicio {
+      flex: none; align-self: center; display: flex; align-items: center; gap: calc(var(--ha-s-2) * var(--e));
+      background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-gold);
+      padding: calc(var(--ha-s-2) * var(--e)) calc(var(--ha-s-5) * var(--e));
+      text-transform: uppercase; white-space: nowrap; line-height: var(--ha-lh-tight);
+      font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-label-size) * 1.2 * var(--e)); letter-spacing: var(--ha-t-label-track);
+    }
+    .inicio svg { width: 1.1em; height: 1.1em; fill: none; stroke: var(--ha-sand); stroke-width: 1.8; stroke-linecap: round; }
+    .inicio .hora { color: var(--ha-sand); margin-right: calc(var(--ha-t-label-track) * -1); }
+
     /* ── Tabla de pruebas: número · prueba (categoría + altura | modalidad) · cantidad ── */
-    .tabla { flex: none; }
+    .tabla { flex: none; margin-top: calc(var(--ha-s-5) * var(--e)); }
     .fila, .cabecera {
       display: grid; align-items: center; column-gap: calc(var(--ha-s-2) * var(--e));
       grid-template-columns: calc(56px * var(--e)) minmax(0, 1fr) calc(112px * var(--e));
@@ -112,8 +123,8 @@
   <script>
     // ── Datos ──
     // Pruebas, alturas y modalidad del flyer original; categorías con la escritura del anteprograma (datos.js).
-    // Cantidades corregidas por el usuario el 25/11. El flyer original deja vacío el horario de inicio de las pruebas.
-    const DIA = { nombre: "Sábado", fecha: "28.11.2026", remate: "17:30 h" };
+    // Cantidades corregidas por el usuario el 25/11. Horario de inicio (vacío en el flyer original) pasado por el usuario el 26/11.
+    const DIA = { nombre: "Sábado", fecha: "28.11.2026", inicio: "9:00 h", remate: "17:30 h" };
     const PRUEBAS = [
       { n: 8,  prueba: "3.ª Mayor/Menor - Amateur",            altura: "1,05", mod: "2F", cant: 60 },
       { n: 9,  prueba: "1.ª - 2.ª - 3.ª Mayor/Menor - Amateur", altura: "1,20", mod: "2F", cant: 62 },
@@ -137,6 +148,7 @@
       <div class="eyebrow">Cantidades y horario de inicio</div>
       <div class="titulo">${DIA.nombre} <span class="fecha">${DIA.fecha}</span></div>
       <div class="destello"></div>
+      <div class="inicio">${reloj}<span>Inicio</span><span class="hora">${DIA.inicio}</span></div>
       <div class="tabla">
         <div class="cabecera"><span class="c-prueba">Prueba</span><span class="c-cant">Cantidad</span></div>
         ${PRUEBAS.map((p) => `
