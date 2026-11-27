@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>27-11-HA-PortadaYT-Sponsors</title>
+  <!-- Portada de YouTube (1920 × 1080) del video de sponsors (27-11-HA-Sponsors-16x9-01).
+       Mismo fondo (el cuadro del dron del PDF HA26_ Sponsors_Clip_1920x1080, con su encuadre) y los mismos tres logos
+       arriba, en las posiciones del video. Al centro, REMATE 2026 & CONCURSO INTERNACIONAL CSI 1★. Sin la cinta de sponsors.
+       Exportar: node herramientas/exportar-slides.mjs youtube/27-11-HA-PortadaYT-Sponsors/index.html <carpeta>
+       y pasar el PNG a JPG calidad 90 → salida/portadas-yt/27-11-HA-PortadaYT-Sponsors.jpg -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: var(--ha-charcoal-elev); }
+    body { -webkit-font-smoothing: antialiased; font-family: var(--ha-font-sans); color: var(--ha-white); }
+
+    .slide { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--ha-black); }
+    /* Fondo: 2560 × 1440 con el encuadre de la pág. 1 del PDF (2526 px de ancho, abajo a ras) */
+    .fondo { position: absolute; left: 0; top: 0; width: 2560px; height: 1440px; transform-origin: 0 0; transform: translate(-346.3px, -336.6px) scale(0.98672); }
+    /* Velos: arriba como en el video (logos sobre el cielo); abajo, porque sin la cinta el título baja sobre la pista clara */
+    .velo-sup { position: absolute; left: 0; top: 0; width: 1920px; height: 600px; background: linear-gradient(180deg, var(--ha-veil-dark) 0%, var(--ha-veil-dark) 50%, transparent 100%); }
+    .velo-inf { position: absolute; left: 0; top: 380px; width: 1920px; height: 700px; background: var(--ha-veil-bottom); }
+
+    /* ---------- Encabezado: las mismas posiciones que el video ---------- */
+    .logotipo { position: absolute; left: 109.6px; top: 98.9px; width: 253.1px; height: 28.9px; }
+    .estrella-ha { position: absolute; left: 226.2px; top: 52.8px; width: 37.7px; height: 37.7px; }
+    .linea-ha { position: absolute; left: 102.4px; top: 140.8px; width: 278.3px; height: var(--ha-border); background: var(--ha-gold-flare); }
+    .sello { position: absolute; left: 862.9px; top: 27.4px; width: 194.5px; height: 194.3px; }
+    .csi { position: absolute; left: 1630.2px; top: 60px; width: 187.7px; height: 93.4px; }
+
+    /* ---------- Título ---------- */
+    .bloque { position: absolute; left: 0; top: 318px; width: 1920px; display: flex; flex-direction: column; align-items: center; text-transform: uppercase; }
+    .fila { display: flex; justify-content: center; align-items: flex-start; white-space: nowrap; line-height: 1; }
+    /* El tracking deja aire después de la última letra: se compensa con margin-right negativo para que quede centrado */
+    .b { font-weight: var(--ha-t-event-weight); letter-spacing: 0.15em; margin-right: -0.15em; }
+    .r { font-weight: var(--ha-t-year-weight); letter-spacing: 0.175em; margin-right: -0.175em; }
+
+    /* REMATE 2026 en una línea: evento en Bold y año en Regular (firma de DESIGN §4), 150 px */
+    .l1 { font-size: calc(var(--ha-t-event-size) * 1.34); gap: 0.42em; }
+    /* & en arena, entre dos rayas doradas que se abren hacia los lados */
+    .amp { margin-top: 34px; gap: 34px; align-items: center; color: var(--ha-sand); font-weight: var(--ha-t-num-weight); font-size: calc(var(--ha-t-num-size) * 1.1); }
+    .raya { width: 150px; height: var(--ha-border); }
+    .raya.izq { background: linear-gradient(90deg, transparent, var(--ha-gold)); }
+    .raya.der { background: linear-gradient(90deg, var(--ha-gold), transparent); }
+    /* CONCURSO INTERNACIONAL en Bold, más chico para que entre con el mismo tracking */
+    .l3 { margin-top: 34px; font-size: calc(var(--ha-t-event-size) * 0.92); }
+    /* CSI 1★ en Regular, como el "2026" del video. La estrella roja reemplaza al asterisco (DESIGN §2) */
+    .l4 { margin-top: 22px; font-size: calc(var(--ha-t-year-size) * 1.27); }
+    .l4 .r { margin-right: 0; }
+    .l4 .uno { letter-spacing: 0; margin-right: 0.1em; }
+    .estrella-csi { width: 46px; height: 46.5px; margin-top: 21px; fill: var(--ha-red); }
+  </style>
+</head>
+<body>
+  <div class="slide" data-nombre="27-11-HA-PortadaYT-Sponsors">
+    <img class="fondo" src="../../assets/fotos/sponsors-tapa-16x9.jpg" alt="" />
+    <div class="velo-sup"></div>
+    <div class="velo-inf"></div>
+
+    <img class="logotipo" src="../../assets/logos/ha-logotipo-negativo.png" alt="Haras Abril" />
+    <img class="estrella-ha" src="../../assets/logos/ha-estrella-roja.png" alt="" />
+    <div class="linea-ha"></div>
+    <img class="sello" src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+    <img class="csi" src="../../assets/logos/csi-logo-negativo.svg" alt="CSI" />
+
+    <div class="bloque">
+      <div class="fila l1"><span class="b">Remate</span><span class="r">2026</span></div>
+      <div class="fila amp"><span class="raya izq"></span><span>&amp;</span><span class="raya der"></span></div>
+      <div class="fila l3"><span class="b">Concurso Internacional</span></div>
+      <div class="fila l4"><span class="r">CSI&nbsp;<span class="uno">1</span></span><svg class="estrella-csi" viewBox="131.686 0 56.02 56.598" aria-label="*"><path d="M159.696 0L151.973 20.497L131.686 28.299L151.973 36.101L159.696 56.598L167.418 36.101L187.706 28.299L167.418 20.497Z"/></svg></div>
+    </div>
+  </div>
+</body>
+</html>
