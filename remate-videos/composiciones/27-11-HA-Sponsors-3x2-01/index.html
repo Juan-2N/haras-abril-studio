@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1280" />
+    <title>27-11-HA-Sponsors-3x2-01</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css" />
+    <style>
+      /* Adaptación a 1920 × 1280 (3:2, pantalla del salón) de 27-11-HA-Sponsors-16x9-01 (v2), con los mismos componentes y tamaños.
+         Los 200 px de más: el encabezado y la frase quedan igual, el título baja 100 px y la cinta 200 (misma distancia al borde de abajo).
+         Sin tapa en el frame 0: la pieza no va a IG, y en la pantalla se vería como un salto. */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; overflow: hidden; background: var(--ha-black); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ha-black); }
+
+      /* Fondo: DJI 0011 a 2560×1440 (el clip del 16:9). Los encuadres del 16:9 llevados a 1280 de alto, con el mismo centro horizontal:
+         al principio escala 1 y abajo a ras (pág. 1), al final la escala de la pág. 2. Un acercamiento lento durante toda la pieza */
+      #fondo { position: absolute; left: 0; top: 0; width: 2560px; height: 1440px; transform-origin: 0 0; }
+      /* Velo arriba: el encabezado y la frase quedan sobre el cielo, que se aclara en la segunda mitad (no está en el PDF) */
+      #velo-sup { position: absolute; left: 0; top: 0; width: 1920px; height: 600px; background: linear-gradient(180deg, var(--ha-veil-dark) 0%, var(--ha-veil-dark) 50%, transparent 100%); }
+      /* Con el encuadre más alto, el sol y el horizonte quedan detrás de la frase: un segundo velo, suave, solo detrás de ella (como en el 9:16) */
+      #velo-frase { position: absolute; left: 0; top: 155px; width: 1920px; height: 200px; background: radial-gradient(ellipse 48% 50% at 50% 50%, var(--ha-veil-dark) 0%, var(--ha-veil-dark) 20%, transparent 100%); }
+
+      /* ---------- Encabezado ---------- */
+      /* Logotipo HARAS ABRIL (849×97, el texto arranca en +5,+5) a escala 0.2981: texto de 248 px en (111, 100) */
+      #logotipo { position: absolute; left: 109.6px; top: 98.9px; width: 253.1px; height: 28.9px; }
+      /* Estrella con la posición del logo oficial: visible de 33 px en (228.6, 55.3). El PNG (130 px, visible 114 en +9,+7) va a 37.7 px */
+      #estrella-ha { position: absolute; left: 226.2px; top: 52.8px; width: 37.7px; height: 37.7px; }
+      #linea-ha { position: absolute; left: 102.4px; top: 140.8px; width: 278.3px; height: var(--ha-border); background: var(--ha-gold-flare); }
+      /* Sello: círculo de 171 px centrado en (960, 127). El PNG mide 1081×1080 y el círculo, 950 px, centrado en (540, 555) */
+      #sello { position: absolute; left: 862.9px; top: 27.4px; width: 194.5px; height: 194.3px; transform-origin: 49.95% 51.39%; }
+      /* Logo CSI (vector sacado del PDF): 187.7 × 93.4 en (1630.2, 60) */
+      #csi { position: absolute; left: 1630.2px; top: 60px; width: 187.7px; height: 93.4px; }
+
+      /* Frase de cierre (Garamond itálica, sand), con la base en y = 264 */
+      .frase {
+        position: absolute; left: 0; top: 239px; width: 1920px; text-align: center; white-space: nowrap;
+        font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-claim-weight);
+        font-size: calc(var(--ha-t-claim-size) * 0.64); line-height: 1; color: var(--ha-sand);
+        text-shadow: 0 0 18px var(--ha-veil-dark), 0 0 6px var(--ha-veil-dark);
+      }
+
+      /* ---------- Título ---------- */
+      .fila { position: absolute; left: 0; width: 1920px; display: flex; justify-content: center; align-items: flex-start; white-space: nowrap; line-height: 1; text-transform: uppercase; color: var(--ha-white); font-family: var(--ha-font-sans); }
+      /* Evento en Bold de 145 px: mayúsculas de 102 px con el borde superior en y = 494 */
+      .evento { top: 465px; font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-event-size) * 1.298); letter-spacing: 0.15em; }
+      /* Año / CSI 1★ en Regular (v2; el PDF usa Medium) de 132 px, con el borde superior en y = 635 */
+      .anio { top: 609px; font-weight: var(--ha-t-year-weight); font-size: calc(var(--ha-t-year-size) * 1.266); letter-spacing: 0.175em; }
+      /* El tracking deja aire después de la última letra: se compensa para que quede centrado
+         (en CSI 1★ la última es la estrella, que no lleva tracking) */
+      .evento .c { margin-right: -0.15em; }
+      .anio .c { margin-right: -0.175em; }
+      #an-csi .c { margin-right: 0; }
+      .c { display: inline-flex; align-items: flex-start; }
+      .l { display: inline-block; }
+      /* La estrella roja reemplaza al asterisco de "1*" (DESIGN §2) */
+      /* La estrella es la del logo CSI (sacada del PDF), en SVG para no repetir el PNG del logotipo */
+      .estrella-csi { width: 46px; height: 46.5px; margin-top: 21px; fill: var(--ha-red); }
+      #an-csi .uno { letter-spacing: 0; margin-right: 0.1em; }
+
+      /* ---------- Cinta de sponsors (footer del sitio) ---------- */
+      /* Banda de 193 px (977 a 1170) en #161616: carbón elevado oscurecido */
+      #banda { position: absolute; left: 0; top: 977.4px; width: 1920px; height: 193px; background: color-mix(in srgb, var(--ha-charcoal-elev) 70%, var(--ha-black)); }
+      .filete { position: absolute; left: 0; width: 1920px; height: var(--ha-border); background: var(--ha-gold-grad); transform-origin: 50% 50%; }
+      #filete-sup { top: 976px; }
+      #filete-inf { top: 1169px; }
+      /* Filetes finos del footer del sitio (blanco al 8 %), centrados con los logos en la banda */
+      .hilo { position: absolute; left: 0; width: 1920px; height: var(--ha-hairline); background: var(--ha-line-neutral); opacity: 0.35; }
+      #hilo-sup { top: 1017px; }
+      #hilo-inf { top: 1130px; }
+      /* Ventana de la cinta: fundido en los bordes como en el sitio; logos en gris claro al 80 % */
+      #cinta {
+        position: absolute; left: 0; top: 978px; width: 1920px; height: 191px; overflow: hidden;
+        -webkit-mask-image: linear-gradient(90deg, transparent, var(--ha-black) 5%, var(--ha-black) 95%, transparent);
+        mask-image: linear-gradient(90deg, transparent, var(--ha-black) 5%, var(--ha-black) 95%, transparent);
+        filter: grayscale(1) brightness(1.5) opacity(0.8);
+      }
+      /* 21 logos × 3 copias. Alto 50 px y ancho máximo 127 (170 en Center Box y Volvo, muy apaisados), 63 px entre logos.
+         Una copia mide 3389.8 px. En el segundo 3 el primer logo de la copia B arranca en x = 60, como en el 16:9 */
+      #pista { position: absolute; left: 0; top: 0; height: 191px; display: flex; align-items: center; will-change: transform; }
+      .sp { flex-shrink: 0; display: flex; align-items: center; justify-content: center; height: 191px; padding: 0 31.5px; }
+      .sp img { display: block; }
+
+      #fin { position: absolute; inset: 0; background: var(--ha-black); opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <!-- 30 s. Del frame 1 a 13,3 s: REMATE 2026 (pág. 1). De 13,9 s a 28,8 s: CONCURSO CSI 1★ (pág. 2), con el cambio
+         en la subida de la música. Encabezado y cinta de sponsors durante toda la pieza. Salida a negro a 28,8 s. -->
+    <div data-hf-id="hf-3w3x" id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1280">
+
+      <video data-hf-id="hf-1jtx" id="fondo" class="clip" src="assets/clips/sponsors-dron-16x9.mp4" muted playsinline
+             data-start="0" data-duration="30" data-media-start="0" data-track-index="0"></video>
+
+      <div data-hf-id="hf-6j26" id="velo-sup"></div>
+      <div data-hf-id="hf-r3sf" id="velo-frase"></div>
+
+      <!-- Encabezado -->
+      <img data-hf-id="hf-vz9d" id="logotipo" src="assets/logos/ha-logotipo-negativo.png" alt="Haras Abril" />
+      <img data-hf-id="hf-sujx" id="estrella-ha" src="assets/logos/ha-estrella-roja.png" alt="" />
+      <div data-hf-id="hf-60y8" id="linea-ha"></div>
+      <img data-hf-id="hf-ad77" id="sello" src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="Haras Abril" />
+      <img data-hf-id="hf-7o8w" id="csi" src="assets/logos/csi-logo-negativo.svg" alt="CSI" />
+
+      <div data-hf-id="hf-ei5f" id="frase-remate" class="frase">Tu próxima estrella cada vez más cerca.</div>
+      <div data-hf-id="hf-t6rt" id="frase-csi" class="frase">La mejor sangre. Los mejores resultados.</div>
+
+      <!-- Título: REMATE 2026 -->
+      <div data-hf-id="hf-z987" id="ev-remate" class="fila evento"><span data-hf-id="hf-i298" class="c"><span data-hf-id="hf-m0zv" class="l">R</span><span data-hf-id="hf-doka" class="l">E</span><span data-hf-id="hf-gv0i" class="l">M</span><span data-hf-id="hf-f9se" class="l">A</span><span data-hf-id="hf-jn5p" class="l">T</span><span data-hf-id="hf-fi66" class="l">E</span></span></div>
+      <div data-hf-id="hf-6t5l" id="an-remate" class="fila anio"><span data-hf-id="hf-ajr8" class="c"><span data-hf-id="hf-9b6z" class="l">2</span><span data-hf-id="hf-8ikx" class="l">0</span><span data-hf-id="hf-pyh7" class="l">2</span><span data-hf-id="hf-7pyv" class="l">6</span></span></div>
+      <!-- Título: CONCURSO CSI 1★ -->
+      <div data-hf-id="hf-zod6" id="ev-csi" class="fila evento"><span data-hf-id="hf-9cu5" class="c"><span data-hf-id="hf-g2eg" class="l">C</span><span data-hf-id="hf-hnmk" class="l">O</span><span data-hf-id="hf-h9bj" class="l">N</span><span data-hf-id="hf-2a74" class="l">C</span><span data-hf-id="hf-k1gq" class="l">U</span><span data-hf-id="hf-eep7" class="l">R</span><span data-hf-id="hf-mfaw" class="l">S</span><span data-hf-id="hf-ya50" class="l">O</span></span></div>
+      <div data-hf-id="hf-o89w" id="an-csi" class="fila anio"><span data-hf-id="hf-9r56" class="c"><span data-hf-id="hf-13a1" class="l">C</span><span data-hf-id="hf-7m4w" class="l">S</span><span data-hf-id="hf-ig8m" class="l">I</span><span data-hf-id="hf-e457" class="l">&nbsp;</span><span data-hf-id="hf-8aae" class="l uno">1</span><svg data-hf-id="hf-6e9c" class="l estrella-csi" viewBox="131.686 0 56.02 56.598" aria-label="*"><path data-hf-id="hf-6zg8" d="M159.696 0L151.973 20.497L131.686 28.299L151.973 36.101L159.696 56.598L167.418 36.101L187.706 28.299L167.418 20.497Z"/></svg></span></div>
+
+      <!-- Cinta de sponsors -->
+      <div data-hf-id="hf-fb4p" id="banda"></div>
+      <div data-hf-id="hf-ntjt" id="hilo-sup" class="hilo"></div>
+      <div data-hf-id="hf-1dr0" id="hilo-inf" class="hilo"></div>
+      <div data-hf-id="hf-s544" id="cinta">
+        <div data-hf-id="hf-z2w5" id="pista" data-layout-allow-overflow>
+          <!-- copia A -->
+          <div data-hf-id="hf-se81" class="sp"><img data-hf-id="hf-i994" src="assets/logos/sponsors-web/01-equi-care.svg" style="width:127px;height:32.9px" alt="" /></div>
+          <div data-hf-id="hf-ubyt" class="sp"><img data-hf-id="hf-1w3k" src="assets/logos/sponsors-web/02-haras-la-lucrecia.svg" style="width:50.1px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-vivw" class="sp"><img data-hf-id="hf-4pyp" src="assets/logos/sponsors-web/03-equibox.svg" style="width:100.2px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-v4kv" class="sp"><img data-hf-id="hf-le5c" src="assets/logos/sponsors-web/04-ruiz-diaz-saddles.svg" style="width:46.6px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-wbhy" class="sp"><img data-hf-id="hf-bcku" src="assets/logos/sponsors-web/05-madoc.svg" style="width:50px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-vx6x" class="sp"><img data-hf-id="hf-661d" src="assets/logos/sponsors-web/06-tres-jagueles.svg" style="width:75.6px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-x440" class="sp"><img data-hf-id="hf-09i5" src="assets/logos/sponsors-web/07-biofarma.svg" style="width:127px;height:22.8px" alt="" /></div>
+          <div data-hf-id="hf-wpsz" class="sp"><img data-hf-id="hf-eoly" src="assets/logos/sponsors-web/08-mares-of-macha.svg" style="width:47.4px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-rjtm" class="sp"><img data-hf-id="hf-qm7x" src="assets/logos/sponsors-web/09-in-vitro-equinos.svg" style="width:93.1px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-r5il" class="sp"><img data-hf-id="hf-h5v6" src="assets/logos/sponsors-web/10-howard-johnson.svg" style="width:127px;height:39.7px" alt="" /></div>
+          <div data-hf-id="hf-ea0v" class="sp"><img data-hf-id="hf-6v8s" src="assets/logos/sponsors-web/11-synergy-cloning.svg" style="width:127px;height:31.5px" alt="" /></div>
+          <div data-hf-id="hf-eobw" class="sp"><img data-hf-id="hf-nhq1" src="assets/logos/sponsors-web/12-aries-equestrian.svg" style="width:38.7px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-dhet" class="sp"><img data-hf-id="hf-nnjd" src="assets/logos/sponsors-web/13-haras-cooper.svg" style="width:127px;height:45.3px" alt="" /></div>
+          <div data-hf-id="hf-dvpu" class="sp"><img data-hf-id="hf-v0w4" src="assets/logos/sponsors-web/14-center-box.svg" style="width:170px;height:26.9px" alt="" /></div>
+          <div data-hf-id="hf-fv8z" class="sp"><img data-hf-id="hf-xtz4" src="assets/logos/sponsors-web/15-volvo.svg" style="width:170px;height:16.4px" alt="" /></div>
+          <div data-hf-id="hf-g9k0" class="sp"><img data-hf-id="hf-o4p6" src="assets/logos/sponsors-web/16-baldini-veterinaria.svg" style="width:103.1px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-f2mx" class="sp"><img data-hf-id="hf-a0yj" src="assets/logos/sponsors-web/17-aranda-inmobiliaria.svg" style="width:93.5px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-fgxy" class="sp"><img data-hf-id="hf-lz22" src="assets/logos/sponsors-web/18-la-carpa-argentina.svg" style="width:50.3px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-b3kn" class="sp"><img data-hf-id="hf-zvzj" src="assets/logos/sponsors-web/19-sport-horse.svg" style="width:111.6px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-bhvo" class="sp"><img data-hf-id="hf-p8if" src="assets/logos/sponsors-web/20-interpampas.svg" style="width:104.6px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-i6f8" class="sp"><img data-hf-id="hf-g2ir" src="assets/logos/sponsors-web/21-dervy-nutricion.svg" style="width:127px;height:45.4px" alt="" /></div>
+          <!-- copia B -->
+          <div data-hf-id="hf-hs47" class="sp"><img data-hf-id="hf-2o60" src="assets/logos/sponsors-web/01-equi-care.svg" style="width:127px;height:32.9px" alt="Equi-Care" /></div>
+          <div data-hf-id="hf-hdt6" class="sp"><img data-hf-id="hf-t20w" src="assets/logos/sponsors-web/02-haras-la-lucrecia.svg" style="width:50.1px;height:50px" alt="Haras La Lucrecia" /></div>
+          <div data-hf-id="hf-gzi5" class="sp"><img data-hf-id="hf-4vp2" src="assets/logos/sponsors-web/03-equibox.svg" style="width:100.2px;height:50px" alt="Equibox" /></div>
+          <div data-hf-id="hf-jrnc" class="sp"><img data-hf-id="hf-sips" src="assets/logos/sponsors-web/04-ruiz-diaz-saddles.svg" style="width:46.6px;height:50px" alt="Ruiz Díaz Saddles" /></div>
+          <div data-hf-id="hf-jdcb" class="sp"><img data-hf-id="hf-3rp0" src="assets/logos/sponsors-web/05-madoc.svg" style="width:50px;height:50px" alt="Madoc" /></div>
+          <div data-hf-id="hf-iz1a" class="sp"><img data-hf-id="hf-1o1p" src="assets/logos/sponsors-web/06-tres-jagueles.svg" style="width:75.6px;height:50px" alt="Haras Tres Jagüeles" /></div>
+          <div data-hf-id="hf-ikq9" class="sp"><img data-hf-id="hf-63lu" src="assets/logos/sponsors-web/07-biofarma.svg" style="width:127px;height:22.8px" alt="Biofarma" /></div>
+          <div data-hf-id="hf-lcvg" class="sp"><img data-hf-id="hf-aebf" src="assets/logos/sponsors-web/08-mares-of-macha.svg" style="width:47.4px;height:50px" alt="Mares of Macha" /></div>
+          <div data-hf-id="hf-kykf" class="sp"><img data-hf-id="hf-cmjn" src="assets/logos/sponsors-web/09-in-vitro-equinos.svg" style="width:93.1px;height:50px" alt="In Vitro Equinos Argentina" /></div>
+          <div data-hf-id="hf-iy31" class="sp"><img data-hf-id="hf-u2ci" src="assets/logos/sponsors-web/10-howard-johnson.svg" style="width:127px;height:39.7px" alt="Howard Johnson" /></div>
+          <div data-hf-id="hf-jce2" class="sp"><img data-hf-id="hf-phhl" src="assets/logos/sponsors-web/11-synergy-cloning.svg" style="width:127px;height:31.5px" alt="Synergy Cloning" /></div>
+          <div data-hf-id="hf-jqp3" class="sp"><img data-hf-id="hf-ceju" src="assets/logos/sponsors-web/12-aries-equestrian.svg" style="width:38.7px;height:50px" alt="Aries Equestrian" /></div>
+          <div data-hf-id="hf-k504" class="sp"><img data-hf-id="hf-sfor" src="assets/logos/sponsors-web/13-haras-cooper.svg" style="width:127px;height:45.3px" alt="Haras Cooper Argentina" /></div>
+          <div data-hf-id="hf-kjb5" class="sp"><img data-hf-id="hf-qwp8" src="assets/logos/sponsors-web/14-center-box.svg" style="width:170px;height:26.9px" alt="Center Box" /></div>
+          <div data-hf-id="hf-kxm6" class="sp"><img data-hf-id="hf-zvf8" src="assets/logos/sponsors-web/15-volvo.svg" style="width:170px;height:16.4px" alt="Volvo" /></div>
+          <div data-hf-id="hf-lbx7" class="sp"><img data-hf-id="hf-bebr" src="assets/logos/sponsors-web/16-baldini-veterinaria.svg" style="width:103.1px;height:50px" alt="Baldini Veterinaria" /></div>
+          <div data-hf-id="hf-lq88" class="sp"><img data-hf-id="hf-a4en" src="assets/logos/sponsors-web/17-aranda-inmobiliaria.svg" style="width:93.5px;height:50px" alt="Juan Alberto Aranda Inmobiliaria" /></div>
+          <div data-hf-id="hf-m4j9" class="sp"><img data-hf-id="hf-jh3x" src="assets/logos/sponsors-web/18-la-carpa-argentina.svg" style="width:50.3px;height:50px" alt="La Carpa Argentina" /></div>
+          <div data-hf-id="hf-miua" class="sp"><img data-hf-id="hf-k0iq" src="assets/logos/sponsors-web/19-sport-horse.svg" style="width:111.6px;height:50px" alt="Sport Horse" /></div>
+          <div data-hf-id="hf-vib6" class="sp"><img data-hf-id="hf-lt21" src="assets/logos/sponsors-web/20-interpampas.svg" style="width:104.6px;height:50px" alt="InterPampas" /></div>
+          <div data-hf-id="hf-v405" class="sp"><img data-hf-id="hf-1hn1" src="assets/logos/sponsors-web/21-dervy-nutricion.svg" style="width:127px;height:45.4px" alt="Derby Nutricion Equina" /></div>
+          <!-- copia C -->
+          <div data-hf-id="hf-wax8" class="sp"><img data-hf-id="hf-vsmo" src="assets/logos/sponsors-web/01-equi-care.svg" style="width:127px;height:32.9px" alt="" /></div>
+          <div data-hf-id="hf-vwm7" class="sp"><img data-hf-id="hf-vge0" src="assets/logos/sponsors-web/02-haras-la-lucrecia.svg" style="width:50.1px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-x3ja" class="sp"><img data-hf-id="hf-37mt" src="assets/logos/sponsors-web/03-equibox.svg" style="width:100.2px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-wp89" class="sp"><img data-hf-id="hf-eiu0" src="assets/logos/sponsors-web/04-ruiz-diaz-saddles.svg" style="width:46.6px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-xw5c" class="sp"><img data-hf-id="hf-5i0i" src="assets/logos/sponsors-web/05-madoc.svg" style="width:50px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-xhub" class="sp"><img data-hf-id="hf-tu9x" src="assets/logos/sponsors-web/06-tres-jagueles.svg" style="width:75.6px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-sbuy" class="sp"><img data-hf-id="hf-rrch" src="assets/logos/sponsors-web/07-biofarma.svg" style="width:127px;height:22.8px" alt="" /></div>
+          <div data-hf-id="hf-rxjx" class="sp"><img data-hf-id="hf-y77e" src="assets/logos/sponsors-web/08-mares-of-macha.svg" style="width:47.4px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-herf" class="sp"><img data-hf-id="hf-rtht" src="assets/logos/sponsors-web/09-in-vitro-equinos.svg" style="width:93.1px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-ht2g" class="sp"><img data-hf-id="hf-yaba" src="assets/logos/sponsors-web/10-howard-johnson.svg" style="width:127px;height:39.7px" alt="" /></div>
+          <div data-hf-id="hf-gm5d" class="sp"><img data-hf-id="hf-4j7o" src="assets/logos/sponsors-web/11-synergy-cloning.svg" style="width:127px;height:31.5px" alt="" /></div>
+          <div data-hf-id="hf-h0ge" class="sp"><img data-hf-id="hf-ywct" src="assets/logos/sponsors-web/12-aries-equestrian.svg" style="width:38.7px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-ftjb" class="sp"><img data-hf-id="hf-t87x" src="assets/logos/sponsors-web/13-haras-cooper.svg" style="width:127px;height:45.3px" alt="" /></div>
+          <div data-hf-id="hf-g7uc" class="sp"><img data-hf-id="hf-b69o" src="assets/logos/sponsors-web/14-center-box.svg" style="width:170px;height:26.9px" alt="" /></div>
+          <div data-hf-id="hf-f0x9" class="sp"><img data-hf-id="hf-o7p4" src="assets/logos/sponsors-web/15-volvo.svg" style="width:170px;height:16.4px" alt="" /></div>
+          <div data-hf-id="hf-ff8a" class="sp"><img data-hf-id="hf-eowe" src="assets/logos/sponsors-web/16-baldini-veterinaria.svg" style="width:103.1px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-kl7n" class="sp"><img data-hf-id="hf-2g7v" src="assets/logos/sponsors-web/17-aranda-inmobiliaria.svg" style="width:93.5px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-kzio" class="sp"><img data-hf-id="hf-bzvi" src="assets/logos/sponsors-web/18-la-carpa-argentina.svg" style="width:50.3px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-tyzk" class="sp"><img data-hf-id="hf-1y33" src="assets/logos/sponsors-web/19-sport-horse.svg" style="width:111.6px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-tkoj" class="sp"><img data-hf-id="hf-s95j" src="assets/logos/sponsors-web/20-interpampas.svg" style="width:104.6px;height:50px" alt="" /></div>
+          <div data-hf-id="hf-t6di" class="sp"><img data-hf-id="hf-0rpf" src="assets/logos/sponsors-web/21-dervy-nutricion.svg" style="width:127px;height:45.4px" alt="" /></div>
+        </div>
+      </div>
+      <div data-hf-id="hf-f869" id="filete-sup" class="filete"></div>
+      <div data-hf-id="hf-3jac" id="filete-inf" class="filete"></div>
+
+      <div data-hf-id="hf-sgeg" id="fin"></div>
+
+      <!-- Música: Battleborn Symphony (la de los videos de lote), con fundido de entrada y de salida -->
+      <audio data-hf-id="hf-6exa" id="musica" src="assets/musica/battleborn-symphony.mp3"
+             data-start="0" data-duration="30" data-track-index="10" data-volume="0.8"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.6,"v":1},{"t":27,"v":1},{"t":29.6,"v":0}]}]}'></audio>
+    </div>
+
+    <script>
+      const DUR = 30, TAPA = 3;
+      // Cinta: 70 px/s, constante, con la misma fase que el 16:9 (en el segundo 3 el primer logo de la copia B queda en x = 60)
+      const SET = 3389.8, VEL = 70, X_TAPA = 60 - 31.5 - SET;
+
+      // Estados iniciales (una tl.set() en 0 no aplica en el frame 0)
+      gsap.set("#fondo", { x: -363.9, y: -160, scale: 1, transformOrigin: "0 0" });
+      gsap.set("#pista", { x: X_TAPA + VEL * TAPA });
+
+      const anim = gsap.timeline({ paused: true });
+      const entra = (sel, t, extra = {}) =>
+        anim.fromTo(sel, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out", ...extra }, t);
+      // Letras: arrancan separadas y se cierran hasta su lugar; al salir se vuelven a abrir
+      const abre = (sel, paso) => (i, el, all) => (i - (all.length - 1) / 2) * paso;
+
+      // Fondo: del encuadre de la pág. 1 al de la pág. 2, llevados a 1280 de alto
+      anim.fromTo("#fondo", { x: -363.9, y: -160, scale: 1 }, { x: -446.2, y: -41.7, scale: 1.07531, duration: DUR, ease: "none" }, 0);
+
+      // Cinta: la banda aparece, los filetes dorados se dibujan desde el centro y los logos corren todo el tiempo
+      anim.fromTo("#banda", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 0);
+      anim.fromTo(".filete", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "power3.out" }, 0.1);
+      anim.fromTo(".hilo", { opacity: 0 }, { opacity: 0.35, duration: 0.6, ease: "power2.out" }, 0.3);
+      anim.fromTo("#cinta", { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power2.out" }, 0.4);
+      anim.fromTo("#pista", { x: X_TAPA + VEL * TAPA }, { x: X_TAPA + VEL * (TAPA - DUR), duration: DUR, ease: "none" }, 0);
+
+      // Encabezado: sello desde un punto; logotipo y CSI suben; línea desde el centro; estrella al final
+      anim.fromTo("#sello", { opacity: 0, scale: 0.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, 0.15);
+      entra("#logotipo", 0.35);
+      entra("#csi", 0.35);
+      anim.fromTo("#linea-ha", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, 0.55);
+      anim.fromTo("#estrella-ha", { opacity: 0, scale: 0.6, rotation: -30 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.7, ease: "expo.out" }, 0.8);
+
+      // REMATE 2026
+      anim.fromTo("#ev-remate .l", { opacity: 0, x: abre("#ev-remate", 70) }, { opacity: 1, x: 0, duration: 0.6, ease: "expo.out" }, 0.6);
+      anim.fromTo("#an-remate .l", { opacity: 0, x: abre("#an-remate", 70) }, { opacity: 1, x: 0, duration: 0.6, ease: "expo.out" }, 0.85);
+      entra("#frase-remate", 1.4, { duration: 0.9 });
+
+      // Cambio a CONCURSO CSI 1★, en la subida de la música (13,3 a 14,5 s)
+      anim.to("#ev-remate .l", { opacity: 0, x: abre(null, 40), duration: 0.5, ease: "power2.in" }, 13.3);
+      anim.to("#an-remate .l", { opacity: 0, x: abre(null, 40), duration: 0.5, ease: "power2.in" }, 13.35);
+      anim.to("#frase-remate", { opacity: 0, duration: 0.5, ease: "power2.in" }, 13.2);
+      anim.fromTo("#ev-csi .l", { opacity: 0, x: abre("#ev-csi", 70) }, { opacity: 1, x: 0, duration: 0.6, ease: "expo.out" }, 13.9);
+      anim.fromTo("#an-csi span.l", { opacity: 0, x: abre("#an-csi", 70) }, { opacity: 1, x: 0, duration: 0.6, ease: "expo.out" }, 14.15);
+      anim.fromTo("#an-csi .estrella-csi", { opacity: 0, scale: 0.6, rotation: -30 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.7, ease: "expo.out" }, 14.5);
+      entra("#frase-csi", 14.7, { duration: 0.9 });
+
+      // Salida a negro; el último medio segundo queda limpio
+      anim.fromTo("#fin", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.in" }, 28.8);
+
+      // Sin tapa: la animación arranca en el frame 0
+      window.__timelines["main"] = anim;
+      anim.seek(0);
+    </script>
+  </body>
+</html>
