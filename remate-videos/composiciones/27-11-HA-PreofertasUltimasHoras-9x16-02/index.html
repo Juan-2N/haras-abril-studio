@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>27-11-HA-PreofertasUltimasHoras-9x16-02</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--ha-charcoal); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ha-charcoal); font-family: var(--ha-font-sans); color: var(--ha-white); }
+      /* Fondo común */
+      #fondo { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      #velo { position: absolute; inset: 0; background: var(--ha-ink); opacity: 0.86; }
+      #sello-bg { position: absolute; left: -420px; top: 125px; width: 1040px; height: 1040px; opacity: 0.06; }
+      /* Slide 00: clip vertical a sangre (1080×1920, tamaño fijo) y velo abajo para el texto */
+      #clip { position: absolute; left: 0; top: 0px; width: 1080px; height: 1920px; object-fit: cover; }
+      #velo-pie { position: absolute; left: 0; right: 0; bottom: 0; height: 1060px;
+        background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--ha-black) 55%, transparent) 38%, color-mix(in srgb, var(--ha-black) 82%, transparent) 100%); }
+      .lote { margin-bottom: var(--ha-s-3); white-space: nowrap; text-transform: uppercase; line-height: 1; font-weight: var(--ha-t-lot-weight); letter-spacing: var(--ha-t-num-track); text-indent: var(--ha-t-num-track); font-size: calc(var(--ha-t-label-size) * 1.0); }
+      .lote b { color: var(--ha-sand); font-weight: var(--ha-t-num-weight); margin-right: 0.6em; }
+      .hasta { margin-top: 22px; white-space: nowrap; font-weight: var(--ha-t-data-weight); letter-spacing: var(--ha-t-data-track); font-size: calc(var(--ha-t-data-size) * 1.3); }
+      .hasta b { color: var(--ha-sand); font-weight: var(--ha-t-lot-weight); text-transform: uppercase; margin-right: 0.4em; }
+      /* Columna centrada */
+      .col { position: absolute; left: 0; width: 1080px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+      .eyebrow { color: var(--ha-sand); text-transform: uppercase; font-weight: var(--ha-t-label-weight); letter-spacing: var(--ha-t-label-track); text-indent: var(--ha-t-label-track); font-size: calc(var(--ha-t-label-size) * 1.3); line-height: 1.1; }
+      .titulo { white-space: nowrap; text-transform: uppercase; font-weight: var(--ha-t-event-weight); letter-spacing: 0.1em; text-indent: 0.1em; font-size: var(--ha-t-event-size); line-height: 1.02; }
+      .sub { white-space: nowrap; text-transform: uppercase; color: var(--ha-sand); font-weight: var(--ha-t-year-weight); letter-spacing: 0.22em; text-indent: 0.22em; font-size: calc(var(--ha-t-year-size) * 0.86); line-height: 1.05; }
+      .firma { white-space: nowrap; text-transform: uppercase; font-weight: var(--ha-t-event-weight); letter-spacing: var(--ha-t-label-track); text-indent: var(--ha-t-label-track); font-size: calc(var(--ha-t-label-size) * 1.3); line-height: 1.1; }
+      .firma span { font-weight: var(--ha-t-year-weight); }
+      .flare { width: var(--ha-flare-w); height: var(--ha-flare-h); margin: var(--ha-s-3) 0; background: var(--ha-gold-flare); }
+      .pill { margin-top: var(--ha-s-4); height: var(--ha-btn-h); padding: 0 var(--ha-btn-pad-x); border-radius: var(--ha-btn-radius); background: var(--ha-gold-grad); display: flex; align-items: center; gap: var(--ha-s-2); color: var(--ha-ink); font-weight: var(--ha-t-lot-weight); letter-spacing: 0.06em; font-size: calc(var(--ha-t-label-size) * 1.1); line-height: 1; }
+      /* Círculos de los beneficios */
+      .circ { position: relative; width: 250px; height: 250px; border-radius: 50%; border: var(--ha-border) solid var(--ha-gold); background: var(--ha-panel-dark); display: flex; align-items: center; justify-content: center; gap: 6px; }
+      .circ b { font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-count-size) * 1.15); line-height: 1; margin-top: -10px; }
+      .circ i { font-style: normal; color: var(--ha-sand); font-weight: var(--ha-t-num-weight); font-size: var(--ha-t-num-size); line-height: 1; margin-top: 28px; }
+      .circ.grande { width: 320px; height: 320px; flex-direction: column; gap: 0; }
+      .circ.grande b { margin-top: 0; }
+      .circ.grande i { margin-top: 0; text-transform: uppercase; letter-spacing: var(--ha-t-label-track); text-indent: var(--ha-t-label-track); font-size: calc(var(--ha-t-label-size) * 1.2); }
+      .txt { margin-top: var(--ha-s-4); text-transform: uppercase; font-weight: var(--ha-t-lot-weight); letter-spacing: var(--ha-t-data-track); font-size: calc(var(--ha-t-label-size) * 1.3); line-height: 1.2; }
+      .txt span { font-weight: var(--ha-t-data-weight); }
+      .txt div + div { color: var(--ha-gray-light); }
+      .nota { font-weight: var(--ha-t-data-weight); letter-spacing: 0.02em; font-size: calc(var(--ha-t-data-size) * 1.15); color: var(--ha-gray-light); }
+      .frase { font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-lot-size) * 0.82); line-height: 1.3; }
+      /* Remate en vivo: la caja del flyer del sábado (reloj + REMATE + hora grande en sand), suelta sobre el fondo */
+      #sello { width: 230px; height: 230px; }
+      .que { margin-top: 20px; display: flex; align-items: center; gap: var(--ha-s-2); white-space: nowrap; text-transform: uppercase; line-height: 1;
+        font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-lot-size) * 0.95); letter-spacing: var(--ha-t-event-track); }
+      .que span { margin-right: calc(var(--ha-t-event-track) * -1); }
+      .que svg { width: 1em; height: 1em; fill: none; stroke: var(--ha-sand); stroke-width: 1.8; stroke-linecap: round; }
+      .hora { margin-top: 8px; white-space: nowrap; text-transform: uppercase; line-height: 1; color: var(--ha-sand);
+        font-weight: var(--ha-t-count-weight); font-size: calc(var(--ha-t-count-size) * 1.2); letter-spacing: var(--ha-t-count-track); text-indent: var(--ha-t-count-track); }
+      .donde { font-weight: var(--ha-t-data-weight); letter-spacing: 0.04em; font-size: calc(var(--ha-t-data-size) * 1.4); line-height: 1.3; }
+      .contacto { margin-top: var(--ha-s-4); font-weight: var(--ha-t-data-weight); letter-spacing: 0.04em; font-size: calc(var(--ha-t-data-size) * 1.15); color: var(--ha-gray-light); }
+      .contacto span { color: var(--ha-sand); text-transform: uppercase; font-weight: var(--ha-t-num-weight); letter-spacing: var(--ha-t-label-track); margin-right: 0.8em; }
+      .claim { margin-top: var(--ha-s-4); color: var(--ha-sand); font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-claim-weight); font-size: var(--ha-t-claim-size); line-height: 1.2; }
+      .fl { font-weight: var(--ha-t-data-weight); }
+      #fin { position: absolute; inset: 0; background: var(--ha-black); opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <!-- Últimas horas de las pre-ofertas, slide 02. Generado por herramientas/armar-preofertas-ultimas.mjs: no editar a mano -->
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1080" data-height="1920">
+      <img id="fondo" src="assets/fotos/dron-pistas-atardecer.jpg" alt="" />
+      <div id="velo"></div>
+      <img id="sello-bg" src="brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="" />
+      <div class="col" style="top:515px">
+        <div class="circ grande c1"><b>30</b><i>min</i></div>
+        <div class="titulo a" style="margin-top:64px">Recordá</div>
+        <div class="flare"></div>
+        <div class="frase a">Si entra una oferta en los últimos<br />30 minutos, el cierre de ese lote<br />se extiende 30 minutos más.</div>
+        <div class="hasta a" style="margin-top:56px"><b>Cierran hoy</b>VIE 27.11.2026 · 20 h</div>
+      </div>
+      <div id="fin"></div>
+      <audio id="musica" src="assets/musica/battleborn-symphony.mp3" data-start="0" data-duration="8" data-track-index="10" data-volume="0.8" data-media-start="20"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":7.2,"v":1},{"t":7.95,"v":0}]}]}'></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const anim = gsap.timeline({ paused: true });
+      const F = 1 / 30, D = 8, TAPA = 3;
+
+      anim.fromTo("#fondo", { scale: 1.0 }, { scale: 1.06, duration: 8, ease: "none" }, 0);
+      anim.fromTo(".c1", { opacity: 0, scale: 0.6, rotation: -12 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.9, ease: "power3.out" }, 0.3);
+      anim.fromTo(".a", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.3 }, 0.8);
+      anim.fromTo(".flare", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, 1.1);
+      anim.fromTo("#fin", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "power1.in" }, D - 0.75);
+      anim.to({}, { duration: 0.001 }, D);
+      // Tapa en el frame 0: la pieza armada; desde el frame 1, la animación
+      tl.add(anim.tweenFromTo(TAPA, TAPA, { duration: F, ease: "none" }), 0);
+      tl.add(anim.tweenFromTo(0, D - F, { duration: D - F, ease: "none" }), F);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

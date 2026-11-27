@@ -1,0 +1,71 @@
+{
+  "slug": "carrusel-preofertas-ultimas-horas",
+  "titulo": "Carrusel Últimas horas de pre-ofertas",
+  "tipo": "carrusel",
+  "fecha_publicacion": "2026-11-27",
+  "descripcion": "4 slides de 8 s · Feed 4:5 y Stories 9:16 · Clip del lote 13 (Abril Viconthon), beneficios, extensión de 30 min y remate en vivo mañana a las 17:30 h · Mismo contenido que el mail del 27/11",
+  "base": "../salida",
+  "formatos": ["4x5", "9x16"],
+  "slides": [
+    { "id": "00", "titulo": "Portada", "subtitulo": "Lote 13 · Abril Viconthon · ¡Últimas horas para pre-ofertar! · Cierran hoy 20 h",
+      "video": "27-11-HA-PreofertasUltimasHoras-{formato}-00.mp4", "captura": "capturas/27-11-HA-PreofertasUltimasHoras-{formato}-00.jpg" },
+    { "id": "01", "titulo": "Beneficios exclusivos", "subtitulo": "2 % por pre-ofertar · 3 % al ganador · no acumulables",
+      "video": "27-11-HA-PreofertasUltimasHoras-{formato}-01.mp4", "captura": "capturas/27-11-HA-PreofertasUltimasHoras-{formato}-01.jpg" },
+    { "id": "02", "titulo": "Recordá", "subtitulo": "Extensión de 30 minutos por lote · Cierran hoy 20 h",
+      "video": "27-11-HA-PreofertasUltimasHoras-{formato}-02.mp4", "captura": "capturas/27-11-HA-PreofertasUltimasHoras-{formato}-02.jpg" },
+    { "id": "03", "titulo": "Remate en vivo", "subtitulo": "Mañana, sábado 28.11 · 17:30 h · link y consultas",
+      "video": "27-11-HA-PreofertasUltimasHoras-{formato}-03.mp4", "captura": "capturas/27-11-HA-PreofertasUltimasHoras-{formato}-03.jpg" }
+  ],
+  "copy": [
+    {
+      "titulo": "Carrusel · completo",
+      "comentario": "Toda la información, como el carrusel del 23/11. Publicar hoy antes de las 20 h: dice \"hoy\" y \"mañana\".",
+      "texto": [
+        "¡ÚLTIMAS HORAS PARA PRE-OFERTAR! 💫",
+        "Remate 2026",
+        "",
+        "Las pre-ofertas cierran hoy, viernes 27/11, a las 20 h, en remateharasabril.com",
+        "La oferta más alta de cada lote es el precio de largada del remate de mañana.",
+        "",
+        "Beneficios exclusivos:",
+        "2 % de descuento solo por pre-ofertar",
+        "3 % de descuento al ganador de la pre-oferta",
+        "(no son acumulables; se aplican sobre el precio de martillo)",
+        "",
+        "Recordá: si entra una oferta en los últimos 30 minutos, el cierre de ese lote se extiende 30 minutos más.",
+        "",
+        "Mañana, remate en vivo: sábado 28/11 · 17:30 h · Haras Abril, Lezama. Presencial y online.",
+        "",
+        "En portada: ABRIL VICONTHON, lote 13 (Conthargos × Clinton × Kojak).",
+        "",
+        "Consultas: remate@harasabril.com.ar",
+        "WP +54 9 11 7302-4522",
+        "",
+        "Tu próxima estrella cada vez más cerca.",
+        "#harasabril #simplementelamejorsangre #losmejoresresultados"
+      ]
+    },
+    {
+      "titulo": "Carrusel · corto",
+      "comentario": "Para no repetir lo que ya dicen los slides.",
+      "texto": [
+        "¡ÚLTIMAS HORAS PARA PRE-OFERTAR! 💫",
+        "Las pre-ofertas cierran hoy a las 20 h en remateharasabril.com",
+        "Mañana, remate en vivo: sábado 28/11 · 17:30 h · Lezama.",
+        "",
+        "Tu próxima estrella cada vez más cerca.",
+        "#harasabril #simplementelamejorsangre #losmejoresresultados"
+      ]
+    },
+    {
+      "titulo": "Stories",
+      "comentario": "Sticker de link a remateharasabril.com en la story 00. En la 03, sticker de cuenta regresiva al sábado 28/11 a las 17:30 h.",
+      "texto": [
+        "Últimas horas · Pre-ofertas hasta hoy 20 h",
+        "remateharasabril.com",
+        "",
+        "Mañana · Remate en vivo · 17:30 h"
+      ]
+    }
+  ]
+}
