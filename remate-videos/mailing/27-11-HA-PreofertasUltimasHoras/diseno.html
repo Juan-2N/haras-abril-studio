@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>27-11-HA-PreofertasUltimasHoras-diseno</title>
+  <!-- Mail de últimas horas de las pre-ofertas (cierran vie 27.11 a las 20 h) y refuerzo del remate en vivo (sáb 28.11, 17:30 h).
+       Mismo sistema que 23-11-HA-Preofertas: cada <section> es un corte, se exporta a JPG al doble (1200 px) y se usa a 600 px.
+       data-href = link del corte · data-alt = texto alternativo.
+       Beneficios según las bases (pdf/02-00-HA-BasesRemate, punto 2): el 3 % del ganador NO se suma al 2 %; los dos valen mañana, sobre el martillo.
+       Generar: node herramientas/cortar-mail.mjs mailing/27-11-HA-PreofertasUltimasHoras/diseno.html salida/mailing/27-11-HA-PreofertasUltimasHoras --prefijo emkt-lasthrs --titulo "…" --pre "…" -->
+  <link rel="stylesheet" href="../../brand/tokens.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 600px; background: var(--ha-charcoal); }
+    body { color: var(--ha-white); font-family: var(--ha-font-sans); -webkit-font-smoothing: antialiased; }
+    section { display: block; width: 600px; background: var(--ha-charcoal); }
+    svg.ico { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+    /* ── Imagen principal: lote 13 (Abril Viconthon) a la izquierda, el texto a la derecha sobre la pared oscura ──
+       Foto del usuario: videosreferencias/lote-13-head-last-hrs.jpg → assets/fotos/lote13-head-last-hrs.jpg (1863×1176).
+       A cover en 600×380 queda entera (602×380): la cabeza del potrillo en x ≈ 120–175. */
+    .hero { position: relative; height: 380px; overflow: hidden; }
+    .hero .foto { position: absolute; left: 0; top: 0; width: 600px; height: 380px; object-fit: cover; object-position: 50% 50%; }
+    .hero .velo { position: absolute; inset: 0;
+      background: linear-gradient(270deg, color-mix(in srgb, var(--ha-charcoal) 60%, transparent) 0%, color-mix(in srgb, var(--ha-charcoal) 45%, transparent) 40%, transparent 62%); }
+    .hero .velo-pie { position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: var(--ha-veil-bottom); }
+    .hero .bloque { position: absolute; left: 288px; right: var(--ha-s-3); top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .hero .eyebrow { color: var(--ha-sand); text-transform: uppercase; white-space: nowrap; font-weight: var(--ha-t-label-weight); letter-spacing: var(--ha-t-label-track); text-indent: var(--ha-t-label-track); font-size: calc(var(--ha-t-label-size) * 0.56); line-height: 1.1; }
+    .hero .titulo { white-space: nowrap; text-transform: uppercase; font-weight: var(--ha-t-event-weight); letter-spacing: var(--ha-t-lot-track); text-indent: var(--ha-t-lot-track); font-size: calc(var(--ha-t-event-size) * 0.42); line-height: 1.05; }
+    .hero .rule { width: 240px; height: var(--ha-flare-h); margin: 12px 0 10px; background: var(--ha-gold-flare); }
+    .hero .marca { white-space: nowrap; text-transform: uppercase; font-weight: var(--ha-t-event-weight); letter-spacing: var(--ha-t-label-track); text-indent: var(--ha-t-label-track); font-size: calc(var(--ha-t-label-size) * 0.5); line-height: 1.1; }
+    .hero .marca span { font-weight: var(--ha-t-year-weight); }
+    .hero .hasta { margin-top: 16px; display: flex; flex-direction: column; align-items: center; gap: 4px; white-space: nowrap; font-weight: var(--ha-t-data-weight); letter-spacing: var(--ha-t-data-track); font-size: calc(var(--ha-t-data-size) * 0.75); line-height: 1.1; }
+    .hero .hasta b { color: var(--ha-sand); font-weight: var(--ha-t-lot-weight); text-transform: uppercase; text-indent: var(--ha-t-data-track); }
+    /* Leyenda del lote, abajo a la izquierda, sobre el pecho del potrillo */
+    .hero .lote { position: absolute; left: var(--ha-s-3); bottom: 18px; white-space: nowrap; text-transform: uppercase; line-height: 1;
+      font-size: calc(var(--ha-t-label-size) * 0.42); letter-spacing: var(--ha-t-num-track); }
+    .hero .lote b { color: var(--ha-sand); font-weight: var(--ha-t-num-weight); margin-right: 0.5em; }
+    .hero .lote span { font-weight: var(--ha-t-lot-weight); }
+
+    /* ── Texto ── */
+    .intro { padding: var(--ha-s-5) var(--ha-s-6) var(--ha-s-1); text-align: center; }
+    .eyebrow { font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 0.45); letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-gold); }
+    .titulo { font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-event-size) * 0.34); line-height: 1.05; letter-spacing: 0.04em; text-transform: uppercase; padding-top: 12px; }
+    .texto { font-weight: var(--ha-t-data-weight); font-size: calc(var(--ha-t-label-size) * 0.6); line-height: 1.35; padding-top: 20px; }
+
+    /* ── Botones ── */
+    .cta { padding: 28px var(--ha-s-6) 36px; text-align: center; }
+    .cta.sec { padding: var(--ha-s-3) var(--ha-s-6) var(--ha-s-1); }
+    .boton {
+      display: inline-flex; align-items: center; gap: 12px; height: 52px; padding: 0 40px; border-radius: var(--ha-btn-radius);
+      background: var(--ha-gold-grad); font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 0.56);
+      letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-ink); line-height: 1;
+    }
+    .boton.linea { background: none; border: 1px solid var(--ha-gold); color: var(--ha-gold); height: 46px; padding: 0 32px; font-size: calc(var(--ha-t-label-size) * 0.5); }
+
+    /* ── Beneficios: dos cajas con el porcentaje grande ── */
+    .caja { background: var(--ha-panel-dark); border: 1px solid var(--ha-line-gold); }
+    .etq { font-weight: var(--ha-t-label-weight); font-size: calc(var(--ha-t-label-size) * 0.47); letter-spacing: var(--ha-t-label-track); text-transform: uppercase; color: var(--ha-gold); padding-top: 2px; }
+    .benef { padding: 4px var(--ha-s-6) 0; text-align: center; }
+    .benef .etq { display: block; padding-bottom: 14px; }
+    .cajas { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .ben { height: 104px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+    .num { display: flex; align-items: baseline; white-space: nowrap; line-height: 1; }
+    .num b { font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-event-size) * 0.5); }
+    .num i { font-style: normal; color: var(--ha-sand); font-weight: var(--ha-t-num-weight); font-size: calc(var(--ha-t-label-size) * 0.7); margin-left: 2px; }
+    .ben-txt { text-align: left; text-transform: uppercase; white-space: nowrap; letter-spacing: var(--ha-t-lot-track); font-size: calc(var(--ha-t-label-size) * 0.41); line-height: 1.25; color: var(--ha-gray-light); }
+    .ben-txt b { display: block; color: var(--ha-white); font-weight: var(--ha-t-lot-weight); }
+    .benef .nota { padding-top: 12px; font-weight: var(--ha-t-data-weight); font-size: calc(var(--ha-t-label-size) * 0.47); line-height: 1.35; color: var(--ha-gray-light); }
+
+    .recorda { margin: var(--ha-s-3) var(--ha-s-6) 0; padding: 16px 24px; text-align: center; }
+    .recorda .etq { display: block; padding-bottom: 6px; }
+    .recorda p { font-weight: var(--ha-t-data-weight); font-size: calc(var(--ha-t-label-size) * 0.53); line-height: 1.35; }
+
+    /* ── Remate en vivo: la misma caja del flyer del sábado (reloj + REMATE + hora grande en sand) ── */
+    .vivo-sec { padding-top: var(--ha-s-8); }
+    .vivo { margin: 0 var(--ha-s-6); padding: var(--ha-s-4) var(--ha-s-3) var(--ha-s-4); display: flex; flex-direction: column; align-items: center; text-align: center;
+      background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-gold); }
+    .vivo .etq { white-space: nowrap; text-indent: var(--ha-t-label-track); font-size: calc(var(--ha-t-label-size) * 0.5); }
+    .vivo .que { margin-top: 18px; display: flex; align-items: center; gap: 12px; white-space: nowrap; text-transform: uppercase; line-height: 1;
+      font-weight: var(--ha-t-event-weight); font-size: calc(var(--ha-t-lot-size) * 0.42); letter-spacing: var(--ha-t-event-track); }
+    .vivo .que span { margin-right: calc(var(--ha-t-event-track) * -1); }
+    .vivo .que svg { color: var(--ha-sand); }
+    .vivo .hora { margin-top: 10px; white-space: nowrap; text-transform: uppercase; line-height: 1; color: var(--ha-sand);
+      font-weight: var(--ha-t-count-weight); font-size: calc(var(--ha-t-count-size) * 0.62); letter-spacing: var(--ha-t-count-track); text-indent: var(--ha-t-count-track); }
+    .vivo .rule { width: 260px; height: var(--ha-flare-h); margin: 18px 0 16px; background: var(--ha-gold-flare); }
+    .vivo .donde { font-weight: var(--ha-t-data-weight); font-size: calc(var(--ha-t-label-size) * 0.56); line-height: 1.35; }
+    .vivo .donde .lnk { color: var(--ha-sand); }
+
+    /* ── Filas de datos ── */
+    .fila { margin: 0 var(--ha-s-6); padding: 20px 0; display: grid; grid-template-columns: 150px 1fr; border-top: 1px solid var(--ha-line-gold-soft); }
+    .fila.primera { margin-top: var(--ha-s-5); }
+    .fila.ultima { border-bottom: 1px solid var(--ha-line-gold-soft); }
+    .val { font-weight: var(--ha-t-data-weight); font-size: calc(var(--ha-t-label-size) * 0.56); line-height: 1.35; }
+    .val .lnk { color: var(--ha-sand); }
+
+    .firma { padding: 40px var(--ha-s-6) var(--ha-s-6); display: grid; justify-items: center; gap: 16px; }
+    .firma img { width: 96px; height: 96px; }
+    .frase { font-family: var(--ha-font-serif); font-style: italic; font-weight: var(--ha-t-claim-weight); font-size: calc(var(--ha-t-label-size) * 0.7); color: var(--ha-sand); }
+  </style>
+</head>
+<body>
+  <section class="hero" data-href="https://remateharasabril.com/Remate/338/haras-abril" data-alt="¡Últimas horas para pre-ofertar! Remate 2026 · Cierran hoy, viernes 27.11.2026, a las 20 h · Lote 13, Abril Viconthon">
+    <img class="foto" src="../../assets/fotos/lote13-head-last-hrs.jpg" alt="" />
+    <div class="velo"></div>
+    <div class="velo-pie"></div>
+    <div class="bloque">
+      <div class="eyebrow">¡Últimas horas para</div>
+      <div class="titulo">Pre-ofertar!</div>
+      <div class="rule"></div>
+      <div class="marca">Remate <span>2026</span></div>
+      <div class="hasta"><b>Cierran hoy</b><span>VIE 27.11.2026 · 20 h</span></div>
+    </div>
+    <div class="lote"><b>Lote 13</b><span>Abril Viconthon</span></div>
+  </section>
+
+  <section class="intro" data-alt="Remate Haras Abril 2026. El último paso antes del remate. Hasta las 20 h de hoy, los 13 lotes del catálogo reciben pre-ofertas en remateharasabril.com. La oferta más alta de cada lote es el precio de largada del remate en vivo de mañana.">
+    <div class="eyebrow">Remate Haras Abril 2026</div>
+    <div class="titulo">El último paso<br />antes del remate</div>
+    <div class="texto">Hasta las 20 h de hoy, los 13 lotes del catálogo<br />reciben pre-ofertas en remateharasabril.com.<br />La oferta más alta de cada lote es el precio<br />de largada del remate en vivo de mañana.</div>
+  </section>
+
+  <section class="cta" data-href="https://remateharasabril.com/Remate/338/haras-abril" data-alt="Pre-ofertar">
+    <span class="boton">Pre-ofertar <span>→</span></span>
+  </section>
+
+  <section class="benef" data-href="https://remateharasabril.com/Remate/338/haras-abril" data-alt="Beneficios exclusivos: 2 % de descuento solo por pre-ofertar y 3 % de descuento al ganador de la pre-oferta. Se aplican mañana, sobre el precio de martillo del lote en que pre-ofertaste. No son acumulables.">
+    <span class="etq">Beneficios exclusivos</span>
+    <div class="cajas">
+      <div class="ben caja"><div class="num"><b>2</b><i>%</i></div><div class="ben-txt"><b>de descuento</b>solo por<br />pre-ofertar</div></div>
+      <div class="ben caja"><div class="num"><b>3</b><i>%</i></div><div class="ben-txt"><b>de descuento</b>al ganador de<br />la pre-oferta</div></div>
+    </div>
+    <p class="nota">Se aplican mañana, sobre el precio de martillo del lote<br />en que pre-ofertaste. No son acumulables.</p>
+  </section>
+
+  <section data-alt="Recordá: si entra una oferta en los últimos 30 minutos, el cierre de ese lote se extiende 30 minutos más.">
+    <div class="recorda caja"><span class="etq">Recordá</span><p>Si entra una oferta en los últimos 30 minutos,<br />el cierre de ese lote se extiende 30 minutos más.</p></div>
+  </section>
+
+  <section class="vivo-sec" data-href="https://remateharasabril.com/Remate/338/haras-abril" data-alt="Mañana, sábado 28.11.2026: remate en vivo a las 17:30 h. Haras Abril, Lezama. Presencial y online: seguilo en remateharasabril.com">
+    <div class="vivo">
+      <span class="etq">Mañana · Sábado 28.11.2026</span>
+      <div class="que"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span>Remate en vivo</span></div>
+      <div class="hora">17:30 h</div>
+      <div class="rule"></div>
+      <div class="donde">Haras Abril, Lezama · Presencial y online<br />Seguilo en <span class="lnk">remateharasabril.com</span></div>
+    </div>
+  </section>
+
+  <section class="cta sec" data-href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Remate%20Haras%20Abril%202026&amp;dates=20261128T173000/20261128T203000&amp;ctz=America/Argentina/Buenos_Aires&amp;location=Haras%20Abril%2C%20RP%202%20km%20153%2C%20Lezama%2C%20Buenos%20Aires&amp;details=Remate%20en%20vivo%2C%20presencial%20y%20online.%20Seguilo%20en%20https%3A%2F%2Fremateharasabril.com%2FRemate%2F338%2Fharas-abril" data-alt="Agendar el remate en el calendario">
+    <span class="boton linea"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Agendar el remate</span>
+  </section>
+
+  <section data-href="https://harasabril.com.ar/remate2026_listas.pdf" data-alt="Lotes: la lista completa de los 13 lotes en PDF">
+    <div class="fila primera"><span class="etq">Lotes</span><span class="val">La lista completa de los 13 lotes<br /><span class="lnk">Descargar el PDF</span></span></div>
+  </section>
+
+  <section data-href="https://youtube.com/playlist?list=PLRpMvaeQJNdQ" data-alt="Videos: el video de cada lote en YouTube">
+    <div class="fila"><span class="etq">Videos</span><span class="val">El video de cada lote<br /><span class="lnk">Ver en YouTube</span></span></div>
+  </section>
+
+  <section data-href="https://hub.harasabril.com.ar/docs/bases-remate-2026.pdf" data-alt="Bases: bases y condiciones del Remate 2026 en PDF">
+    <div class="fila"><span class="etq">Bases</span><span class="val">Bases y condiciones del Remate 2026<br /><span class="lnk">Ver el PDF</span></span></div>
+  </section>
+
+  <section data-href="https://wa.me/5491173024522" data-alt="Consultas: remate@harasabril.com.ar · WhatsApp +54 9 11 7302-4522">
+    <div class="fila ultima"><span class="etq">Consultas</span><span class="val">remate@harasabril.com.ar<br /><span class="lnk">WhatsApp +54 9 11 7302-4522</span></span></div>
+  </section>
+
+  <section class="firma" data-href="https://harasabril.com.ar/" data-alt="Haras Abril · Tu próxima estrella cada vez más cerca.">
+    <img src="../../brand/logos/PNG/HA_Emblema_Dorado_Negativo.png" alt="" />
+    <span class="frase">Tu próxima estrella cada vez más cerca.</span>
+  </section>
+</body>
+</html>

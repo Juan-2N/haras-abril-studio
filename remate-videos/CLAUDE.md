@@ -136,6 +136,12 @@ Si ya existe uno de ese día, agregar una sección. Las decisiones que valen par
 - Los saltos se adaptan solos a la duración de los clips. Si son cortos, el cierre arranca antes y dura más; no se congela ningún cuadro.
 - **Portada de YouTube:** diseño A (foto de Salto, panel a la izquierda, REMATE 2026, línea del video), aprobado el 08/11. Es un JPG aparte por lote, no va en el frame 0: YouTube no toma la primera imagen como miniatura. Fuente: `youtube/00-00-HA-PortadaYT/index.html`; exportar con `herramientas/exportar-slides.mjs` a `salida/portadas-yt/`.
 
+## Mailing en cortes
+
+- Diseño en `mailing/<DD-MM-HA-Pieza>/diseno.html` (cada `<section>` es un corte, con `data-href` y `data-alt`) → `node herramientas/cortar-mail.mjs <diseno.html> salida/mailing/<pieza> --prefijo emkt-<nombre> --titulo "Asunto" --pre "Preencabezado"`.
+- **Siempre con `--prefijo` (desde el 27/11/2026):** los cortes salen `emkt-<nombre>-01.jpg`… y el HTML `emkt-<nombre>.html`, en la misma carpeta. Con `01.jpg`, `02.jpg`… se pisan en Mailchimp. Modelo: `mailing/27-11-HA-PreofertasUltimasHoras/`.
+- Al lado van `<pieza>-mail.txt` (asunto, preencabezado, link de cada corte y versión en texto) y la vista completa. Con las URLs de Mailchimp, regenerar con `--urls` y controlar píxel a píxel.
+
 ## Errores conocidos (no repetir)
 
 - **Render en paralelo:** con varios workers, las imágenes no cargan a tiempo y el video sale con imágenes faltantes o rotas. Siempre `--workers 1 --no-best-effort`.

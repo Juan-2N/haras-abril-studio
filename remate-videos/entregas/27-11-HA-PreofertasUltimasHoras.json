@@ -1,0 +1,86 @@
+{
+  "slug": "mailing-preofertas-ultimas-horas",
+  "titulo": "Mailing · Últimas horas de pre-ofertas",
+  "tipo": "mailing",
+  "fecha_publicacion": "2026-11-27",
+  "descripcion": "Mail en 12 cortes (JPG de 1200 px, se usan a 600 px) + HTML · Cierre de pre-ofertas hoy 20 h y remate en vivo mañana 17:30 h · Cortes con prefijo emkt-lasthrs para que no se pisen en Mailchimp",
+  "base": "../salida",
+  "formatos": ["mailing"],
+  "copy": [
+    {
+      "titulo": "Asunto y preencabezado",
+      "comentario": "Enviar hoy, viernes 27.11, con tiempo antes de las 20 h: el mail dice \"hoy\" y \"mañana\".",
+      "texto": [
+        "ASUNTO",
+        "Últimas horas para pre-ofertar · Remate 2026 💫",
+        "",
+        "PREENCABEZADO",
+        "Las pre-ofertas cierran hoy a las 20 h. Mañana, remate en vivo a las 17:30 h."
+      ]
+    },
+    {
+      "titulo": "Links de los cortes",
+      "comentario": "Cada corte, en este orden, con su link. El 02 y el 05 van sin link.",
+      "texto": [
+        "01 · Imagen principal → https://remateharasabril.com/Remate/338/haras-abril",
+        "02 · Texto → sin link",
+        "03 · Botón PRE-OFERTAR → https://remateharasabril.com/Remate/338/haras-abril",
+        "04 · Beneficios → https://remateharasabril.com/Remate/338/haras-abril",
+        "05 · Recordá → sin link",
+        "06 · Remate en vivo 17:30 h → https://remateharasabril.com/Remate/338/haras-abril",
+        "07 · Agendar el remate → https://calendar.google.com/calendar/render?action=TEMPLATE&text=Remate%20Haras%20Abril%202026&dates=20261128T173000/20261128T203000&ctz=America/Argentina/Buenos_Aires&location=Haras%20Abril%2C%20RP%202%20km%20153%2C%20Lezama%2C%20Buenos%20Aires&details=Remate%20en%20vivo%2C%20presencial%20y%20online.%20Seguilo%20en%20https%3A%2F%2Fremateharasabril.com%2FRemate%2F338%2Fharas-abril",
+        "08 · Lotes (PDF) → https://harasabril.com.ar/remate2026_listas.pdf",
+        "09 · Videos → https://youtube.com/playlist?list=PLRpMvaeQJNdQ",
+        "10 · Bases (PDF) → https://hub.harasabril.com.ar/docs/bases-remate-2026.pdf",
+        "11 · Consultas → https://wa.me/5491173024522",
+        "12 · Firma → https://harasabril.com.ar/"
+      ]
+    },
+    {
+      "titulo": "Versión en texto",
+      "comentario": "Por si se arma el mail en texto o como versión sin imágenes.",
+      "texto": [
+        "¡Últimas horas para pre-ofertar!",
+        "Remate 2026 · Cierran hoy, viernes 27.11.2026, a las 20 h",
+        "",
+        "El último paso antes del remate",
+        "Hasta las 20 h de hoy, los 13 lotes del catálogo reciben pre-ofertas en remateharasabril.com. La oferta más alta de cada lote es el precio de largada del remate en vivo de mañana.",
+        "",
+        "PRE-OFERTAR → https://remateharasabril.com/Remate/338/haras-abril",
+        "",
+        "BENEFICIOS EXCLUSIVOS",
+        "2 % de descuento solo por pre-ofertar",
+        "3 % de descuento al ganador de la pre-oferta",
+        "Se aplican mañana, sobre el precio de martillo del lote en que pre-ofertaste. No son acumulables.",
+        "",
+        "RECORDÁ",
+        "Si entra una oferta en los últimos 30 minutos, el cierre de ese lote se extiende 30 minutos más.",
+        "",
+        "MAÑANA · SÁBADO 28.11.2026",
+        "REMATE EN VIVO · 17:30 h",
+        "Haras Abril, Lezama · Presencial y online",
+        "Seguilo en remateharasabril.com",
+        "",
+        "Consultas: remate@harasabril.com.ar · WhatsApp +54 9 11 7302-4522",
+        "",
+        "Tu próxima estrella cada vez más cerca."
+      ]
+    }
+  ],
+  "slides": [
+    { "id": "HTML", "titulo": "Mail completo", "subtitulo": "emkt-lasthrs.html: tabla de 600 px con los 12 cortes y sus links. Las imágenes van con ruta relativa (están en el mismo ZIP).",
+      "video": "mailing/27-11-HA-PreofertasUltimasHoras/emkt-lasthrs.html", "captura": "capturas/27-11-HA-PreofertasUltimasHoras.jpg" },
+    { "id": "01", "titulo": "Imagen principal", "subtitulo": "Lote 13 · ¡Últimas horas para pre-ofertar! → remateharasabril.com", "video": "mailing/27-11-HA-PreofertasUltimasHoras/emkt-lasthrs-01.jpg" },
+    { "id": "02", "titulo": "El último paso antes del remate", "subtitulo": "Sin link", "video": "mailing/27-11-HA-PreofertasUltimasHoras/emkt-lasthrs-02.jpg" },
+    { "id": "03", "titulo": "Botón Pre-ofertar", "subtitulo": "→ remateharasabril.com", "video": "mailing/27-11-HA-PreofertasUltimasHoras/emkt-lasthrs-03.jpg" },
+    { "id": "04", "titulo": "Beneficios exclusivos", "subtitulo": "2 % y 3 % · → remateharasabril.com", "video": "mailing/27-11-HA-PreofertasUltimasHoras/emkt-lasthrs-04.jpg" },
+    { "id": "05", "titulo": "Recordá", "subtitulo": "Extensión de 30 min · Sin link", "video": "mailing/27-11-HA-PreofertasUltimasHoras/emkt-lasthrs-05.jpg" },
+    { "id": "06", "titulo": "Remate en vivo · 17:30 h", "subtitulo": "Mañana, sábado 28.11 · → remateharasabril.com", "video": "mailing/27-11-HA-PreofertasUltimasHoras/emkt-lasthrs-06.jpg" },
+    { "id": "07", "titulo": "Botón Agendar el remate", "subtitulo": "→ evento en Google Calendar (sáb 28.11, 17:30 a 20:30 h)", "video": "mailing/27-11-HA-PreofertasUltimasHoras/emkt-lasthrs-07.jpg" },
+    { "id": "08", "titulo": "Lotes", "subtitulo": "→ PDF de la lista", "video": "mailing/27-11-HA-PreofertasUltimasHoras/emkt-lasthrs-08.jpg" },
+    { "id": "09", "titulo": "Videos", "subtitulo": "→ playlist de YouTube", "video": "mailing/27-11-HA-PreofertasUltimasHoras/emkt-lasthrs-09.jpg" },
+    { "id": "10", "titulo": "Bases", "subtitulo": "→ PDF de las bases", "video": "mailing/27-11-HA-PreofertasUltimasHoras/emkt-lasthrs-10.jpg" },
+    { "id": "11", "titulo": "Consultas", "subtitulo": "→ WhatsApp", "video": "mailing/27-11-HA-PreofertasUltimasHoras/emkt-lasthrs-11.jpg" },
+    { "id": "12", "titulo": "Firma", "subtitulo": "→ harasabril.com.ar", "video": "mailing/27-11-HA-PreofertasUltimasHoras/emkt-lasthrs-12.jpg" }
+  ]
+}

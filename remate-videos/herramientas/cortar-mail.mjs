@@ -2,14 +2,17 @@
 // y arma el HTML del mail con una tabla de imágenes, cada una con su link (data-href) y su alt (data-alt).
 //
 // Uso (desde remate-videos/):
-//   node herramientas/cortar-mail.mjs <diseno.html> <carpeta-salida> [--base https://.../] [--titulo "Asunto"] [--pre "Preencabezado"] [--urls u1,u2,...]
+//   node herramientas/cortar-mail.mjs <diseno.html> <carpeta-salida> [--prefijo emkt-xxx] [--base https://.../] [--titulo "Asunto"] [--pre "Preencabezado"] [--urls u1,u2,...]
 //
 // Sale: <carpeta>/cortes/NN.jpg y <carpeta>/mail.html.
-// Sin --base, las imágenes quedan con ruta relativa (cortes/NN.jpg): sirve para revisar en local.
-// Para enviar, subir la carpeta cortes/ a un hosting público y volver a correr con --base <url de la carpeta>.
+// Con --prefijo (desde el 27/11, para todo mail nuevo): <carpeta>/<prefijo>-NN.jpg y <carpeta>/<prefijo>.html, todo en la misma carpeta.
+//   Los nombres no se repiten entre mails (en Mailchimp, 01.jpg de un mail pisaba al de otro) y el HTML
+//   funciona igual desde la carpeta o desde el ZIP del hub, que guarda los archivos sin subcarpetas.
+// Sin --base, las imágenes quedan con ruta relativa (cortes/NN.jpg o <prefijo>-NN.jpg): sirve para revisar en local.
+// Para enviar, subir los cortes a un hosting público y volver a correr con --base <url de la carpeta> o --urls.
 
 import { createRequire } from "node:module";
-import { mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { mkdirSync, writeFileSync, rmSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -23,16 +26,30 @@ const base = opt("--base");
 const urls = opt("--urls").split(",").map((u) => u.trim());
 const titulo = opt("--titulo", "Haras Abril");
 const pre = opt("--pre");
+const prefijo = opt("--prefijo");
 const [diseno, salida] = args;
 if (!diseno || !salida) {
-  console.error("Uso: node herramientas/cortar-mail.mjs <diseno.html> <carpeta-salida> [--base url] [--titulo txt] [--pre txt]");
+  console.error("Uso: node herramientas/cortar-mail.mjs <diseno.html> <carpeta-salida> [--prefijo emkt-xxx] [--base url] [--titulo txt] [--pre txt] [--urls u1,u2,...]");
+  process.exit(1);
+}
+if (prefijo && !/^[a-z0-9-]+$/.test(prefijo)) {
+  console.error(`Prefijo inválido "${prefijo}": solo minúsculas, números y guiones.`);
   process.exit(1);
 }
 
 const ANCHO = 600;
-const dirCortes = join(salida, "cortes");
-rmSync(dirCortes, { recursive: true, force: true });
-mkdirSync(dirCortes, { recursive: true });
+const dirCortes = prefijo ? salida : join(salida, "cortes");
+const nombreCorte = (i) => `${prefijo ? prefijo + "-" : ""}${String(i + 1).padStart(2, "0")}.jpg`;
+const nombreHtml = prefijo ? `${prefijo}.html` : "mail.html";
+if (prefijo) {
+  // Solo se borran los cortes viejos de este prefijo: la carpeta tiene también el .txt y la vista completa
+  mkdirSync(salida, { recursive: true });
+  const viejo = new RegExp(`^${prefijo}-\\d+\\.jpg$`);
+  for (const f of readdirSync(salida)) if (viejo.test(f)) rmSync(join(salida, f));
+} else {
+  rmSync(dirCortes, { recursive: true, force: true });
+  mkdirSync(dirCortes, { recursive: true });
+}
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 
@@ -49,7 +66,7 @@ try {
 
   const secciones = await page.$$("body > section");
   for (const [i, s] of secciones.entries()) {
-    const nombre = `${String(i + 1).padStart(2, "0")}.jpg`;
+    const nombre = nombreCorte(i);
     const caja = await s.boundingBox();
     // Alto entero en px de 600: evita líneas finas entre cortes
     const alto = Math.round(caja.height);
@@ -63,7 +80,7 @@ try {
   await browser.close();
 }
 
-const src = (n, i) => urls[i] || (base ? base.replace(/\/?$/, "/") : "cortes/") + n;
+const src = (n, i) => urls[i] || (base ? base.replace(/\/?$/, "/") : prefijo ? "" : "cortes/") + n;
 const celdas = filas.map(({ nombre, alto, href, alt }, i) => {
   const img = `<img src="${src(nombre, i)}" width="${ANCHO}" height="${alto}" alt="${esc(alt)}" style="display:block;width:${ANCHO}px;max-width:100%;height:auto;border:0;outline:none;color:#FEDBA3;font-family:Arial,sans-serif;font-size:14px;" />`;
   return `        <tr><td style="padding:0;line-height:0;font-size:0;">${href ? `<a href="${esc(href)}" target="_blank">${img}</a>` : img}</td></tr>`;
@@ -87,5 +104,5 @@ ${celdas}
 </body>
 </html>
 `;
-writeFileSync(join(salida, "mail.html"), html);
-console.log(`✓ ${join(salida, "mail.html")} (${filas.length} cortes)`);
+writeFileSync(join(salida, nombreHtml), html);
+console.log(`✓ ${join(salida, nombreHtml)} (${filas.length} cortes)`);
