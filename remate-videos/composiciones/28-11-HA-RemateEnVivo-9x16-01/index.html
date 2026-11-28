@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es" data-composition-variables='[{"id":"hora","type":"string","label":"Hora","default":"17:30 H"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>28-11-HA-RemateEnVivo-9x16-01</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="brand/tokens.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--ha-charcoal); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ha-charcoal); font-family: var(--ha-font-sans); color: var(--ha-white); }
+      /* Fondo: salto slow de Abril Tilcha (lote 06), a tamaño final (assets/clips/lote06-slow-envivo-9x16.mp4, 7,7 s):
+         recorte que sigue al caballo, entre y = 200 e y = 1248, y la misma imagen desenfocada arriba y abajo. En el frame 0, el cuadro del segundo 4,0 (la tapa) */
+      #clip, #tapa-foto { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      #velo { position: absolute; inset: 0; background: var(--ha-black); opacity: 0.42; }
+      /* Velo del texto: arranca bajo el caballo y tapa el poste y el sello del obstáculo detrás de las letras */
+      #velo-pie { position: absolute; left: 0; right: 0; bottom: 0; height: 1120px; /* desde y = 800 */
+        background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--ha-black) 62%, transparent) 17%, color-mix(in srgb, var(--ha-black) 80%, transparent) 34%, color-mix(in srgb, var(--ha-black) 88%, transparent) 100%); }
+      /* Columna centrada */
+      .col { position: absolute; left: 0; width: 1080px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+      .eyebrow { white-space: nowrap; color: var(--ha-sand); text-transform: uppercase; font-weight: var(--ha-t-label-weight); letter-spacing: var(--ha-t-label-track); text-indent: var(--ha-t-label-track); font-size: calc(var(--ha-t-label-size) * 1.45); line-height: 1; }
+      .remate { margin-top: 6px; white-space: nowrap; text-transform: uppercase; font-weight: var(--ha-t-event-weight); letter-spacing: 0.12em; text-indent: 0.12em; font-size: calc(var(--ha-t-event-size) * 1.85); line-height: 0.92; }
+      .vivo { white-space: nowrap; text-transform: uppercase; color: var(--ha-sand); font-weight: var(--ha-t-event-weight); letter-spacing: 0.12em; text-indent: 0.12em; font-size: calc(var(--ha-t-event-size) * 1.28); line-height: 0.95; }
+      .pill { position: relative; margin-top: var(--ha-s-6); height: var(--ha-btn-h); padding: 0 var(--ha-btn-pad-x) 4px; /* 4px abajo: el texto sube 2px y queda centrado a ojo */ border-radius: var(--ha-btn-radius); background: var(--ha-gold-grad); display: flex; align-items: center; gap: var(--ha-s-2); color: var(--ha-ink); font-weight: var(--ha-t-lot-weight); letter-spacing: 0.06em; font-size: calc(var(--ha-t-label-size) * 1.15); line-height: 1; }
+      .pill .fl { font-weight: var(--ha-t-data-weight); }
+      .reflejo { position: absolute; inset: 0; overflow: hidden; border-radius: var(--ha-btn-radius); pointer-events: none; }
+      .brillo { display: block; position: absolute; top: 0; left: -160px; width: 120px; height: 100%; background: linear-gradient(100deg, transparent 0%, rgba(255,255,255,0.75) 50%, transparent 100%); }
+      /* Caja de la hora: reloj | hora | ARG., con borde y divisiones doradas */
+      .caja { margin-top: var(--ha-s-4); display: flex; align-items: stretch; height: 104px; background: var(--ha-panel-dark); border: var(--ha-border) solid var(--ha-gold); }
+      .caja > div { display: flex; align-items: center; justify-content: center; padding: 0 var(--ha-s-5); white-space: nowrap; text-transform: uppercase; line-height: 1; }
+      .caja > div + div { border-left: var(--ha-border) solid var(--ha-gold); }
+      .caja svg { width: 52px; height: 52px; fill: none; stroke: var(--ha-sand); stroke-width: 1.8; stroke-linecap: round; }
+      .caja .hora { color: var(--ha-sand); font-weight: var(--ha-t-event-weight); letter-spacing: var(--ha-t-num-track); font-size: calc(var(--ha-t-lot-size) * 1.0); }
+      .caja .zona { font-weight: var(--ha-t-data-weight); letter-spacing: var(--ha-t-num-track); font-size: calc(var(--ha-t-lot-size) * 1.0); }
+      #fin { position: absolute; inset: 0; background: var(--ha-black); opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1080" data-height="1920">
+      <video id="clip" class="clip" src="assets/clips/lote06-slow-envivo-9x16.mp4" muted playsinline data-start="0" data-duration="7.7" data-media-start="0" data-track-index="0"></video>
+      <img id="tapa-foto" class="clip" src="assets/fotos/lote06-slow-envivo-9x16-tapa.jpg" alt="" data-start="0" data-duration="0.033" data-track-index="1" />
+      <div id="velo"></div>
+      <div id="velo-pie"></div>
+      <div class="col" style="top:938px">
+        <div class="eyebrow a">¡Comienza!</div>
+        <div class="remate a">Remate</div>
+        <div class="vivo a">¡En vivo!</div>
+        <div class="pill f">remateharasabril.com<span class="fl">→</span><span class="reflejo"><i class="brillo"></i></span></div>
+        <!-- La hora es la variable "hora" (17:30 H por defecto). Alternativas: render con --variables {"hora":"17:00 H"} o {"hora":"18:00 H"} -->
+        <div class="caja f">
+          <div><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+          <div class="hora" id="hora" data-var-text="hora">17:30 H</div>
+          <div class="zona">ARG.</div>
+        </div>
+      </div>
+      <div id="fin"></div>
+      <audio id="musica" src="assets/musica/battleborn-symphony.mp3" data-start="0" data-duration="8" data-track-index="10" data-volume="0.8" data-media-start="28"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.4,"v":1},{"t":6.9,"v":1},{"t":7.7,"v":0}]}]}'></audio>
+    </div>
+
+    <script>
+
+      const tl = gsap.timeline({ paused: true });
+      const anim = gsap.timeline({ paused: true });
+      const F = 1 / 30, D = 8, TAPA = 3;
+
+      anim.fromTo(".a", { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.85, ease: "power3.out", stagger: 0.16 }, 0.25);
+      anim.fromTo(".f", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out", stagger: 0.14 }, 0.95);
+      // Destello que cruza la pill dos veces (fuera del segundo de la tapa)
+      anim.fromTo(".brillo", { x: 0 }, { x: 760, duration: 0.8, ease: "power1.inOut" }, 1.9);
+      anim.fromTo(".brillo", { x: 0 }, { x: 760, duration: 0.8, ease: "power1.inOut", immediateRender: false }, 4.8);
+      // Fundido a negro completo antes de que termine el clip (7,7 s)
+      anim.fromTo("#fin", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "power1.in" }, 6.9);
+      anim.to({}, { duration: 0.001 }, D);
+      // Tapa en el frame 0: la pieza armada; desde el frame 1, la animación
+      tl.add(anim.tweenFromTo(TAPA, TAPA, { duration: F, ease: "none" }), 0);
+      tl.add(anim.tweenFromTo(0, D - F, { duration: D - F, ease: "none" }), F);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

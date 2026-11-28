@@ -1,0 +1,55 @@
+{
+  "slug": "remate-en-vivo",
+  "titulo": "¡Comienza! Remate ¡en vivo!",
+  "tipo": "post",
+  "fecha_publicacion": "2026-11-28",
+  "descripcion": "Video de 8 s · Feed 4:5 y Stories 9:16 · Salto slow de Abril Tilcha (lote 06) · remateharasabril.com · 17:30 H ARG. · Listas también las versiones de 17:00 H y 18:00 H, por si cambia el horario",
+  "base": "../salida",
+  "formatos": ["4x5", "9x16"],
+  "slides": [
+    { "id": "01", "titulo": "17:30 H · principal", "subtitulo": "¡Comienza! Remate ¡en vivo! · remateharasabril.com · 17:30 H ARG.",
+      "video": "28-11-HA-RemateEnVivo-{formato}-01.mp4", "captura": "capturas/28-11-HA-RemateEnVivo-{formato}-01.jpg" },
+    { "id": "02", "titulo": "17:00 H · alternativa", "subtitulo": "La misma pieza con 17:00 H · usar solo si el remate arranca a las 17",
+      "video": "28-11-HA-RemateEnVivo17h-{formato}-01.mp4", "captura": "capturas/28-11-HA-RemateEnVivo17h-{formato}-01.jpg" },
+    { "id": "03", "titulo": "18:00 H · alternativa", "subtitulo": "La misma pieza con 18:00 H · usar solo si el remate arranca a las 18",
+      "video": "28-11-HA-RemateEnVivo18h-{formato}-01.mp4", "captura": "capturas/28-11-HA-RemateEnVivo18h-{formato}-01.jpg" }
+  ],
+  "copy": [
+    {
+      "titulo": "Post · completo",
+      "comentario": "Si cambia el horario, reemplazar 17:30 h por 17 h o 18 h y usar el video de esa hora.",
+      "texto": [
+        "¡COMIENZA EL REMATE EN VIVO! 💫",
+        "Remate 2026",
+        "",
+        "Hoy, sábado 28/11, a las 17:30 h (hora Argentina).",
+        "Seguilo en vivo en remateharasabril.com",
+        "Presencial en Haras Abril, Lezama, y online.",
+        "",
+        "En imagen: ABRIL TILCHA, lote 06 (Cornet du Lys × Conthargos × Chacco-Blue).",
+        "",
+        "Tu próxima estrella cada vez más cerca.",
+        "#harasabril #simplementelamejorsangre #losmejoresresultados"
+      ]
+    },
+    {
+      "titulo": "Post · corto",
+      "comentario": "Para publicar sobre la hora: el video ya dice todo.",
+      "texto": [
+        "HOY 17:30 h · Remate en vivo 💫",
+        "Seguilo en remateharasabril.com",
+        "",
+        "Tu próxima estrella cada vez más cerca.",
+        "#harasabril #simplementelamejorsangre #losmejoresresultados"
+      ]
+    },
+    {
+      "titulo": "Story",
+      "comentario": "Sticker de link a remateharasabril.com. Si se sube antes de que empiece, sumar un sticker de cuenta regresiva a las 17:30 h.",
+      "texto": [
+        "¡Comienza! Remate en vivo · 17:30 h",
+        "remateharasabril.com"
+      ]
+    }
+  ]
+}
